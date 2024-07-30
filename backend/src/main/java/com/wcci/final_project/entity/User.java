@@ -1,0 +1,62 @@
+package com.wcci.final_project.entity;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class User {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String email;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
+    private Wishlist wishlist;
+
+    private User() {
+        this.reviews = new ArrayList<>();
+    }
+
+    private User(String email) {
+        this.email = email;
+        this.reviews = new ArrayList<>();
+    }
+
+    private User(String email, Wishlist wishlist) {
+        this.email = email;
+        this.wishlist = wishlist;
+        this.reviews = new ArrayList<>();
+    }
+
+    private User(String email, List<Review> reviews) {
+        this.email = email;
+        this.reviews = reviews;
+    }
+
+    private User(String email, Wishlist wishlist, List<Review> reviews) {
+        this.email = email;
+        this.wishlist = wishlist;
+        this.reviews = reviews;
+    }
+}
+
+// Time to create review entity
