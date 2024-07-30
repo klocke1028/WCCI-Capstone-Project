@@ -32,27 +32,27 @@ public class User {
     @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
     private Wishlist wishlist;
 
-    private User() {
+    public User() {
         this.reviews = new ArrayList<>();
     }
 
-    private User(String email) {
+    public User(String email) {
         this.email = email;
         this.reviews = new ArrayList<>();
     }
 
-    private User(String email, Wishlist wishlist) {
+    public User(String email, Wishlist wishlist) {
         this.email = email;
         this.wishlist = wishlist;
         this.reviews = new ArrayList<>();
     }
 
-    private User(String email, List<Review> reviews) {
+    public User(String email, List<Review> reviews) {
         this.email = email;
         this.reviews = reviews;
     }
 
-    private User(String email, Wishlist wishlist, List<Review> reviews) {
+    public User(String email, Wishlist wishlist, List<Review> reviews) {
         this.email = email;
         this.wishlist = wishlist;
         this.reviews = reviews;
