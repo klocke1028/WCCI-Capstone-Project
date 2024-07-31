@@ -23,6 +23,8 @@ public class Game {
     @Id
     @GeneratedValue
     private Long id;
+    
+    private String title;
 
     private double price;
 
@@ -41,25 +43,35 @@ public class Game {
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(double price) {
+    public Game(String title) {
+        this.title = title;
+        this.reviews = new ArrayList<>();
+        this.priceAlerts = new ArrayList<>();
+    }
+
+    public Game(String title, double price) {
+        this.title = title;
         this.price = price;
         this.reviews = new ArrayList<>();
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(double price, List<Review> reviews) {
+    public Game(String title, double price, List<Review> reviews) {
+        this.title = title;
         this.price = price;
         this.reviews = reviews;
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(List<PriceAlert> priceAlerts, double price) {
+    public Game(String title, List<PriceAlert> priceAlerts, double price) {
+        this.title = title;
         this.priceAlerts = priceAlerts;
         this.price = price;
         this.reviews = new ArrayList<>();
     }
 
-    public Game(double price, List<Review> reviews, List<PriceAlert> priceAlerts) {
+    public Game(String title, double price, List<Review> reviews, List<PriceAlert> priceAlerts) {
+        this.title = title;
         this.price = price;
         this.reviews = new ArrayList<>();
         this.priceAlerts = priceAlerts;
