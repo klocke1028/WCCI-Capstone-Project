@@ -1,5 +1,6 @@
 package com.wcci.final_project.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wcci.final_project.dto.UserPayload;
 import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
 import com.wcci.final_project.entity.Wishlist;
+import com.wcci.final_project.service.ReviewService;
 import com.wcci.final_project.service.UserService;
+import com.wcci.final_project.service.WishlistService;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,10 +30,33 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private WishlistService wishlistService;
+
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
+        Wishlist wishlist = wishlistService.getWishlistById(userPayload.getWishlistId());
+        if (wishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        user.setWishlist(wishlist);
+
+        User user = new User();
+
+        user.setEmail(userPayload.getEmail());
+
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        if (!(userReviewIds == null)) {
+            List<Review> userReviews = new ArrayList<>();
+            for (Long reviewId : userReviewIds) {
+                Review review = reviewService.getReviewById(reviewId);
+                if (!(review == null)) userReviews.add(review);
+            }
+            user.setReviews(userReviews);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -43,7 +70,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User existingUser = userService.getUserById(id);
+        User existingUser = userService.getUserById(updatedUser.getId());
         if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
