@@ -1,5 +1,7 @@
 package com.wcci.final_project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
+import com.wcci.final_project.entity.Wishlist;
 import com.wcci.final_project.service.UserService;
 
 @RestController
@@ -58,5 +62,27 @@ public class UserController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/reviews")
+    public ResponseEntity<List<Review>> getReviewByUserId(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        List<Review> reviews = user.getReviews();
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/{id}/wishlist")
+    public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Wishlist wishlist = user.getWishlist();
+        return ResponseEntity.ok(wishlist);
     }
 }
