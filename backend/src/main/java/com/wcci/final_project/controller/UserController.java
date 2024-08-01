@@ -3,6 +3,7 @@ package com.wcci.final_project.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,6 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
         Wishlist wishlist = wishlistService.getWishlistById(userPayload.getWishlistId());
         if (wishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        user.setWishlist(wishlist);
 
         User user = new User();
 
@@ -55,6 +55,8 @@ public class UserController {
             }
             user.setReviews(userReviews);
         }
+        user.setWishlist(wishlist);
+
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -69,13 +71,23 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        User existingUser = userService.getUserById(updatedUser.getId());
-        if (existingUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserPayload userPayload) {
+        Wishlist wishlist = wishlistService.getWishlistById(userPayload.getWishlistId());
+        User existingUser = userService.getUserById(id);
+        if (existingUser == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
-        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setEmail(userPayload.getEmail());
+
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        if (!(userReviewIds == null)) {
+            List<Review> userReviews = new ArrayList<>();
+            for (Long reviewId : userReviewIds) {
+                Review review = reviewService.getReviewById(reviewId);
+                userReviews.add(review);
+            }
+            existingUser.setReviews(userReviews);
+        }
+        existingUser.setWishlist(wishlist);
 
         return ResponseEntity.ok(existingUser);
     }
