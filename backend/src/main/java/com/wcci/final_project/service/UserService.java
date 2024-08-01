@@ -23,7 +23,7 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
-    public boolean deleteSpaceport(Long id) {
+    public boolean deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             return false;
         }

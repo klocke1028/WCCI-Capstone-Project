@@ -15,7 +15,7 @@ public class PriceAlertService {
         return priceAlertRepository.save(priceAlert);
     }
 
-    public boolean deleteSpaceport(Long id) {
+    public boolean deletePriceAlert(Long id) {
         if (!priceAlertRepository.existsById(id)) {
             return false;
         }

@@ -21,7 +21,7 @@ public class WishlistService {
         wishlistRepository.save(updatedWishlist);
     }
 
-    public boolean deleteSpaceport(Long id) {
+    public boolean deleteWishlist(Long id) {
         if (!wishlistRepository.existsById(id)) {
             return false;
         }

@@ -22,7 +22,7 @@ public class ReviewService {
         reviewRepository.save(updatedReview);
     }
 
-    public boolean deleteSpaceport(Long id) {
+    public boolean deleteReview(Long id) {
         if (!reviewRepository.existsById(id)) {
             return false;
         }
