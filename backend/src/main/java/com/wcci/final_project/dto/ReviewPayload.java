@@ -1,24 +1,21 @@
 package com.wcci.final_project.dto;
 
-import java.util.List;
-import java.util.ArrayList;
+import com.wcci.final_project.entity.Game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReviewPayload {
 
     private String text;
 
-    private List<Long> gameIds;
+    private Long gameId;
 
     private Long userId;
-
-    public ReviewPayload() {
-        this.gameIds = new ArrayList<>();
-    }
 }

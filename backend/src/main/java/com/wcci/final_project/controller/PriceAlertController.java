@@ -30,15 +30,19 @@ public class PriceAlertController {
 
     @PostMapping
     public ResponseEntity<PriceAlert> addPriceAlert(@RequestBody PriceAlertPayload priceAlertPayload) {
-        Game game = gameService.getGameById(priceAlertPayload.getGameId());
-        if (game == null) {
+        PriceAlert priceAlert = new PriceAlert();
+
+        Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
+        Long priceAlertGameId = priceAlertPayload.getGameId();
+
+        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+
+        if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        PriceAlert priceAlert = new PriceAlert();
-
-        priceAlert.setNewPrice(priceAlertPayload.getNewPrice());
-        priceAlert.setGame(game);
+        priceAlert.setNewPrice(priceAlertNewPrice);
+        priceAlert.setGame(priceAlertGame);
 
         return new ResponseEntity<>(priceAlert, HttpStatus.CREATED);
     }
@@ -46,24 +50,31 @@ public class PriceAlertController {
     @GetMapping("/{id}")
     public ResponseEntity<PriceAlert> findPriceAlertById(@PathVariable Long id) {
         PriceAlert foundPriceAlert = priceAlertService.getPriceAlertById(id);
+
         if(foundPriceAlert == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
         return ResponseEntity.ok(foundPriceAlert);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PriceAlert> updatePriceAlert(@PathVariable Long id, @RequestBody PriceAlertPayload priceAlertPayload) {
-        Game game = gameService.getGameById(priceAlertPayload.getGameId());
         PriceAlert existingPriceAlert = priceAlertService.getPriceAlertById(id);
-        if (existingPriceAlert == null) {
+
+        Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
+        Long priceAlertGameId = priceAlertPayload.getGameId();
+
+        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+
+        if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        existingPriceAlert.setNewPrice(priceAlertPayload.getNewPrice());
-        existingPriceAlert.setGame(game);
+        existingPriceAlert.setNewPrice(priceAlertNewPrice);
+        existingPriceAlert.setGame(priceAlertGame);
 
-        return ResponseEntity.ok(existingPriceAlert);
+        return new ResponseEntity<>(existingPriceAlert, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
