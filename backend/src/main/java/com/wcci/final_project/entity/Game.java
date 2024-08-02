@@ -18,6 +18,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Game {
 
     @Id
@@ -27,6 +28,10 @@ public class Game {
     private String title;
 
     private double price;
+
+    private String itadId;
+
+    private String boxArtLink;
 
     @OneToMany(mappedBy = "games", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
@@ -45,6 +50,13 @@ public class Game {
 
     public Game(String title) {
         this.title = title;
+        this.reviews = new ArrayList<>();
+        this.priceAlerts = new ArrayList<>();
+    }
+
+    public Game(String title, String itadId) {
+        this.title = title;
+        this.itadId = itadId;
         this.reviews = new ArrayList<>();
         this.priceAlerts = new ArrayList<>();
     }
@@ -75,5 +87,12 @@ public class Game {
         this.price = price;
         this.reviews = new ArrayList<>();
         this.priceAlerts = priceAlerts;
+    }
+
+    @Override
+    public String toString() {
+        String gameToString = title + "\n" +
+                                "ITAD ID: " + itadId;
+        return gameToString;
     }
 }

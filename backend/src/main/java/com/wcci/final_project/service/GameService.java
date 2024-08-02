@@ -3,17 +3,20 @@ package com.wcci.final_project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class GameService {
@@ -40,33 +43,52 @@ public class GameService {
         gameRepository.save(updatedGame);
     }
     
-    public void searchForGameByTitle(String searchTerm) throws IOException {
-        URL urlObj = new URL("https://restcountries.com/v3.1/name/france");
-        HttpsURLConnection connection = (HttpsURLConnection) urlObj.openConnection();
-        connection.setRequestMethod("GET");
+    public static List<Game> searchForGamesByTitle(String searchTerm) throws IOException {
+		List<Game> searchResults = new ArrayList<>();
+		int resultsLimiter = 20;
+		String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
+		URL urlObj = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results=" + resultsLimiter + "&key=" + itadApiKey);
+        HttpsURLConnection itadConnection = (HttpsURLConnection) urlObj.openConnection();
+        itadConnection.setRequestMethod("GET");
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
+        int responseCode = itadConnection.getResponseCode();
+
+		System.out.println(responseCode);
+
+		if (responseCode == HttpsURLConnection.HTTP_OK) {
+			BufferedReader  bufferedReader = new BufferedReader(new InputStreamReader(itadConnection.getInputStream()));
+			String inputLine = bufferedReader.readLine();
             StringBuilder response = new StringBuilder();
-            Scanner scanner = new Scanner(connection.getInputStream());
-            while (scanner.hasNext()) {
-                response.append(scanner.nextLine());
+
+			response.append(inputLine);
+			System.out.println(response.toString());
+
+			bufferedReader.close();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode searchResultsNode = objectMapper.readTree(response.toString());
+
+			if (searchResultsNode.isArray()) {
+                for (JsonNode gameNode : searchResultsNode) {
+					String title = gameNode.path("title").asText();
+					String itadId = gameNode.path("id").asText();
+                    Game game = new Game(title, itadId);
+					searchResults.add(game);
+                }
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-			Country[] country = objectMapper.readValue(String.valueOf(response), new TypeReference<Country[]>() {});
-			System.out.println(country[0].toString());
-			scanner.close();
-        } else {
-                System.out.println("Error in sending a GET request.");
-        }
+		} else {
+			System.out.println("Error in getting game search results. Error code: " + responseCode);
+		}
+
+		return searchResults;
     }
 
     // Modify this to do this: 
     /*
-     * searchTitles will be the method in our service that makes the request to the external API. We can still use Steam if we want.
-     * The searchTitles method should do a fetch and return apps with the type "game" and titles that contain our search term.
-     * Need to add steam id as an attribute to game entity
+     * use Steam API
      * First do a get all apps fetch to get IDs and titles 
-     * We want to loop through the games and store titles and IDs that contain the search term in their title into an array and then return that array
+     * We want to loop through the games
+     * Store titles and IDs that contain the search term in their title into an array 
+     * Return the array
      */
 }
