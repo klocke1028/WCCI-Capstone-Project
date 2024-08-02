@@ -45,6 +45,8 @@ public class GameController {
         game.setPrice(gamePayload.getGamePrice());
         
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
+        
         if (!(gameReviewIds == null)) {
             List<Review> gameReviews = new ArrayList<>();
             for (Long reviewId : gameReviewIds) {
@@ -54,7 +56,6 @@ public class GameController {
             game.setReviews(gameReviews);
         } 
 
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
         if (!(gamePriceAlertIds == null)) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
             for (Long priceAlertId : gamePriceAlertIds) {
@@ -65,12 +66,12 @@ public class GameController {
         } 
 
         return new ResponseEntity<>(game, HttpStatus.CREATED);
-
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Game> findGameById(@PathVariable Long id) {
         Game foundGame = gameService.getGameById(id);
+
         if (foundGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -79,22 +80,38 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game updatedGame) {
-        Game existingGame = gameService.getGameById(updatedGame.getId());
-        if (existingGame == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
+        Game existingGame = gameService.getGameById(id);
 
-        existingGame.setTitle(existingGame.getTitle());
-        existingGame.setPrice(existingGame.getPrice());
+        existingGame.setTitle(gamePayload.getTitle());
+        existingGame.setPrice(gamePayload.getGamePrice());
+        
+        List<Long> gameReviewIds = gamePayload.getGameReviewIds();
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
+        
+        if (!(gameReviewIds == null)) {
+            List<Review> gameReviews = new ArrayList<>();
+            for (Long reviewId : gameReviewIds) {
+                Review review = reviewService.getReviewById(reviewId);
+                if(!(review == null)) gameReviews.add(review);
+            }
+            existingGame.setReviews(gameReviews);
+        } 
 
-        gameService.updateGame(existingGame);
+        if (!(gamePriceAlertIds == null)) {
+            List<PriceAlert> gamePriceAlerts = new ArrayList<>();
+            for (Long priceAlertId : gamePriceAlertIds) {
+                PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
+                if(!(priceAlert == null)) gamePriceAlerts.add(priceAlert);
+            }
+            existingGame.setPriceAlerts(gamePriceAlerts);
+        } 
 
-        return ResponseEntity.ok(existingGame);
+        return new ResponseEntity<>(existingGame, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeSpaceship(@PathVariable Long id) {
+    public ResponseEntity<Void> removeGame(@PathVariable Long id) {
         boolean isDeleted = gameService.deleteGame(id);
 
         if (!isDeleted) {

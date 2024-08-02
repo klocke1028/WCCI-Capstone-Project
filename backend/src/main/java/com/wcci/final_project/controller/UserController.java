@@ -3,7 +3,6 @@ package com.wcci.final_project.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,14 +38,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
-        Wishlist wishlist = wishlistService.getWishlistById(userPayload.getWishlistId());
-        if (wishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
         User user = new User();
+
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        Long userWishlistId = userPayload.getWishlistId();
+
+        Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
 
         user.setEmail(userPayload.getEmail());
 
-        List<Long> userReviewIds = userPayload.getReviewIds();
+        if (!(userWishlist == null)) user.setWishlist(userWishlist);
+
         if (!(userReviewIds == null)) {
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
@@ -55,8 +57,6 @@ public class UserController {
             }
             user.setReviews(userReviews);
         }
-        user.setWishlist(wishlist);
-
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -72,24 +72,27 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserPayload userPayload) {
-        Wishlist wishlist = wishlistService.getWishlistById(userPayload.getWishlistId());
         User existingUser = userService.getUserById(id);
-        if (existingUser == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        Long userWishlistId = userPayload.getWishlistId();
+
+        Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
 
         existingUser.setEmail(userPayload.getEmail());
 
-        List<Long> userReviewIds = userPayload.getReviewIds();
+        if (!(userWishlist == null)) existingUser.setWishlist(userWishlist);
+
         if (!(userReviewIds == null)) {
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
                 Review review = reviewService.getReviewById(reviewId);
-                userReviews.add(review);
+                if (!(review == null)) userReviews.add(review);
             }
             existingUser.setReviews(userReviews);
         }
-        existingUser.setWishlist(wishlist);
 
-        return ResponseEntity.ok(existingUser);
+        return new ResponseEntity<>(existingUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -106,6 +109,7 @@ public class UserController {
     @GetMapping("/{id}/reviews")
     public ResponseEntity<List<Review>> getReviewByUserId(@PathVariable Long id) {
         User user = userService.getUserById(id);
+
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -117,6 +121,7 @@ public class UserController {
     @GetMapping("/{id}/wishlist")
     public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable Long id) {
         User user = userService.getUserById(id);
+        
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
