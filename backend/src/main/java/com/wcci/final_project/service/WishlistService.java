@@ -9,7 +9,7 @@ public class WishlistService {
     @Autowired
     private WishlistRepository wishlistRepository;
 
-    public Wishlist createReview(Wishlist wishlist) {
+    public Wishlist createWishlist(Wishlist wishlist) {
         return wishlistRepository.save(wishlist);
     }
 
