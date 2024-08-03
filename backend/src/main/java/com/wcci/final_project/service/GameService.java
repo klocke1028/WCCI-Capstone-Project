@@ -117,4 +117,15 @@ public class GameService {
 
 		return searchResults;
     }
+
+    // Modify this to do this: 
+    /*
+     * use Steam API
+     * First do a get all apps fetch to get IDs and titles 
+     * We want to loop through the games
+     * Store titles and IDs that contain the search term in their title into an array 
+     * Return the array
+     */
+
+     public List<Game> getMostWaitlistedGames() throws IOException
 }
