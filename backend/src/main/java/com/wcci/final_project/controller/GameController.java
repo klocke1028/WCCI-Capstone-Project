@@ -1,5 +1,6 @@
 package com.wcci.final_project.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.wcci.final_project.dto.GamePayload;
+import com.wcci.final_project.dto.SearchPayload;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.entity.Review;
@@ -119,6 +121,18 @@ public class GameController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestBody SearchPayload searchPayload) throws IOException {
+
+        String searchTerm = searchPayload.getSearchTerm();
+
+        List<Game> searchResults = gameService.searchForGamesByTitle(searchTerm);
+
+        if (searchResults == null) return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(searchResults);
     }
 
 }

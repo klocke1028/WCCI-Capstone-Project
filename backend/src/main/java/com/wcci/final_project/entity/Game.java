@@ -33,14 +33,14 @@ public class Game {
 
     private String boxArtLink;
 
-    @OneToMany(mappedBy = "games", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
     @JsonIgnoreProperties("game")
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
-    @OneToMany(mappedBy = "games", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceAlert> priceAlerts;
 
     public Game() {
@@ -57,6 +57,14 @@ public class Game {
     public Game(String title, String itadId) {
         this.title = title;
         this.itadId = itadId;
+        this.reviews = new ArrayList<>();
+        this.priceAlerts = new ArrayList<>();
+    }
+    
+    public Game(String title, String itadId, String boxArtLink) {
+        this.title = title;
+        this.itadId = itadId;
+        this.boxArtLink = boxArtLink;
         this.reviews = new ArrayList<>();
         this.priceAlerts = new ArrayList<>();
     }
