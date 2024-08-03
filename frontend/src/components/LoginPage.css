@@ -1,4 +1,5 @@
 body {
+  background: white;
   height: 100vh;
   width: 100%;
   text-align: center;
@@ -40,7 +41,7 @@ form {
   width: 165px;
   height: 60px;
   border-radius: 30px;
-  background: #08ea1b;
+  background: greenyellow;
   border: none;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
