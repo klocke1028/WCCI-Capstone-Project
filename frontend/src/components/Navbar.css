@@ -1,0 +1,27 @@
+.navbar-wrapper {
+    box-sizing: border-box;
+    display: block;
+    height: 70px;
+    width: 100vw;
+    background-color: rgb(0, 0, 0);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .search-bar-container {
+    display: block;
+    padding: 1em 0;
+  }
+
+  .search-bar {
+    padding: .75em;
+    border-radius: .5em;
+  }
