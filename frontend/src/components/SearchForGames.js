@@ -1,6 +1,7 @@
 import React from "react";
 //W3Schools formats the import like this
 import { useState, useEffect } from "react";
+import GameSearchBar from "./GameSearchBar";
 
 function SearchForGames() {
   const [results, setResults] = useState([]);
@@ -58,18 +59,11 @@ function SearchForGames() {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search for games"
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      {/*results being an array of filtered game objects and parameter 'game' being equivalent to a single game object*/}
-      <ul>
-        {results.map((game) => (
-          <li key={game.appid}>{game.name}</li>
-        ))}
-      </ul>
+      <GameSearchBar
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        results={results}
+        />
     </div>
   );
 }
