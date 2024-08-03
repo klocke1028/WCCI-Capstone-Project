@@ -43,7 +43,7 @@ public class GameService {
         gameRepository.save(updatedGame);
     }
     
-    public static List<Game> searchForGamesByTitle(String searchTerm) throws IOException {
+    public List<Game> searchForGamesByTitle(String searchTerm) throws IOException {
 		List<Game> searchResults = new ArrayList<>();
 		int resultsLimiter = 20;
 		String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
@@ -53,15 +53,12 @@ public class GameService {
 
         int responseCode = itadConnection.getResponseCode();
 
-		System.out.println(responseCode);
-
 		if (responseCode == HttpsURLConnection.HTTP_OK) {
 			BufferedReader  bufferedReader = new BufferedReader(new InputStreamReader(itadConnection.getInputStream()));
 			String inputLine = bufferedReader.readLine();
             StringBuilder response = new StringBuilder();
 
 			response.append(inputLine);
-			System.out.println(response.toString());
 
 			bufferedReader.close();
 
@@ -72,7 +69,8 @@ public class GameService {
                 for (JsonNode gameNode : searchResultsNode) {
 					String title = gameNode.path("title").asText();
 					String itadId = gameNode.path("id").asText();
-                    Game game = new Game(title, itadId);
+                    JsonNode assetsNode = gameNode.path("assets");
+                    Game game = new Game(title, itadId, boxArtLink);
 					searchResults.add(game);
                 }
             }
