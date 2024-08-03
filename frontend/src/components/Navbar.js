@@ -5,9 +5,9 @@ import "./Navbar.css";
 function NavBar() {
   return (
     <div className="navbar-wrapper">
-            <nav className="navbar">
-      <SearchForGames />
-    </nav>
+      <nav className="navbar">
+        <SearchForGames />
+      </nav>
     </div>
   );
 }

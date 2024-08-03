@@ -89,4 +89,6 @@ public class GameService {
      * Store titles and IDs that contain the search term in their title into an array 
      * Return the array
      */
+
+     public List<Game> getMostWaitlistedGames() throws IOException
 }
