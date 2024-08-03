@@ -1,10 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 import { useState } from "react";
-import React from 'react';
-import Navbar from "./components/Navbar";
+import SearchForGames from "./components/SearchForGames";
+//import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
 
 function App() {
   return (
@@ -14,5 +13,6 @@ function App() {
   );
 }
 
+// Add <Route path="/" element={<LoginPage>} />
 
 export default App;
