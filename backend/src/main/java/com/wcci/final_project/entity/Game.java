@@ -35,6 +35,7 @@ public class Game {
 
     private String boxArtLink;
 
+    @JsonIgnoreProperties("game")
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
@@ -42,6 +43,7 @@ public class Game {
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
+    @JsonIgnoreProperties("game")
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceAlert> priceAlerts;
 
@@ -99,6 +101,28 @@ public class Game {
         this.priceAlerts = priceAlerts;
     }
 
+    public void setReviews(List<Review> reviews) {
+        if (this.reviews != null) {
+            this.reviews.forEach(review -> review.setGame(null));
+        }
+        if (reviews != null) {
+            reviews.forEach(review -> review.setGame(this));
+        }
+        this.reviews.clear();
+        this.reviews.addAll(reviews);
+    }
+
+    public void setPriceAlerts(List<PriceAlert> priceAlerts) {
+        if (this.priceAlerts != null) {
+            this.priceAlerts.forEach(priceAlert -> priceAlert.setGame(null));
+        }
+        if (priceAlerts != null) {
+            priceAlerts.forEach(priceAlert -> priceAlert.setGame(this));
+        }
+        this.priceAlerts.clear();
+        this.priceAlerts.addAll(priceAlerts);
+    }
+    
     @Override
     public String toString() {
         String gameToString = title + "\n" +

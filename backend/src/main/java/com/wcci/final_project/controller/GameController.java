@@ -50,7 +50,7 @@ public class GameController {
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
         
-        if (gameReviewIds != null) {
+        if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
@@ -64,11 +64,11 @@ public class GameController {
         
         List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
 
-        if (gamePriceAlertIds != null) {
+        if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
 
             for (Long priceAlertId : gamePriceAlertIds) {
-                PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
+                PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
 
                 if(priceAlert != null) gamePriceAlerts.add(priceAlert);
             }
@@ -109,7 +109,7 @@ public class GameController {
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
         
-        if (gameReviewIds != null) {
+        if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
@@ -123,11 +123,11 @@ public class GameController {
         
         List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
 
-        if (gamePriceAlertIds != null) {
+        if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
 
             for (Long priceAlertId : gamePriceAlertIds) {
-                PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
+                PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
 
                 if(priceAlert != null) gamePriceAlerts.add(priceAlert);
             }

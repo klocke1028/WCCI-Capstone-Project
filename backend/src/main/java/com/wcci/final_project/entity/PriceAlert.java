@@ -27,7 +27,7 @@ public class PriceAlert {
 
     private double newPrice;
 
-    @JsonIgnoreProperties("price-alert")
+    @JsonIgnoreProperties("priceAlerts")
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 }

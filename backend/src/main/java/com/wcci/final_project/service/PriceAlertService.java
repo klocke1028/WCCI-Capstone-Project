@@ -26,7 +26,7 @@ public class PriceAlertService {
         return priceAlertRepository.save(priceAlert);
     }
 
-    public PriceAlert getPriceAlertById(Long id) {
+    public PriceAlert findPriceAlertById(Long id) {
         return priceAlertRepository.findById(id).orElse(null);
     }
 
