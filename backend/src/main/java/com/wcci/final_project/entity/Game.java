@@ -12,10 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "\"game\"")
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,7 +95,7 @@ public class Game {
     public Game(String title, double price, List<Review> reviews, List<PriceAlert> priceAlerts) {
         this.title = title;
         this.price = price;
-        this.reviews = new ArrayList<>();
+        this.reviews = reviews;
         this.priceAlerts = priceAlerts;
     }
 

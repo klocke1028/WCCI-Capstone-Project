@@ -39,38 +39,38 @@ public class PriceAlertService {
         return true;
     }
 
-    public PriceAlert trackPrice(Long gameId) throws IOException {
-        PriceAlert priceAlert = new PriceAlert();
+    // public PriceAlert trackPrice(Long gameId) throws IOException {
+    //     PriceAlert priceAlert = new PriceAlert();
 
-        Game priceAlertGame = gameService.getGameById(gameId);
-        priceAlert.setGame(priceAlertGame);
+    //     Game priceAlertGame = gameService.getGameById(gameId);
+    //     priceAlert.setGame(priceAlertGame);
 
-        String gameTitle = priceAlertGame.getTitle();
+    //     String gameTitle = priceAlertGame.getTitle();
 
-        List<Integer> shopIds = getItadShopIds();
+    //     List<Integer> shopIds = getItadShopIds();
 
-        Runnable track = new Runnable() {
-            @Override
-            public void run() {
-                /*
-                 * URL getPriceUrl = new URL("");
-                 * HttpsURLConnection getPriceConnection = (HttpsURLConnection) getPriceUrl.openConnection(); 
-                 */
+    //     Runnable track = new Runnable() {
+    //         @Override
+    //         public void run() {
+    //             /*
+    //              * URL getPriceUrl = new URL("");
+    //              * HttpsURLConnection getPriceConnection = (HttpsURLConnection) getPriceUrl.openConnection(); 
+    //              */
                 
-            }
-        };    
-    }
+    //         }
+    //     };    
+    // }
 
-    private List<Integer> getItadShopIds() throws IOException {
-        URL getShopsUrl = new URL("https://api.isthereanydeal.com/service/shops/v1?country=US");
-        HttpsURLConnection getShopsConnection = (HttpsURLConnection) getShopsUrl.openConnection();
+    // private List<Integer> getItadShopIds() throws IOException {
+    //     URL getShopsUrl = new URL("https://api.isthereanydeal.com/service/shops/v1?country=US");
+    //     HttpsURLConnection getShopsConnection = (HttpsURLConnection) getShopsUrl.openConnection();
 
-        getShopsConnection.setRequestMethod("GET");
+    //     getShopsConnection.setRequestMethod("GET");
 
-        int getShopsResponseCode = getShopsConnection.getResponseCode();
+    //     int getShopsResponseCode = getShopsConnection.getResponseCode();
 
-        System.out.println(getShopsResponseCode);
+    //     System.out.println(getShopsResponseCode);
 
         
-    }
+    // }
 }

@@ -46,11 +46,11 @@ public class WishlistController {
         List<Game> wishlistGames = new ArrayList<>();
 
         for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.getGameById(wishlistGameId); 
+            Game wishlistGame = gameService.findGameById(wishlistGameId); 
             if (!(wishlistGame == null)) wishlistGames.add(wishlistGame);
         }
 
-        User wishlistUser = userService.getUserById(wishlistUserId);
+        User wishlistUser = userService.findUserById(wishlistUserId);
         
         wishlist.setGames(wishlistGames);
         wishlist.setUser(wishlistUser);
@@ -79,11 +79,11 @@ public class WishlistController {
         List<Game> wishlistGames = new ArrayList<>();
 
         for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.getGameById(wishlistGameId); 
+            Game wishlistGame = gameService.findGameById(wishlistGameId); 
             if (!(wishlistGame == null)) wishlistGames.add(wishlistGame);
         }
 
-        User wishlistUser = userService.getUserById(wishlistUserId);
+        User wishlistUser = userService.findUserById(wishlistUserId);
         
         existingWishlist.setGames(wishlistGames);
         existingWishlist.setUser(wishlistUser);

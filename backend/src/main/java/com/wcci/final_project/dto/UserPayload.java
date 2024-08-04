@@ -29,6 +29,7 @@ public class UserPayload {
 
     public UserPayload(String email, Long wishlistId) {
         this.email = email;
+        this.wishlistId = wishlistId;
         this.reviewIds = new ArrayList<>();
     }
 

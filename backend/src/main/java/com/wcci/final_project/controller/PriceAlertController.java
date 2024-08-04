@@ -19,7 +19,7 @@ import com.wcci.final_project.service.GameService;
 import com.wcci.final_project.service.PriceAlertService;
 
 @RestController
-@RequestMapping("api/price-alerts")
+@RequestMapping("/price-alerts")
 public class PriceAlertController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class PriceAlertController {
         Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
         Long priceAlertGameId = priceAlertPayload.getGameId();
 
-        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+        Game priceAlertGame = gameService.findGameById(priceAlertGameId);
 
         if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -65,7 +65,7 @@ public class PriceAlertController {
         Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
         Long priceAlertGameId = priceAlertPayload.getGameId();
 
-        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+        Game priceAlertGame = gameService.findGameById(priceAlertGameId);
 
         if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
