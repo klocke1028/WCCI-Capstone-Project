@@ -16,7 +16,7 @@ body {
   margin-bottom: 2rem;
 }
 
-form {
+.login_form {
   display: inline-block;
   align-items: center;
   height: 100px;

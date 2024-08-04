@@ -1,12 +1,13 @@
 import React from "react";
+import "./AccountRegistration.css";
 
 function AccountRegistration() {
   return (
-    <div className="registration_container">
+    <div>
       <h2 className="website_name">Insert website name here :)</h2>
       <div className="registration">
-        <form>
-          <div className="text_area">
+        <form className="reg_form">
+          <div className="text">
             <input
               type="text"
               id="username"

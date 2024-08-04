@@ -1,6 +1,26 @@
-body {
-  background: white;
-  height: 100vh;
+.reg_form {
+  display: inline-block;
+  align-items: center;
+  height: 100px;
+  width: 300px;
+  margin-bottom: 150px;
+}
+
+.text {
+  align-content: center;
+  border-radius: 22px;
+  margin-bottom: 35px;
   width: 100%;
-  text-align: center;
+  height: 64px;
+  box-shadow: 0 0 8px 0 black;
+}
+
+.registration {
+  display: inline-block;
+  background: #ffffff;
+  width: 435px;
+  height: 300px;
+  margin-top: 10%;
+  border-radius: 22px;
+  box-shadow: 0 4px 8px 0 black;
 }
