@@ -25,9 +25,8 @@ import com.wcci.final_project.service.GameService;
 import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.ReviewService;
 
-
 @RestController
-@RequestMapping("/games")
+@RequestMapping("api/games")
 public class GameController {
 
     @Autowired
@@ -45,27 +44,29 @@ public class GameController {
 
         game.setTitle(gamePayload.getTitle());
         game.setPrice(gamePayload.getGamePrice());
-        
+
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
-        
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
+
         if (!(gameReviewIds == null)) {
             List<Review> gameReviews = new ArrayList<>();
             for (Long reviewId : gameReviewIds) {
                 Review review = reviewService.getReviewById(reviewId);
-                if(!(review == null)) gameReviews.add(review);
+                if (!(review == null))
+                    gameReviews.add(review);
             }
             game.setReviews(gameReviews);
-        } 
+        }
 
         if (!(gamePriceAlertIds == null)) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
             for (Long priceAlertId : gamePriceAlertIds) {
                 PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
-                if(!(priceAlert == null)) gamePriceAlerts.add(priceAlert);
+                if (!(priceAlert == null))
+                    gamePriceAlerts.add(priceAlert);
             }
             game.setPriceAlerts(gamePriceAlerts);
-        } 
+        }
 
         return new ResponseEntity<>(game, HttpStatus.CREATED);
     }
@@ -87,27 +88,29 @@ public class GameController {
 
         existingGame.setTitle(gamePayload.getTitle());
         existingGame.setPrice(gamePayload.getGamePrice());
-        
+
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
-        
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
+
         if (!(gameReviewIds == null)) {
             List<Review> gameReviews = new ArrayList<>();
             for (Long reviewId : gameReviewIds) {
                 Review review = reviewService.getReviewById(reviewId);
-                if(!(review == null)) gameReviews.add(review);
+                if (!(review == null))
+                    gameReviews.add(review);
             }
             existingGame.setReviews(gameReviews);
-        } 
+        }
 
         if (!(gamePriceAlertIds == null)) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
             for (Long priceAlertId : gamePriceAlertIds) {
                 PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
-                if(!(priceAlert == null)) gamePriceAlerts.add(priceAlert);
+                if (!(priceAlert == null))
+                    gamePriceAlerts.add(priceAlert);
             }
             existingGame.setPriceAlerts(gamePriceAlerts);
-        } 
+        }
 
         return new ResponseEntity<>(existingGame, HttpStatus.CREATED);
     }
@@ -124,15 +127,27 @@ public class GameController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestBody SearchPayload searchPayload) throws IOException {
+    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestBody SearchPayload searchPayload)
+            throws IOException {
 
         String searchTerm = searchPayload.getSearchTerm();
 
         List<Game> searchResults = gameService.searchForGamesByTitle(searchTerm);
 
-        if (searchResults == null) return ResponseEntity.noContent().build();
+        if (searchResults == null)
+            return ResponseEntity.noContent().build();
 
         return ResponseEntity.ok(searchResults);
     }
 
+    @GetMapping("/popular")
+    public List<Game> getPopularGames() {
+        try {
+            return gameService.getPopularGames();
+        } catch (IOException error) {
+            error.printStackTrace();
+
+            return null;
+        }
+    }
 }

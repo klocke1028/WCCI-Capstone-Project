@@ -19,8 +19,8 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void updateUser(User updatedUser) {
-        userRepository.save(updatedUser);
+    public User updateUser(User updatedUser) {
+        return userRepository.save(updatedUser);
     }
 
     public boolean deleteUser(Long id) {

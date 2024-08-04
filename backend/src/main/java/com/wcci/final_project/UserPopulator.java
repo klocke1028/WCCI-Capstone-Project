@@ -27,9 +27,4 @@ public class UserPopulator implements CommandLineRunner {
         userRepository.save(user2);
         userRepository.save(user3);
     }
-
-    
-
-  
-
 }

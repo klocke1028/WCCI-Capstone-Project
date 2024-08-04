@@ -43,22 +43,26 @@ public class UserController {
         List<Long> userReviewIds = userPayload.getReviewIds();
         Long userWishlistId = userPayload.getWishlistId();
 
-        Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
+        if (userWishlistId != null) {
+            Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
+
+            if (!(userWishlist == null))
+                user.setWishlist(userWishlist);
+        }
 
         user.setEmail(userPayload.getEmail());
-
-        if (!(userWishlist == null)) user.setWishlist(userWishlist);
 
         if (!(userReviewIds == null)) {
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
                 Review review = reviewService.getReviewById(reviewId);
-                if (!(review == null)) userReviews.add(review);
+                if (!(review == null))
+                    userReviews.add(review);
             }
             user.setReviews(userReviews);
         }
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -73,33 +77,43 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserPayload userPayload) {
         User existingUser = userService.getUserById(id);
-        
+
+        if (existingUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
         List<Long> userReviewIds = userPayload.getReviewIds();
         Long userWishlistId = userPayload.getWishlistId();
 
-        Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
-
         existingUser.setEmail(userPayload.getEmail());
 
-        if (!(userWishlist == null)) existingUser.setWishlist(userWishlist);
+        if (userWishlistId != null) {
+            Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
 
-        if (!(userReviewIds == null)) {
+            if (!(userWishlist == null))
+                existingUser.setWishlist(userWishlist);
+        }
+
+        if (userReviewIds != null && userReviewIds.size() > 0) {
+
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
                 Review review = reviewService.getReviewById(reviewId);
-                if (!(review == null)) userReviews.add(review);
+                if (!(review == null))
+                    userReviews.add(review);
             }
+
             existingUser.setReviews(userReviews);
         }
 
-        return new ResponseEntity<>(existingUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.updateUser(existingUser), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeUser(@PathVariable Long id) {
         boolean isDeleted = userService.deleteUser(id);
 
-        if(!isDeleted) {
+        if (!isDeleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -121,7 +135,7 @@ public class UserController {
     @GetMapping("/{id}/wishlist")
     public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        
+
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
