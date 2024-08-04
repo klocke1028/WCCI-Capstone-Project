@@ -27,11 +27,11 @@ public class Review {
 
     private String text;
 
-    @JsonIgnoreProperties("review")
+    @JsonIgnoreProperties("reviews")
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 
-    @JsonIgnoreProperties("review")
+    @JsonIgnoreProperties("reviews")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

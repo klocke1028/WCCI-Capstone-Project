@@ -63,7 +63,7 @@ public class PriceAlertController {
         PriceAlert existingPriceAlert = priceAlertService.findPriceAlertById(id);
 
         Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
-        Long priceAlertGameId = priceAlertPayload.getGameId();
+        Long priceAlertGameId = existingPriceAlert.getGame().getId();
 
         Game priceAlertGame = gameService.findGameById(priceAlertGameId);
 
@@ -74,7 +74,7 @@ public class PriceAlertController {
         existingPriceAlert.setNewPrice(priceAlertNewPrice);
         existingPriceAlert.setGame(priceAlertGame);
 
-        return new ResponseEntity<>(existingPriceAlert, HttpStatus.OK);
+        return new ResponseEntity<>(priceAlertService.createPriceAlert(existingPriceAlert), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

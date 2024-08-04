@@ -55,7 +55,7 @@ public class UserController {
         if (!(userReviewIds == null)) {
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
+                Review review = reviewService.findReviewById(reviewId);
                 if (!(review == null))
                     userReviews.add(review);
             }
@@ -104,7 +104,7 @@ public class UserController {
         if (userReviewIds != null) {
             List<Review> userReviews = new ArrayList<>();
             for (Long reviewId : userReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
+                Review review = reviewService.findReviewById(reviewId);
                 if (!(review == null)) userReviews.add(review);
             }
             existingUser.setReviews(userReviews);

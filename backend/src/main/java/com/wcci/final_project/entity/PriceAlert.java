@@ -27,7 +27,7 @@ public class PriceAlert {
 
     private double newPrice;
 
-    @JsonIgnoreProperties("priceAlerts")
+    @JsonIgnoreProperties({ "priceAlerts", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 }

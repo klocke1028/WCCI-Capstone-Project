@@ -51,12 +51,12 @@ public class ReviewController {
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         review.setUser(user);
 
-        return new ResponseEntity<>(review, HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.createReview(review), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> findReviewById(@PathVariable Long id) {
-        Review foundReview = reviewService.getReviewById(id);
+    public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+        Review foundReview = reviewService.findReviewById(id);
         if (foundReview == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -65,7 +65,7 @@ public class ReviewController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Review> modifyReview(@PathVariable Long id, @RequestBody ReviewPayload reviewPayload) {
-        Review existingReview = reviewService.getReviewById(id);
+        Review existingReview = reviewService.findReviewById(id);
 
         Long reviewGameId = reviewPayload.getGameId();
         Long reviewUserId = reviewPayload.getUserId();

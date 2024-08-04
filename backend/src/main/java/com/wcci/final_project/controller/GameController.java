@@ -54,7 +54,7 @@ public class GameController {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
+                Review review = reviewService.findReviewById(reviewId);
 
                 if(review != null) gameReviews.add(review);
             }
@@ -113,7 +113,7 @@ public class GameController {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
+                Review review = reviewService.findReviewById(reviewId);
 
                 if(review != null) gameReviews.add(review);
             }
