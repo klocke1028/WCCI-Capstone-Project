@@ -1,6 +1,9 @@
 package com.wcci.final_project.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
@@ -23,6 +26,7 @@ public class Wishlist {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnoreProperties("")
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Game> games;
 

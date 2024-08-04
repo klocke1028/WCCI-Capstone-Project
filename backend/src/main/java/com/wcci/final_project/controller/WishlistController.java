@@ -55,7 +55,7 @@ public class WishlistController {
         wishlist.setGames(wishlistGames);
         wishlist.setUser(wishlistUser);
         
-        return new ResponseEntity<>(wishlist, HttpStatus.CREATED);
+        return new ResponseEntity<>(wishlistService.createWishlist(wishlist), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

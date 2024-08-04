@@ -1,14 +1,17 @@
-import logo from "./logo.svg";
+//import logo from "./logo.svg";
 import "./App.css";
-import { useState } from "react";
-import SearchForGames from "./components/SearchForGames";
+import Homepage from "./components/Homepage";
+//import { useState } from "react";
+//import SearchForGames from "./components/SearchForGames";
 //import LoginPage from "./components/LoginPage";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+//import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+  import Navbar from "./components/Navbar"
 
 function App() {
   return (
     <div>
       <Navbar />
+      <Homepage />
     </div>
   );
 }
