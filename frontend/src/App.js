@@ -1,18 +1,19 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { useState } from "react";
 import SearchForGames from "./components/SearchForGames";
-//import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AccountRegistration from "./components/AccountRegistration";
+import LoginPage from "./components/LoginPage";
 
 function App() {
   return (
-    <div>
-      <Navbar />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/LoginPage" element={<LoginPage />} />
+        <Route path="/AccountRegistration" element={<AccountRegistration />} />
+        <Route path="/SearchForGames" element={<SearchForGames />} />
+      </Routes>
+    </Router>
   );
 }
-
-// Add <Route path="/" element={<LoginPage>} />
 
 export default App;

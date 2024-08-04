@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import "./LoginPage.css";
 
-class Login extends Component {
-  render() {
-    return (
+function LoginPage({ login }) {
+  return (
+    <div className="login_container">
+      <h2 className="login_page_header">Insert website name here :)</h2>
       <div className="login">
-        <h4>Login</h4>
+        <h4 className="login_form_header">Login</h4>
         <form>
           <div className="text_area">
             <input
@@ -16,14 +17,13 @@ class Login extends Component {
               className="text_input"
             />
           </div>
-          <input type="submit" value="LOGIN" className="button" />
         </form>
-        <a className="link" href="/signup">
-          Sign Up
+        <a className="link" href="/AccountRegistration">
+          No account? Click here to sign Up!
         </a>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default Login;
+export default LoginPage;
