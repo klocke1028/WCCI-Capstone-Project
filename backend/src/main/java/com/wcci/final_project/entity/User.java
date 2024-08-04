@@ -1,6 +1,9 @@
 package com.wcci.final_project.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
@@ -28,9 +31,11 @@ public class User {
 
     private String email;
 
+    @JsonIgnoreProperties({ "user", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Review> reviews;
 
+    @JsonIgnoreProperties({ "user", "hibernateLazyInitializer", "handler" })
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "wishlist_id", referencedColumnName = "id")
     private Wishlist wishlist;

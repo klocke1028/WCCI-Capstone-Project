@@ -35,15 +35,15 @@ public class Game {
 
     private String boxArtLink;
 
-    @JsonIgnoreProperties("game")
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @JsonIgnoreProperties("game")
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
-    @JsonIgnoreProperties("game")
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceAlert> priceAlerts;
 

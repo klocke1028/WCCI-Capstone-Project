@@ -1,6 +1,9 @@
 package com.wcci.final_project.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
@@ -25,9 +28,11 @@ public class Wishlist {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnoreProperties({ "wishlist", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Game> games;
 
+    @JsonIgnoreProperties({ "wishlist", "hibernateLazyInitializer", "handler" })
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

@@ -20,8 +20,8 @@ public class ReviewService {
         return reviewRepository.findById(id).orElse(null);
     }
 
-    public void updateReview(Review updatedReview) {
-        reviewRepository.save(updatedReview);
+    public Review updateReview(Review updatedReview) {
+        return reviewRepository.save(updatedReview);
     }
 
     public boolean deleteReview(Long id) {

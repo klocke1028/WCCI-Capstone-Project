@@ -67,21 +67,16 @@ public class ReviewController {
     public ResponseEntity<Review> modifyReview(@PathVariable Long id, @RequestBody ReviewPayload reviewPayload) {
         Review existingReview = reviewService.findReviewById(id);
 
-        Long reviewGameId = reviewPayload.getGameId();
-        Long reviewUserId = reviewPayload.getUserId();
-
-        Game reviewGame = gameService.findGameById(reviewGameId);
-        User user = userService.findUserById(reviewUserId);
-
-        existingReview.setText(reviewPayload.getText());
+        Game reviewGame = existingReview.getGame();
+        User user = existingReview.getUser();
         
         if (reviewGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        existingReview.setGame(gameService.findGameById(reviewGameId));
 
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        existingReview.setUser(user);
+        
+        existingReview.setText(reviewPayload.getText());
 
-        return new ResponseEntity<>(existingReview, HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.updateReview(existingReview), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

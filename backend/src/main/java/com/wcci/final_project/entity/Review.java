@@ -27,11 +27,11 @@ public class Review {
 
     private String text;
 
-    @JsonIgnoreProperties("reviews")
+    @JsonIgnoreProperties({ "reviews", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 
-    @JsonIgnoreProperties("reviews")
+    @JsonIgnoreProperties({ "reviews", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }
