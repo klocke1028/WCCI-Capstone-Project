@@ -81,28 +81,38 @@ public class WishlistController {
 
     @PostMapping("/{id}/add-game")
     public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
-        Game newGame = new Game();
-
+        String newGameTitle = gamePayload.getTitle();
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
-        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        
-        String newGameTitle = gamePayload.getTitle();
+        List<Game> gamesInDatabase = gameService.getAllGames();
+        List<Game> gamesOnExistingWishlist = existingWishlist.getGames();
 
-        List<Game> existingGames = existingWishlist.getGames();
+        boolean isAlreadyOnWishlist = false;
 
-        boolean isAlreadyThere = false;
+        Game databaseGame = new Game();
 
-        for (Game existingGame : existingGames) {
-            String existingGameTitle = existingGame.getTitle();
-            if (existingGameTitle.equals(newGameTitle)) isAlreadyThere = true;
-        }
+        for (Game gameInDatabase : gamesInDatabase) {
+            String gameInDatabaseTitle = gameInDatabase.getTitle();
 
-        if (isAlreadyThere != true) {
+            if (gameInDatabaseTitle == newGameTitle) {
+                isAlreadyOnWishlist = true;
+                databaseGame = gameInDatabase;
+            }
+        } 
+
+        if (isAlreadyOnWishlist) {
+            gamesOnExistingWishlist.add(databaseGame);
+        } else {
+            Game game = new Game();
+            Game newGame = gameService.saveGame(game);
+
+            String gameTitle = gamePayload.getTitle();
             double gamePrice = gamePayload.getGamePrice();
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
             
+            if (gameTitle != null) newGame.setTitle(gameTitle);
             if (gamePrice != 0) newGame.setPrice(gamePrice);
+
             if (gameReviewIds != null) {
                 List<Review> gameReviews = new ArrayList<>();
 
@@ -113,10 +123,10 @@ public class WishlistController {
                 } 
 
                 newGame.setReviews(gameReviews);
-            }
 
-            existingGames.add(newGame);
-            existingWishlist.setGames(existingGames);            
+                gamesOnExistingWishlist.add(newGame);
+                existingWishlist.setGames(gamesOnExistingWishlist);
+            }
         }
         
         return ResponseEntity.ok(wishlistService.updateWishlist(existingWishlist));
