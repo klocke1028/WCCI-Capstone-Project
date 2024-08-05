@@ -44,7 +44,7 @@ public class UserController {
         Long userWishlistId = userPayload.getWishlistId();
 
         if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
+            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
 
             if (!(userWishlist == null))
                 user.setWishlist(userWishlist);
@@ -93,7 +93,7 @@ public class UserController {
         Long userWishlistId = userPayload.getWishlistId();
 
         if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.getWishlistById(userWishlistId);
+            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
 
             if (userWishlist != null)
             existingUser.setWishlist(userWishlist);

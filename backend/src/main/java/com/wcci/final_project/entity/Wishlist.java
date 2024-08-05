@@ -50,4 +50,17 @@ public class Wishlist {
         this.user = user;
         this.games = games;
     }
+
+    public void setGames(List<Game> games) {
+        if (this.games != null) {
+            this.games.forEach(game -> game.setWishlist(null));
+        }
+
+        if (games != null) {
+            games.forEach(game -> game.setWishlist(this));
+        }
+
+        this.games.clear();
+        this.games.addAll(games);
+    }
 }
