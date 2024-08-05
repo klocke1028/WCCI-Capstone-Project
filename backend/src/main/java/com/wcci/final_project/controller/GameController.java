@@ -68,7 +68,7 @@ public class GameController {
             game.setPriceAlerts(gamePriceAlerts);
         }
 
-        return new ResponseEntity<>(game, HttpStatus.CREATED);
+        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

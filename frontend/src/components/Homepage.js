@@ -4,7 +4,7 @@ import PopularGames from './PopularGames';
 const Homepage = () => {
     return (
         <div>
-            <h1>Welcome to the Game Store</h1>
+            <h1>All Things Games</h1>
             <PopularGames />
         </div>
     );

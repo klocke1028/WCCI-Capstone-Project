@@ -51,7 +51,7 @@ public class ReviewController {
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         review.setUser(user);
 
-        return new ResponseEntity<>(review, HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.createReview(review), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

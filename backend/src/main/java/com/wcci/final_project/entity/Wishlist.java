@@ -26,7 +26,7 @@ public class Wishlist {
     @GeneratedValue
     private Long id;
 
-    @JsonIgnoreProperties("")
+    @JsonIgnoreProperties ({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Game> games;
 

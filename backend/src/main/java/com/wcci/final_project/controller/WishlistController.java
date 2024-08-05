@@ -1,7 +1,9 @@
 package com.wcci.final_project.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,15 +48,16 @@ public class WishlistController {
         List<Game> wishlistGames = new ArrayList<>();
 
         for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.getGameById(wishlistGameId); 
-            if (!(wishlistGame == null)) wishlistGames.add(wishlistGame);
+            Game wishlistGame = gameService.getGameById(wishlistGameId);
+            if (!(wishlistGame == null))
+                wishlistGames.add(wishlistGame);
         }
 
         User wishlistUser = userService.getUserById(wishlistUserId);
-        
+
         wishlist.setGames(wishlistGames);
         wishlist.setUser(wishlistUser);
-        
+
         return new ResponseEntity<>(wishlistService.createWishlist(wishlist), HttpStatus.CREATED);
     }
 
@@ -70,33 +73,36 @@ public class WishlistController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Wishlist> updateWishlist(@PathVariable Long id, @RequestBody WishlistPayload wishlistPayload) {
+    public ResponseEntity<Wishlist> updateWishlist(@PathVariable Long id,
+            @RequestBody WishlistPayload wishlistPayload) {
         Wishlist existingWishlist = wishlistService.getWishlistById(id);
 
-        List<Long> wishlistGameIds = wishlistPayload.getGameIds();
+        Set<Long> wishlistGameIds = new HashSet<>(wishlistPayload.getGameIds());
         Long wishlistUserId = wishlistPayload.getUserId();
 
         List<Game> wishlistGames = new ArrayList<>();
 
         for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.getGameById(wishlistGameId); 
-            if (!(wishlistGame == null)) wishlistGames.add(wishlistGame);
+            Game wishlistGame = gameService.getGameById(wishlistGameId);
+            if (wishlistGame != null) {
+                wishlistGames.add(wishlistGame);
+            }
         }
 
         User wishlistUser = userService.getUserById(wishlistUserId);
-        
-        existingWishlist.setGames(wishlistGames);
-        existingWishlist.setUser(wishlistUser);
-        
-        return new ResponseEntity<>(existingWishlist, HttpStatus.CREATED);
 
+        existingWishlist.getGames().clear();
+        existingWishlist.getGames().addAll(wishlistGames);
+        existingWishlist.setUser(wishlistUser);
+
+        return new ResponseEntity<>(wishlistService.updateWishlist(existingWishlist), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeWishlist(@PathVariable Long id) {
         boolean isDeleted = wishlistService.deleteWishlist(id);
 
-        if(!isDeleted) {
+        if (!isDeleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 

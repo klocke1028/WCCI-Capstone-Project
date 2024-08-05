@@ -20,8 +20,8 @@ public class WishlistService {
         return wishlistRepository.findById(id).orElse(null);
     }
 
-    public void updateReview(Wishlist updatedWishlist) {
-        wishlistRepository.save(updatedWishlist);
+    public Wishlist updateWishlist(Wishlist updatedWishlist) {
+        return wishlistRepository.save(updatedWishlist);
     }
 
     public boolean deleteWishlist(Long id) {
