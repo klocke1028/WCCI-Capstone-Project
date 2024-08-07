@@ -21,7 +21,7 @@ import com.wcci.final_project.service.ReviewService;
 import com.wcci.final_project.service.UserService;
 
 @RestController
-@RequestMapping("api/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
 
     @Autowired
@@ -40,13 +40,13 @@ public class ReviewController {
         Long reviewGameId = reviewPayload.getGameId();
         Long reviewUserId = reviewPayload.getUserId();
 
-        Game reviewGame = gameService.getGameById(reviewGameId);
-        User user = userService.getUserById(reviewUserId);
+        Game reviewGame = gameService.findGameById(reviewGameId);
+        User user = userService.findUserById(reviewUserId);
 
         review.setText(reviewPayload.getText());
         
         if (reviewGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        review.setGame(gameService.getGameById(reviewGameId));
+        review.setGame(gameService.findGameById(reviewGameId));
 
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         review.setUser(user);
@@ -55,8 +55,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> findReviewById(@PathVariable Long id) {
-        Review foundReview = reviewService.getReviewById(id);
+    public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+        Review foundReview = reviewService.findReviewById(id);
         if (foundReview == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -65,23 +65,18 @@ public class ReviewController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Review> modifyReview(@PathVariable Long id, @RequestBody ReviewPayload reviewPayload) {
-        Review existingReview = reviewService.getReviewById(id);
+        Review existingReview = reviewService.findReviewById(id);
 
-        Long reviewGameId = reviewPayload.getGameId();
-        Long reviewUserId = reviewPayload.getUserId();
-
-        Game reviewGame = gameService.getGameById(reviewGameId);
-        User user = userService.getUserById(reviewUserId);
-
-        existingReview.setText(reviewPayload.getText());
+        Game reviewGame = existingReview.getGame();
+        User user = existingReview.getUser();
         
         if (reviewGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        existingReview.setGame(gameService.getGameById(reviewGameId));
 
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        existingReview.setUser(user);
+        
+        existingReview.setText(reviewPayload.getText());
 
-        return new ResponseEntity<>(existingReview, HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.updateReview(existingReview), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

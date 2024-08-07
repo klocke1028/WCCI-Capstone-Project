@@ -16,7 +16,7 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
-    public Wishlist getWishlistById(Long id) {
+    public Wishlist findWishlistById(Long id) {
         return wishlistRepository.findById(id).orElse(null);
     }
 
