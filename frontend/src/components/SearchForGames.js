@@ -11,9 +11,7 @@ function SearchForGames() {
   useEffect(() => {
     // Fetch the list of all games from Steam DB
     const fetchAllGames = () => {
-      const url = `https://api.steampowered.com/ISteamApps/GetAppList/v2/`; /**Access to fetch at 'https://api.steampowered.com/ISteamApps/GetAppList/v2/' 
-      from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. 
-      If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled. */
+      const url = `http://localhost:8080/api/games/search`; 
       fetch(url, {
         headers: {
           Accept: "application/json",
@@ -26,8 +24,8 @@ function SearchForGames() {
           return response.json();
         })
         .then((data) => {
-          console.log("Fetched games: ", data.applist.apps);
-          setAllGames(data.applist.apps);
+          console.log("Fetched games: ", data.title);
+          setAllGames(data.title);
         })
         .catch((error) => {
           console.error("There was a problem fetching the app list: " + error);
@@ -39,12 +37,13 @@ function SearchForGames() {
 
   useEffect(() => {
     // Filter the results based on the search term
-    /*The useEffect hook is used to run side-effects in a functional component. It takes two arguments: a function to execute and an array of dependencies that control when the effect runs.
+    /*The useEffect hook is used to run side-effects in a functional component. It takes two arguments: 
+    a function to execute and an array of dependencies that control when the effect runs.
     allGames should now hold all the games that were fetched with the updater function setAllGames.
-    game.name should grab the title of the games based on what I see from postman JSON body results.
+    .title should grab the title of the games based on what I see from postman JSON body results.
     threw in lowercase to make sure the search is not case sensitive.*/
-    const filteredResults = allGames.filter((game) =>
-      game.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredResults = allGames.filter((title) =>
+      title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     //setResults updater function will update results to be a filtered array based on the search
     //Runs on first render and any time a dependency value changes
