@@ -1,5 +1,6 @@
 package com.wcci.final_project.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,8 @@ public class WishlistController {
     @Autowired
     private ReviewService reviewService;
 
+
+
     @PostMapping
     public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistPayload wishlistPayload) {
         Wishlist wishlist = new Wishlist();
@@ -81,8 +84,8 @@ public class WishlistController {
     }
 
     @PostMapping("/{id}/add-game")
-    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
-        String newGameTitle = gamePayload.getTitle();
+    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) throws IOException {
+        String newGameItadId = gamePayload.getItadId();
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
         List<Game> gamesInDatabase = gameService.getAllGames();
@@ -97,9 +100,9 @@ public class WishlistController {
         boolean isGameAlreadyInDatabase = false;
 
         for (Game gameInExistingWishlist : againGamesInExistingWishlist) {
-            String gameInExistingWishlistTitle = gameInExistingWishlist.getTitle();
+            String gameInExistingWishlistItadId = gameInExistingWishlist.getItadId();
 
-            if (gameInExistingWishlistTitle.equals(newGameTitle)) {
+            if (gameInExistingWishlistItadId.equals(newGameItadId)) {
                 isGameAlreadyInWishlist = true;
                 break;
             }
@@ -109,9 +112,9 @@ public class WishlistController {
 
         if (!isGameAlreadyInWishlist) {
             for (Game gameInDatabase : gamesInDatabase) {
-                String gameInDatabaseTitle = gameInDatabase.getTitle();
+                String gameInDatabaseItadId = gameInDatabase.getItadId();
 
-                if (gameInDatabaseTitle.equals(newGameTitle)) {
+                if (gameInDatabaseItadId.equals(newGameItadId)) {
                     isGameAlreadyInDatabase = true;
                     databaseGame = gameInDatabase;
                     break;
@@ -124,12 +127,11 @@ public class WishlistController {
         } else {
             Game game = new Game();
 
-            double newGamePrice = gamePayload.getGamePrice();
+            if (newGameItadId != null) game.setItadId(newGameItadId);
 
-            if (newGameTitle != null)
-                game.setTitle(newGameTitle);
-            if (newGamePrice != 0)
-                game.setPrice(newGamePrice);
+            
+
+
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 

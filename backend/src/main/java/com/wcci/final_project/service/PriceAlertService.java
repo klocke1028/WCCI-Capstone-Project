@@ -1,7 +1,10 @@
 package com.wcci.final_project.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -9,6 +12,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.repository.PriceAlertRepository;
@@ -39,10 +44,10 @@ public class PriceAlertService {
         return true;
     }
 
-    // public PriceAlert trackPrice(Long gameId) throws IOException {
+    // public Double trackPrice(Long gameId) throws IOException {
     //     PriceAlert priceAlert = new PriceAlert();
 
-    //     Game priceAlertGame = gameService.getGameById(gameId);
+    //     Game priceAlertGame = gameService.findGameById(gameId);
     //     priceAlert.setGame(priceAlertGame);
 
     //     String gameTitle = priceAlertGame.getTitle();
@@ -52,25 +57,55 @@ public class PriceAlertService {
     //     Runnable track = new Runnable() {
     //         @Override
     //         public void run() {
-    //             /*
-    //              * URL getPriceUrl = new URL("");
-    //              * HttpsURLConnection getPriceConnection = (HttpsURLConnection) getPriceUrl.openConnection(); 
-    //              */
+    //             for (int shopId : shopIds) {
+    //                 // check the price for the game at every shop and return a price if it's lower than the current one
+    //             }
                 
     //         }
     //     };    
     // }
 
-    // private List<Integer> getItadShopIds() throws IOException {
-    //     URL getShopsUrl = new URL("https://api.isthereanydeal.com/service/shops/v1?country=US");
-    //     HttpsURLConnection getShopsConnection = (HttpsURLConnection) getShopsUrl.openConnection();
+    public String getItadShopIds() throws IOException {
+        List<Integer> intItadShopIds = new ArrayList<>();
 
-    //     getShopsConnection.setRequestMethod("GET");
+        URL getShopsUrl = new URL("https://api.isthereanydeal.com/service/shops/v1?country=US");
+        HttpsURLConnection getShopsConnection = (HttpsURLConnection) getShopsUrl.openConnection();
 
-    //     int getShopsResponseCode = getShopsConnection.getResponseCode();
+        getShopsConnection.setRequestMethod("GET");
 
-    //     System.out.println(getShopsResponseCode);
+        int getShopsResponseCode = getShopsConnection.getResponseCode();
 
-        
-    // }
+        if (getShopsResponseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader shopsBufferedReader = new BufferedReader(new InputStreamReader(getShopsConnection.getInputStream()));
+            String shopsResponse = shopsBufferedReader.readLine();
+            ObjectMapper shopsObjectMapper = new ObjectMapper();
+            JsonNode shopsNode = shopsObjectMapper.readTree(shopsResponse);
+
+            for (JsonNode shopNode : shopsNode) {
+                int shopId = shopNode.path("id").asInt();
+                intItadShopIds.add(shopId);
+            }
+        } else {
+            System.out.println("Error in getting shop IDs. Response Code: " + getShopsResponseCode);
+        }
+
+        StringBuilder itadIdsBuilder = new StringBuilder();
+
+        int index = 0;
+
+        for (int shopId : intItadShopIds) {
+            itadIdsBuilder.append(shopId + ",");
+
+            if (index == intItadShopIds.size() - 1) {
+                itadIdsBuilder.append(shopId);
+                break;
+            }
+
+            index++;
+        }
+
+        String itadShopIds = itadIdsBuilder.toString();
+
+        return itadShopIds;
+    }   
 }

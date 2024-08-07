@@ -17,12 +17,14 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-
 @Service
 public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private PriceAlertService priceAlertService;
 
     private String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
 
@@ -96,27 +98,7 @@ public class GameService {
 
             ObjectMapper gameObjectMapper = new ObjectMapper();
             JsonNode gameInfoNode = gameObjectMapper.readTree(gameResponse.toString());
-            String boxArtUrl = gameInfoNode.path("assets").path("boxart").asText();
-
-            if (boxArtUrl.isEmpty()) {
-                String banner600 = gameInfoNode.path("assets").path("banner600").asText();
-                boxArtUrl = banner600;
-            }
-
-            if (boxArtUrl.isEmpty()) {
-                String banner400 = gameInfoNode.path("assets").path("banner400").asText();
-                boxArtUrl = banner400;
-            }
-
-            if (boxArtUrl.isEmpty()) {
-                String banner300 = gameInfoNode.path("assets").path("banner300").asText();
-                boxArtUrl = banner300;
-            }
-
-            if (boxArtUrl.isEmpty()) {
-                String banner145 = gameInfoNode.path("assets").path("banner145").asText();
-                boxArtUrl = banner145;
-            }
+            String boxArtUrl = getBoxArt(gameInfoNode);
             
             game = new Game(title, itadId, boxArtUrl);
         } else {
@@ -154,5 +136,18 @@ public class GameService {
 
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public Double getBestPrice() throws IOException{
+        double bestPrice = 0.0;
+        String shopIds = priceAlertService.getItadShopIds();
+        String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
+
+        URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
+        HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();
+        getBestPriceConnection.setRequestMethod("POST");
+        int gameInfoResponseCode = getBestPriceConnection.getResponseCode();
+
+        return bestPrice;
     }
 }
