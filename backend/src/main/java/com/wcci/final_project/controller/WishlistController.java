@@ -158,15 +158,12 @@ public class WishlistController {
     public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable Long id, @RequestBody Long gameId) {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
-        if (existingWishlist == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         List<Game> wishlistGames = existingWishlist.getGames();
         List<Game> againGamesInExistingWishlist = new ArrayList<>();
 
-        for (Game gameInExistingWishlist : wishlistGames) {
-            againGamesInExistingWishlist.add(gameInExistingWishlist);
-        }
+        againGamesInExistingWishlist.addAll(wishlistGames);
 
         int index = 0;
 
@@ -177,6 +174,7 @@ public class WishlistController {
 
                 if (game != null) {
                     againGamesInExistingWishlist.remove(index);
+                    break;
                 }
 
             } else {
