@@ -16,12 +16,12 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
-    public Wishlist getWishlistById(Long id) {
+    public Wishlist findWishlistById(Long id) {
         return wishlistRepository.findById(id).orElse(null);
     }
 
-    public void updateReview(Wishlist updatedWishlist) {
-        wishlistRepository.save(updatedWishlist);
+    public Wishlist updateWishlist(Wishlist updatedWishlist) {
+        return wishlistRepository.save(updatedWishlist);
     }
 
     public boolean deleteWishlist(Long id) {

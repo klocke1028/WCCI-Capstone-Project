@@ -1,5 +1,7 @@
 package com.wcci.final_project.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wcci.final_project.entity.User;
@@ -15,12 +17,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void updateUser(User updatedUser) {
-        userRepository.save(updatedUser);
+    public User updateUser(User updatedUser) {
+        return userRepository.save(updatedUser);
     }
 
     public boolean deleteUser(Long id) {
@@ -30,5 +32,9 @@ public class UserService {
 
         userRepository.deleteById(id);
         return true;
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

@@ -19,7 +19,7 @@ import com.wcci.final_project.service.GameService;
 import com.wcci.final_project.service.PriceAlertService;
 
 @RestController
-@RequestMapping("api/price-alerts")
+@RequestMapping("/price-alerts")
 public class PriceAlertController {
 
     @Autowired
@@ -35,21 +35,21 @@ public class PriceAlertController {
         Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
         Long priceAlertGameId = priceAlertPayload.getGameId();
 
-        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+        Game priceAlertGame = gameService.findGameById(priceAlertGameId);
 
         if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        priceAlert.setNewPrice(priceAlertNewPrice);
+        if (priceAlertNewPrice != null) priceAlert.setNewPrice(priceAlertNewPrice);
         priceAlert.setGame(priceAlertGame);
 
-        return new ResponseEntity<>(priceAlert, HttpStatus.CREATED);
+        return new ResponseEntity<>(priceAlertService.createPriceAlert(priceAlert), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PriceAlert> findPriceAlertById(@PathVariable Long id) {
-        PriceAlert foundPriceAlert = priceAlertService.getPriceAlertById(id);
+    public ResponseEntity<PriceAlert> getPriceAlertById(@PathVariable Long id) {
+        PriceAlert foundPriceAlert = priceAlertService.findPriceAlertById(id);
 
         if(foundPriceAlert == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -60,12 +60,12 @@ public class PriceAlertController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PriceAlert> updatePriceAlert(@PathVariable Long id, @RequestBody PriceAlertPayload priceAlertPayload) {
-        PriceAlert existingPriceAlert = priceAlertService.getPriceAlertById(id);
+        PriceAlert existingPriceAlert = priceAlertService.findPriceAlertById(id);
 
         Double priceAlertNewPrice = priceAlertPayload.getNewPrice();
-        Long priceAlertGameId = priceAlertPayload.getGameId();
+        Long priceAlertGameId = existingPriceAlert.getGame().getId();
 
-        Game priceAlertGame = gameService.getGameById(priceAlertGameId);
+        Game priceAlertGame = gameService.findGameById(priceAlertGameId);
 
         if (priceAlertGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -74,7 +74,7 @@ public class PriceAlertController {
         existingPriceAlert.setNewPrice(priceAlertNewPrice);
         existingPriceAlert.setGame(priceAlertGame);
 
-        return new ResponseEntity<>(existingPriceAlert, HttpStatus.CREATED);
+        return new ResponseEntity<>(priceAlertService.createPriceAlert(existingPriceAlert), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
