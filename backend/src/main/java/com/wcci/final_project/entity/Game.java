@@ -12,10 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "\"game\"")
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,13 +35,15 @@ public class Game {
 
     private String boxArtLink;
 
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @JsonIgnoreProperties("game")
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
+    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceAlert> priceAlerts;
 
@@ -93,10 +97,32 @@ public class Game {
     public Game(String title, double price, List<Review> reviews, List<PriceAlert> priceAlerts) {
         this.title = title;
         this.price = price;
-        this.reviews = new ArrayList<>();
+        this.reviews = reviews;
         this.priceAlerts = priceAlerts;
     }
 
+    public void setReviews(List<Review> reviews) {
+        if (this.reviews != null) {
+            this.reviews.forEach(review -> review.setGame(null));
+        }
+        if (reviews != null) {
+            reviews.forEach(review -> review.setGame(this));
+        }
+        this.reviews.clear();
+        this.reviews.addAll(reviews);
+    }
+
+    public void setPriceAlerts(List<PriceAlert> priceAlerts) {
+        if (this.priceAlerts != null) {
+            this.priceAlerts.forEach(priceAlert -> priceAlert.setGame(null));
+        }
+        if (priceAlerts != null) {
+            priceAlerts.forEach(priceAlert -> priceAlert.setGame(this));
+        }
+        this.priceAlerts.clear();
+        this.priceAlerts.addAll(priceAlerts);
+    }
+    
     @Override
     public String toString() {
         String gameToString = title + "\n" +

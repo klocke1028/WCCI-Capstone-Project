@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,36 +42,46 @@ public class GameController {
     public ResponseEntity<Game> addGame(@RequestBody GamePayload gamePayload) {
         Game game = new Game();
 
-        game.setTitle(gamePayload.getTitle());
-        game.setPrice(gamePayload.getGamePrice());
+        String gameTitle = gamePayload.getTitle();
+        double gamePrice = gamePayload.getGamePrice();
+
+        if (gameTitle != null) game.setTitle(gameTitle);
+        if (gamePrice != 0) game.setPrice(gamePrice);
+
+        List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
         
-        List<Long> gameReviewIds = gamePayload.getGameReviewIds();
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
-        
-        if (!(gameReviewIds == null)) {
+        if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
+
             for (Long reviewId : gameReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
-                if(!(review == null)) gameReviews.add(review);
+                Review review = reviewService.findReviewById(reviewId);
+
+                if(review != null) gameReviews.add(review);
             }
+
             game.setReviews(gameReviews);
         } 
+        
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
 
-        if (!(gamePriceAlertIds == null)) {
+        if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
+
             for (Long priceAlertId : gamePriceAlertIds) {
-                PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
-                if(!(priceAlert == null)) gamePriceAlerts.add(priceAlert);
+                PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
+
+                if(priceAlert != null) gamePriceAlerts.add(priceAlert);
             }
+
             game.setPriceAlerts(gamePriceAlerts);
         } 
-
-        return new ResponseEntity<>(game, HttpStatus.CREATED);
+        
+        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> findGameById(@PathVariable Long id) {
-        Game foundGame = gameService.getGameById(id);
+    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+        Game foundGame = gameService.findGameById(id);
 
         if (foundGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -81,35 +90,52 @@ public class GameController {
         return ResponseEntity.ok(foundGame);
     }
 
+    @GetMapping("/all") 
+    public ResponseEntity<List<Game>> getAllGames() {
+        List<Game> allGames = gameService.getAllGames();
+
+        return ResponseEntity.ok(allGames);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
-        Game existingGame = gameService.getGameById(id);
+        Game existingGame = gameService.findGameById(id);
 
-        existingGame.setTitle(gamePayload.getTitle());
-        existingGame.setPrice(gamePayload.getGamePrice());
+        String gameTitle = gamePayload.getTitle();
+        double gamePrice = gamePayload.getGamePrice();
+
+        if (gameTitle != null) existingGame.setTitle(gameTitle);
+        if (gamePrice != 0) existingGame.setPrice(gamePrice);
+
+        List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
         
-        List<Long> gameReviewIds = gamePayload.getGameReviewIds();
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();        
-        
-        if (!(gameReviewIds == null)) {
+        if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
+
             for (Long reviewId : gameReviewIds) {
-                Review review = reviewService.getReviewById(reviewId);
-                if(!(review == null)) gameReviews.add(review);
+                Review review = reviewService.findReviewById(reviewId);
+
+                if(review != null) gameReviews.add(review);
             }
+
             existingGame.setReviews(gameReviews);
         } 
+        
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
 
-        if (!(gamePriceAlertIds == null)) {
+        if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
+
             for (Long priceAlertId : gamePriceAlertIds) {
-                PriceAlert priceAlert = priceAlertService.getPriceAlertById(priceAlertId);
-                if(!(priceAlert == null)) gamePriceAlerts.add(priceAlert);
+                PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
+
+                if(priceAlert != null) gamePriceAlerts.add(priceAlert);
             }
+
             existingGame.setPriceAlerts(gamePriceAlerts);
         } 
-
-        return new ResponseEntity<>(existingGame, HttpStatus.CREATED);
+        
+        return new ResponseEntity<>(gameService.saveGame(existingGame), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -128,7 +154,7 @@ public class GameController {
 
         String searchTerm = searchPayload.getSearchTerm();
 
-        List<Game> searchResults = gameService.searchForGamesByTitle(searchTerm);
+        List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
 
         if (searchResults == null) return ResponseEntity.noContent().build();
 

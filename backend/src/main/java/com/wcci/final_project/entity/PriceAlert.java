@@ -7,12 +7,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "\"price-alert\"")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,7 +27,7 @@ public class PriceAlert {
 
     private double newPrice;
 
-    @JsonIgnoreProperties("price-alert")
+    @JsonIgnoreProperties({ "priceAlerts", "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Game game;
 }

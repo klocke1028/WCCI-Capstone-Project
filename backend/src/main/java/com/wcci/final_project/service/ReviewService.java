@@ -16,12 +16,12 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public Review getReviewById(Long id) {
+    public Review findReviewById(Long id) {
         return reviewRepository.findById(id).orElse(null);
     }
 
-    public void updateReview(Review updatedReview) {
-        reviewRepository.save(updatedReview);
+    public Review updateReview(Review updatedReview) {
+        return reviewRepository.save(updatedReview);
     }
 
     public boolean deleteReview(Long id) {
