@@ -51,20 +51,21 @@ public class WishlistController {
         List<Game> wishlistGames = new ArrayList<>();
 
         for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.findGameById(wishlistGameId); 
-            if (wishlistGame != null) wishlistGames.add(wishlistGame);
+            Game wishlistGame = gameService.findGameById(wishlistGameId);
+            if (wishlistGame != null)
+                wishlistGames.add(wishlistGame);
         }
-        
+
         wishlist.setGames(wishlistGames);
 
         User wishlistUser = userService.findUserById(wishlistUserId);
-        
+
         if (wishlistUser != null) {
             wishlist.setUser(wishlistUser);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        
+
         return new ResponseEntity<>(wishlistService.createWishlist(wishlist), HttpStatus.CREATED);
     }
 
@@ -85,50 +86,71 @@ public class WishlistController {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
         List<Game> gamesInDatabase = gameService.getAllGames();
-        List<Game> gamesOnExistingWishlist = existingWishlist.getGames();
+        List<Game> gamesInExistingWishlist = existingWishlist.getGames();
+        List<Game> againGamesInExistingWishlist = new ArrayList<>();
 
-        boolean isAlreadyOnWishlist = false;
+        for (Game gameInExistingWishlist : gamesInExistingWishlist) {
+            againGamesInExistingWishlist.add(gameInExistingWishlist);
+        }
+
+        boolean isGameAlreadyInWishlist = false;
+        boolean isGameAlreadyInDatabase = false;
+
+        for (Game gameInExistingWishlist : againGamesInExistingWishlist) {
+            String gameInExistingWishlistTitle = gameInExistingWishlist.getTitle();
+
+            if (gameInExistingWishlistTitle.equals(newGameTitle)) {
+                isGameAlreadyInWishlist = true;
+                break;
+            }
+        }
 
         Game databaseGame = new Game();
 
-        for (Game gameInDatabase : gamesInDatabase) {
-            String gameInDatabaseTitle = gameInDatabase.getTitle();
+        if (!isGameAlreadyInWishlist) {
+            for (Game gameInDatabase : gamesInDatabase) {
+                String gameInDatabaseTitle = gameInDatabase.getTitle();
 
-            if (gameInDatabaseTitle == newGameTitle) {
-                isAlreadyOnWishlist = true;
-                databaseGame = gameInDatabase;
+                if (gameInDatabaseTitle.equals(newGameTitle)) {
+                    isGameAlreadyInDatabase = true;
+                    databaseGame = gameInDatabase;
+                    break;
+                }
             }
-        } 
+        }
 
-        if (isAlreadyOnWishlist) {
-            gamesOnExistingWishlist.add(databaseGame);
+        if (isGameAlreadyInDatabase) {
+            againGamesInExistingWishlist.add(databaseGame);
         } else {
             Game game = new Game();
-            Game newGame = gameService.saveGame(game);
 
-            String gameTitle = gamePayload.getTitle();
-            double gamePrice = gamePayload.getGamePrice();
+            double newGamePrice = gamePayload.getGamePrice();
+
+            if (newGameTitle != null)
+                game.setTitle(newGameTitle);
+            if (newGamePrice != 0)
+                game.setPrice(newGamePrice);
+
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
-            
-            if (gameTitle != null) newGame.setTitle(gameTitle);
-            if (gamePrice != 0) newGame.setPrice(gamePrice);
 
-            if (gameReviewIds != null) {
+            if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
                 List<Review> gameReviews = new ArrayList<>();
 
                 for (Long gameReviewId : gameReviewIds) {
                     Review gameReview = reviewService.findReviewById(gameReviewId);
 
-                    if (gameReview != null) gameReviews.add(gameReview);
-                } 
+                    if (gameReview != null)
+                        gameReviews.add(gameReview);
+                }
 
-                newGame.setReviews(gameReviews);
-
-                gamesOnExistingWishlist.add(newGame);
-                existingWishlist.setGames(gamesOnExistingWishlist);
+                game.setReviews(gameReviews);
             }
+
+            Game newGame = gameService.saveGame(game);
+            againGamesInExistingWishlist.add(newGame);
+            existingWishlist.setGames(againGamesInExistingWishlist);
         }
-        
+
         return ResponseEntity.ok(wishlistService.updateWishlist(existingWishlist));
     }
 
@@ -136,24 +158,33 @@ public class WishlistController {
     public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable Long id, @RequestBody Long gameId) {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
-        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (existingWishlist == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         List<Game> wishlistGames = existingWishlist.getGames();
-        
+        List<Game> againGamesInExistingWishlist = new ArrayList<>();
+
+        for (Game gameInExistingWishlist : wishlistGames) {
+            againGamesInExistingWishlist.add(gameInExistingWishlist);
+        }
+
         int index = 0;
-        
-        for (Game wishlistGame : wishlistGames) {
+
+        for (Game wishlistGame : againGamesInExistingWishlist) {
             Long wishlistGameId = wishlistGame.getId();
             if (wishlistGameId == gameId) {
                 Game game = gameService.findGameById(wishlistGameId);
-                
-                if (game != null) wishlistGames.remove(index);
 
-                existingWishlist.setGames(wishlistGames);
+                if (game != null) {
+                    againGamesInExistingWishlist.remove(index);
+                }
+
             } else {
                 index++;
             }
         }
+
+        existingWishlist.setGames(againGamesInExistingWishlist);
 
         return ResponseEntity.ok(wishlistService.updateWishlist(existingWishlist));
     }
