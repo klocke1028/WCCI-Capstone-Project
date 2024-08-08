@@ -23,9 +23,6 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
-    @Autowired
-    private PriceAlertService priceAlertService;
-
     private String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
 
     public Game saveGame(Game game) {
@@ -33,7 +30,8 @@ public class GameService {
     }
 
     public boolean deleteGame(Long id) {
-        if (!gameRepository.existsById(id)) return false;
+        if (!gameRepository.existsById(id))
+            return false;
 
         gameRepository.deleteById(id);
         return true;
@@ -46,37 +44,39 @@ public class GameService {
     public Game updateGame(Game updatedGame) {
         return gameRepository.save(updatedGame);
     }
-    
+
     public List<Game> searchGamesByTitle(String searchTerm) throws IOException {
-		List<Game> searchResults = new ArrayList<>();
-		int resultsLimiter = 20;
-		URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results=" + resultsLimiter + "&key=" + itadApiKey);
+        List<Game> searchResults = new ArrayList<>();
+        int resultsLimiter = 20;
+        URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
+                + resultsLimiter + "&key=" + itadApiKey);
         HttpsURLConnection itadConnection = (HttpsURLConnection) searchGames.openConnection();
         itadConnection.setRequestMethod("GET");
 
         int responseCode = itadConnection.getResponseCode();
 
-		if (responseCode == HttpsURLConnection.HTTP_OK) {
-			BufferedReader  searchBufferedReader = new BufferedReader(new InputStreamReader(itadConnection.getInputStream()));
-			String searchInputLine = searchBufferedReader.readLine();
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader searchBufferedReader = new BufferedReader(
+                    new InputStreamReader(itadConnection.getInputStream()));
+            String searchInputLine = searchBufferedReader.readLine();
             StringBuilder searchResponse = new StringBuilder();
 
-			searchResponse.append(searchInputLine);
+            searchResponse.append(searchInputLine);
 
-			ObjectMapper searchObjectMapper = new ObjectMapper();
+            ObjectMapper searchObjectMapper = new ObjectMapper();
             JsonNode searchResultsNode = searchObjectMapper.readTree(searchResponse.toString());
 
-			if (searchResultsNode.isArray()) {
+            if (searchResultsNode.isArray()) {
                 for (JsonNode gameNode : searchResultsNode) {
                     Game game = createGameSearchResult(gameNode);
                     searchResults.add(game);
                 }
             }
-		} else {
-			System.out.println("Error in getting search results. Error code: " + responseCode);
-		}
+        } else {
+            System.out.println("Error in getting search results. Error code: " + responseCode);
+        }
 
-		return searchResults;
+        return searchResults;
     }
 
     public Game createGameSearchResult(JsonNode gameNode) throws IOException {
@@ -90,7 +90,8 @@ public class GameService {
         int gameInfoResponseCode = gameInfoConnection.getResponseCode();
 
         if (gameInfoResponseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader  gameBufferedReader = new BufferedReader(new InputStreamReader(gameInfoConnection.getInputStream()));
+            BufferedReader gameBufferedReader = new BufferedReader(
+                    new InputStreamReader(gameInfoConnection.getInputStream()));
             String gameInputLine = gameBufferedReader.readLine();
             StringBuilder gameResponse = new StringBuilder();
 
@@ -99,7 +100,37 @@ public class GameService {
             ObjectMapper gameObjectMapper = new ObjectMapper();
             JsonNode gameInfoNode = gameObjectMapper.readTree(gameResponse.toString());
             String boxArtUrl = getBoxArt(gameInfoNode);
-            
+
+            game = new Game(title, itadId, boxArtUrl);
+        } else {
+            System.out.println("Error in getting game info. Error code: " + gameInfoResponseCode);
+        }
+
+        return game;
+    }
+
+    public Game searchGameOnItadByItadId(Game existingGame) throws IOException {
+        Game game = new Game();
+        String title = existingGame.getTitle();
+        String itadId = existingGame.getItadId();
+
+        URL gameInfo = new URL("https://api.isthereanydeal.com/games/info/v2?id=" + itadId + "&key=" + itadApiKey);
+        HttpsURLConnection gameInfoConnection = (HttpsURLConnection) gameInfo.openConnection();
+        gameInfoConnection.setRequestMethod("GET");
+        int gameInfoResponseCode = gameInfoConnection.getResponseCode();
+
+        if (gameInfoResponseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader gameBufferedReader = new BufferedReader(
+                    new InputStreamReader(gameInfoConnection.getInputStream()));
+            String gameInputLine = gameBufferedReader.readLine();
+            StringBuilder gameResponse = new StringBuilder();
+
+            gameResponse.append(gameInputLine);
+
+            ObjectMapper gameObjectMapper = new ObjectMapper();
+            JsonNode gameInfoNode = gameObjectMapper.readTree(gameResponse.toString());
+            String boxArtUrl = getBoxArt(gameInfoNode);
+
             game = new Game(title, itadId, boxArtUrl);
         } else {
             System.out.println("Error in getting game info. Error code: " + gameInfoResponseCode);
@@ -138,16 +169,4 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public Double getBestPrice() throws IOException{
-        double bestPrice = 0.0;
-        String shopIds = priceAlertService.getItadShopIds();
-        String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
-
-        URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
-        HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();
-        getBestPriceConnection.setRequestMethod("POST");
-        int gameInfoResponseCode = getBestPriceConnection.getResponseCode();
-
-        return bestPrice;
-    }
 }

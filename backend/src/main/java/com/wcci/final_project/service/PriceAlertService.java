@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.repository.PriceAlertRepository;
 
@@ -23,9 +22,6 @@ public class PriceAlertService {
 
     @Autowired
     private PriceAlertRepository priceAlertRepository;
-
-    @Autowired
-    private GameService gameService;
 
     public PriceAlert createPriceAlert(PriceAlert priceAlert) {
         return priceAlertRepository.save(priceAlert);
@@ -44,27 +40,6 @@ public class PriceAlertService {
         return true;
     }
 
-    // public Double trackPrice(Long gameId) throws IOException {
-    //     PriceAlert priceAlert = new PriceAlert();
-
-    //     Game priceAlertGame = gameService.findGameById(gameId);
-    //     priceAlert.setGame(priceAlertGame);
-
-    //     String gameTitle = priceAlertGame.getTitle();
-
-    //     List<Integer> shopIds = getItadShopIds();
-
-    //     Runnable track = new Runnable() {
-    //         @Override
-    //         public void run() {
-    //             for (int shopId : shopIds) {
-    //                 // check the price for the game at every shop and return a price if it's lower than the current one
-    //             }
-                
-    //         }
-    //     };    
-    // }
-
     public String getItadShopIds() throws IOException {
         List<Integer> intItadShopIds = new ArrayList<>();
 
@@ -76,7 +51,8 @@ public class PriceAlertService {
         int getShopsResponseCode = getShopsConnection.getResponseCode();
 
         if (getShopsResponseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader shopsBufferedReader = new BufferedReader(new InputStreamReader(getShopsConnection.getInputStream()));
+            BufferedReader shopsBufferedReader = new BufferedReader(
+                    new InputStreamReader(getShopsConnection.getInputStream()));
             String shopsResponse = shopsBufferedReader.readLine();
             ObjectMapper shopsObjectMapper = new ObjectMapper();
             JsonNode shopsNode = shopsObjectMapper.readTree(shopsResponse);
@@ -107,5 +83,5 @@ public class PriceAlertService {
         String itadShopIds = itadIdsBuilder.toString();
 
         return itadShopIds;
-    }   
+    }
 }
