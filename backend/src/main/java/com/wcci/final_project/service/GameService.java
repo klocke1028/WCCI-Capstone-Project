@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wcci.final_project.components.PriceTracker;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
@@ -24,7 +25,7 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private PriceAlertService priceAlertService;
+    private PriceTracker priceTracker;
 
     private String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
 
@@ -140,7 +141,7 @@ public class GameService {
 
     public Double getBestPrice() throws IOException{
         double bestPrice = 0.0;
-        String shopIds = priceAlertService.getItadShopIds();
+        String shopIds = priceTracker.getItadShopIds();
         String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
 
         URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);

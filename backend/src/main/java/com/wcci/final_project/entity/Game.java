@@ -38,8 +38,6 @@ public class Game {
     @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
-
-    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
