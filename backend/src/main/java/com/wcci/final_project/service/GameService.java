@@ -252,9 +252,6 @@ public class GameService {
         return "Image Unavailable";
     }
 
-    /*This show the genres (tags), but returns everything else as empty. Need to try writing a near copy of what I did for getPopularGames.
-    I shouldn't even need to write out all the boxArtLink code and just reuse it once everything else has been set appropriately.
-     */
     public Game getGameProperties(JsonNode gameNode) throws IOException {
         String title = gameNode.path("title").asText();
         String itadId = gameNode.path("id").asText();
@@ -279,10 +276,11 @@ public class GameService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode gameInfoNode = objectMapper.readTree(response.toString());
     
+        title = gameInfoNode.path("title").asText();
         String boxArtUrl = null;
         JsonNode assetsNode = gameInfoNode.path("assets");
         if (assetsNode.isObject()) {
-            boxArtUrl = assetsNode.path("boxArt").asText(null);
+            boxArtUrl = assetsNode.path("boxart").asText(null);
             if (boxArtUrl == null || boxArtUrl.isEmpty()) {
                 boxArtUrl = assetsNode.path("banner600").asText(null);
             }
@@ -304,7 +302,7 @@ public class GameService {
                 tags.add(tagNode.asText());
             }
         }
-
+    
         return new Game(title, itadId, boxArtUrl, tags);
     }
 }

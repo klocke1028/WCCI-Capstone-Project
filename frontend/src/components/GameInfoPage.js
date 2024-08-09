@@ -20,6 +20,7 @@ function GameInfoPage() {
         return response.json();
       })
       .then((data) => {
+        console.log("Fetched game data:", data);
         setGameInfo(data);
       })
       .catch((error) => {
@@ -34,7 +35,7 @@ function GameInfoPage() {
   return (
     <div>
       <h1>{gameInfo.title}</h1>
-      <img src={gameInfo.boxArtUrl} alt={gameInfo.title} />
+      <img src={gameInfo.boxArtLink} alt={gameInfo.title} />
       <p>Genres: {gameInfo.tags.join(", ")}</p>
     </div>
   );

@@ -160,17 +160,17 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    //Changed this slightly to RequestParam instead of RequestBody
+    // Changed this slightly to RequestParam instead of RequestBody
     @GetMapping("/search")
-public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String searchTerm) throws IOException {
-    List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
+    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String searchTerm) throws IOException {
+        List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
 
-    if (searchResults.isEmpty()) {
-        return ResponseEntity.noContent().build();
+        if (searchResults.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(searchResults);
     }
-
-    return ResponseEntity.ok(searchResults);
-}
 
     @GetMapping("/popular")
     public List<Game> getPopularGames() {
@@ -184,14 +184,8 @@ public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String sea
     }
 
     @GetMapping("/game-info")
-    public Game getGameInfo(@RequestParam("itadId") String itadId) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode gameNode = objectMapper.createObjectNode().put("id", itadId);
-        try {
-            return gameService.getGameProperties(gameNode);
-        } catch (IOException error) {
-            error.printStackTrace();
-            return null;
-        }
+    public Game getGameInfo(@RequestParam("itadId") String itadId) throws IOException {
+        JsonNode gameNode = new ObjectMapper().createObjectNode().put("id", itadId);
+        return gameService.getGameProperties(gameNode);
     }
 }
