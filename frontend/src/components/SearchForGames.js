@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameSearchBar from "./GameSearchBar";
 
+
 function SearchForGames() {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,14 +15,12 @@ function SearchForGames() {
       return;
     }
 
-    const url = `http://localhost:8080/api/games/search`;
+    const url = `http://localhost:8080/api/games/search?searchTerm=${encodeURIComponent(searchTerm)}`;
     fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
-        "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ searchTerm }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -39,7 +38,12 @@ function SearchForGames() {
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+    const newSearchTerm = event.target.value;
+    setSearchTerm(newSearchTerm);
+    if (!newSearchTerm.trim()) {
+      setResults([]);
+      setIsResultsVisible(false);
+    }
   };
 
   const handleKeyDown = (event) => {

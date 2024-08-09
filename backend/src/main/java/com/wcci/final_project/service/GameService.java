@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
@@ -44,24 +45,26 @@ public class GameService {
     public Game updateGame(Game updatedGame) {
         return gameRepository.save(updatedGame);
     }
-    
+
     public List<Game> searchGamesByTitle(String searchTerm) throws IOException {
-		List<Game> searchResults = new ArrayList<>();
-		int resultsLimiter = 20;
-		URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results=" + resultsLimiter + "&key=" + itadApiKey);
+        List<Game> searchResults = new ArrayList<>();
+        int resultsLimiter = 20;
+        URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
+                + resultsLimiter + "&key=" + itadApiKey);
         HttpsURLConnection itadConnection = (HttpsURLConnection) searchGames.openConnection();
         itadConnection.setRequestMethod("GET");
 
         int responseCode = itadConnection.getResponseCode();
 
-		if (responseCode == HttpsURLConnection.HTTP_OK) {
-			BufferedReader  searchBufferedReader = new BufferedReader(new InputStreamReader(itadConnection.getInputStream()));
-			String searchInputLine = searchBufferedReader.readLine();
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader searchBufferedReader = new BufferedReader(
+                    new InputStreamReader(itadConnection.getInputStream()));
+            String searchInputLine = searchBufferedReader.readLine();
             StringBuilder searchResponse = new StringBuilder();
 
-			searchResponse.append(searchInputLine);
+            searchResponse.append(searchInputLine);
 
-			ObjectMapper searchObjectMapper = new ObjectMapper();
+            ObjectMapper searchObjectMapper = new ObjectMapper();
             JsonNode searchResultsNode = searchObjectMapper.readTree(searchResponse.toString());
 
             if (searchResultsNode.isArray()) {
@@ -70,9 +73,9 @@ public class GameService {
                     searchResults.add(game);
                 }
             }
-		} else {
-			System.out.println("Error in getting search results. Error code: " + responseCode);
-		}
+        } else {
+            System.out.println("Error in getting search results. Error code: " + responseCode);
+        }
 
         return searchResults;
     }
@@ -88,7 +91,8 @@ public class GameService {
         int gameInfoResponseCode = gameInfoConnection.getResponseCode();
 
         if (gameInfoResponseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader  gameBufferedReader = new BufferedReader(new InputStreamReader(gameInfoConnection.getInputStream()));
+            BufferedReader gameBufferedReader = new BufferedReader(
+                    new InputStreamReader(gameInfoConnection.getInputStream()));
             String gameInputLine = gameBufferedReader.readLine();
             StringBuilder gameResponse = new StringBuilder();
 
@@ -117,7 +121,7 @@ public class GameService {
                 String banner145 = gameInfoNode.path("assets").path("banner145").asText();
                 boxArtUrl = banner145;
             }
-            
+
             game = new Game(title, itadId, boxArtUrl);
         } else {
             System.out.println("Error in getting game info. Error code: " + gameInfoResponseCode);
@@ -246,5 +250,61 @@ public class GameService {
         }
 
         return "Image Unavailable";
+    }
+
+    /*This show the genres (tags), but returns everything else as empty. Need to try writing a near copy of what I did for getPopularGames.
+    I shouldn't even need to write out all the boxArtLink code and just reuse it once everything else has been set appropriately.
+     */
+    public Game getGameProperties(JsonNode gameNode) throws IOException {
+        String title = gameNode.path("title").asText();
+        String itadId = gameNode.path("id").asText();
+    
+        URL gameInfoUrl = new URL("https://api.isthereanydeal.com/games/info/v2?id=" + itadId + "&key=" + itadApiKey);
+        HttpsURLConnection connection = (HttpsURLConnection) gameInfoUrl.openConnection();
+        connection.setRequestMethod("GET");
+    
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpsURLConnection.HTTP_OK) {
+            throw new IOException("Failed to get game info: HTTP code " + responseCode);
+        }
+    
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+    
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode gameInfoNode = objectMapper.readTree(response.toString());
+    
+        String boxArtUrl = null;
+        JsonNode assetsNode = gameInfoNode.path("assets");
+        if (assetsNode.isObject()) {
+            boxArtUrl = assetsNode.path("boxArt").asText(null);
+            if (boxArtUrl == null || boxArtUrl.isEmpty()) {
+                boxArtUrl = assetsNode.path("banner600").asText(null);
+            }
+            if (boxArtUrl == null || boxArtUrl.isEmpty()) {
+                boxArtUrl = assetsNode.path("banner400").asText(null);
+            }
+            if (boxArtUrl == null || boxArtUrl.isEmpty()) {
+                boxArtUrl = assetsNode.path("banner300").asText(null);
+            }
+            if (boxArtUrl == null || boxArtUrl.isEmpty()) {
+                boxArtUrl = assetsNode.path("banner145").asText(null);
+            }
+        }
+    
+        JsonNode tagsNode = gameInfoNode.path("tags");
+        List<String> tags = new ArrayList<>();
+        if (tagsNode.isArray()) {
+            for (JsonNode tagNode : tagsNode) {
+                tags.add(tagNode.asText());
+            }
+        }
+
+        return new Game(title, itadId, boxArtUrl, tags);
     }
 }

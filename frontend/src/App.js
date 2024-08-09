@@ -1,21 +1,24 @@
-//import logo from "./logo.svg";
+import React from "react";
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
-//import { useState } from "react";
-//import SearchForGames from "./components/SearchForGames";
-//import LoginPage from "./components/LoginPage";
-//import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-  import Navbar from "./components/Navbar"
+import Navbar from "./components/Navbar";
+import SearchForGames from "./components/SearchForGames";
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <Homepage />
-    </div>
+    <BrowserRouter>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/GameInfoPage/:itadId" element={<GameInfoPage />} />
+          <Route path="/search" element={<SearchForGames />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
-
-// Add <Route path="/" element={<LoginPage>} />
 
 export default App;

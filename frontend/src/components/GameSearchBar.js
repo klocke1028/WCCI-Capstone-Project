@@ -14,7 +14,7 @@ function GameSearchBar({ searchTerm, handleSearchChange, handleKeyDown, results,
         onKeyDown={handleKeyDown}
       />
       {isResultsVisible && (
-        /*Not sure exactly how to set up the Link properly- <Link to={'/search/{game.itadId}'}></Link>*/
+        /*Not sure exactly how to set up the Link properly- <Link to={'/GameInfoPage/{game.itadId}'}></Link>*/
         <ul>
         {results.map((game) => (
             <li key={game.itadId}>
