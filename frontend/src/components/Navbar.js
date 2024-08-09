@@ -12,7 +12,9 @@ function NavBar() {
           <p>All Things Games</p>
         </Link>
       </div>
-        <SearchForGames />
+      <div className="search-container">
+      <SearchForGames />
+      </div>
       </nav>
     </div>
   );
