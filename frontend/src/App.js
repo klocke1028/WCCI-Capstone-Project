@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
 import Navbar from "./components/Navbar";
@@ -8,7 +8,7 @@ import SearchForGames from "./components/SearchForGames";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div>
         <Navbar />
         <Routes>
@@ -17,7 +17,7 @@ function App() {
           <Route path="/search" element={<SearchForGames />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
