@@ -148,7 +148,8 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/search")
+    //Changed to POST because search input must be sent to ITAD
+    @PostMapping("/search")
     public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestBody SearchPayload searchPayload)
             throws IOException {
 
