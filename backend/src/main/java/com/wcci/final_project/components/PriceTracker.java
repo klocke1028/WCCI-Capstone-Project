@@ -9,34 +9,32 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wcci.final_project.entity.Game;
+import com.wcci.final_project.entity.User;
 
 @Component
 public class PriceTracker {
 
-        // public Double trackPrice(Long gameId) throws IOException {
-    //     PriceAlert priceAlert = new PriceAlert();
+    @SuppressWarnings("null")
+    @Scheduled(initialDelay = 20000, fixedRate = 60000)
+    // 10000 milliseconds = 10 seconds
+    // 300000 milliseconds = 5 minutes
+    public boolean checkForNewBestPrice(User loggedInUser) {
+        boolean gameHasNewBestPrice = false;
 
-    //     Game priceAlertGame = gameService.findGameById(gameId);
-    //     priceAlert.setGame(priceAlertGame);
+        List<Game> usersWishlistedGames = loggedInUser.getWishlist().getGames();
 
-    //     String gameTitle = priceAlertGame.getTitle();
+        if (!(usersWishlistedGames.isEmpty())) {
+            
+        }
 
-    //     List<Integer> shopIds = getItadShopIds();
-
-    //     Runnable track = new Runnable() {
-    //         @Override
-    //         public void run() {
-    //             for (int shopId : shopIds) {
-    //                 // check the price for the game at every shop and return a price if it's lower than the current one
-    //             }
-                
-    //         }
-    //     };    
-    // }
+        return gameHasNewBestPrice;
+    }
 
     public String getItadShopIds() throws IOException {
         List<Integer> intItadShopIds = new ArrayList<>();

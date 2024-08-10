@@ -1,6 +1,5 @@
 package com.wcci.final_project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import com.wcci.final_project.dto.UserPayload;
 import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
 import com.wcci.final_project.entity.Wishlist;
-import com.wcci.final_project.service.ReviewService;
 import com.wcci.final_project.service.UserService;
 import com.wcci.final_project.service.WishlistService;
 
@@ -29,9 +27,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ReviewService reviewService;
 
     @Autowired
     private WishlistService wishlistService;

@@ -43,7 +43,7 @@ public class PriceChecker {
                  * Price is currently 0 because we're not YET grabbing the best price for a
                  * game. That's in progress.
                  */
-                double price = itadGame.getPrice();
+                double price = itadGame.getBestPrice();
                 System.out.println("itadGame price: " + price);
             } catch (IOException e) {
                 // TODO Auto-generated catch block

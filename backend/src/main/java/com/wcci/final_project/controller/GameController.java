@@ -51,7 +51,7 @@ public class GameController {
 
         if (gameItadId != null) newGame.setItadId(gameItadId);
         if (gameTitle != null) newGame.setTitle(gameTitle);
-        if (gamePrice != 0) newGame.setPrice(gamePrice);
+        if (gamePrice != 0) newGame.setBestPrice(gamePrice);
         if (gameBoxArtUrl != null) newGame.setBoxArtLink(gameBoxArtUrl);
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
@@ -115,7 +115,7 @@ public class GameController {
         if (gameTitle != null)
             existingGame.setTitle(gameTitle);
         if (gamePrice != 0)
-            existingGame.setPrice(gamePrice);
+            existingGame.setBestPrice(gamePrice);
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 

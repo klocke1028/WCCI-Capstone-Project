@@ -2,9 +2,7 @@ package com.wcci.final_project.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -133,9 +131,9 @@ public class WishlistController {
 
             String shopIds = priceAlertService.getItadShopIds();
 
-            double newGamePrice = gameService.getBestPrice(shopIds, newGameItadId);
+            double newGameBestPrice = gameService.getBestPrice(shopIds, newGameItadId);
 
-            if (newGamePrice != 0.0) newGame.setPrice(newGamePrice);
+            if (newGameBestPrice != 0.0) newGame.setBestPrice(newGameBestPrice);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
