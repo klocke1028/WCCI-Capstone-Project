@@ -40,13 +40,17 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<Game> addGame(@RequestBody GamePayload gamePayload) {
-        Game game = new Game();
+        Game newGame = new Game();
 
+        String gameItadId = gamePayload.getItadId();
         String gameTitle = gamePayload.getTitle();
         double gamePrice = gamePayload.getGamePrice();
+        String gameBoxArtUrl = gamePayload.getBoxArtUrl();
 
-        if (gameTitle != null) game.setTitle(gameTitle);
-        if (gamePrice != 0) game.setPrice(gamePrice);
+        if (gameItadId != null) newGame.setItadId(gameItadId);
+        if (gameTitle != null) newGame.setTitle(gameTitle);
+        if (gamePrice != 0) newGame.setPrice(gamePrice);
+        if (gameBoxArtUrl != null) newGame.setBoxArtLink(gameBoxArtUrl);
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
         
@@ -59,7 +63,7 @@ public class GameController {
                 if(review != null) gameReviews.add(review);
             }
 
-            game.setReviews(gameReviews);
+            newGame.setReviews(gameReviews);
         } 
         
         List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
@@ -73,10 +77,10 @@ public class GameController {
                 if(priceAlert != null) gamePriceAlerts.add(priceAlert);
             }
 
-            game.setPriceAlerts(gamePriceAlerts);
+            newGame.setPriceAlerts(gamePriceAlerts);
         } 
         
-        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.CREATED);
+        return new ResponseEntity<>(gameService.saveGame(newGame), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

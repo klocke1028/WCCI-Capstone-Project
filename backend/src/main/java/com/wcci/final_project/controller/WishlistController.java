@@ -22,6 +22,7 @@ import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
 import com.wcci.final_project.entity.Wishlist;
 import com.wcci.final_project.service.GameService;
+import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.UserService;
 import com.wcci.final_project.service.WishlistService;
 import com.wcci.final_project.service.ReviewService;
@@ -42,7 +43,8 @@ public class WishlistController {
     @Autowired
     private ReviewService reviewService;
 
-
+    @Autowired
+    private PriceAlertService priceAlertService;
 
     @PostMapping
     public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistPayload wishlistPayload) {
@@ -55,8 +57,11 @@ public class WishlistController {
 
         for (Long wishlistGameId : wishlistGameIds) {
             Game wishlistGame = gameService.findGameById(wishlistGameId);
-            if (wishlistGame != null)
+
+            if (wishlistGame != null) {
                 wishlistGames.add(wishlistGame);
+                wishlistGame.setWishlist(wishlist);
+            }
         }
 
         wishlist.setGames(wishlistGames);
@@ -65,6 +70,7 @@ public class WishlistController {
 
         if (wishlistUser != null) {
             wishlist.setUser(wishlistUser);
+            wishlistUser.setWishlist(wishlist);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -125,13 +131,15 @@ public class WishlistController {
         if (isGameAlreadyInDatabase) {
             againGamesInExistingWishlist.add(databaseGame);
         } else {
-            Game game = new Game();
+            Game newGame = new Game();
 
-            if (newGameItadId != null) game.setItadId(newGameItadId);
+            if (newGameItadId != null) newGame.setItadId(newGameItadId);
 
-            
+            String shopIds = priceAlertService.getItadShopIds();
 
+            double newGamePrice = gameService.getBestPrice(shopIds, newGameItadId);
 
+            if (newGamePrice != 0.0) newGame.setPrice(newGamePrice);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
@@ -145,11 +153,11 @@ public class WishlistController {
                         gameReviews.add(gameReview);
                 }
 
-                game.setReviews(gameReviews);
+                newGame.setReviews(gameReviews);
             }
 
-            Game newGame = gameService.saveGame(game);
-            againGamesInExistingWishlist.add(newGame);
+            Game savedNewGame = gameService.saveGame(newGame);
+            againGamesInExistingWishlist.add(savedNewGame);
             existingWishlist.setGames(againGamesInExistingWishlist);
         }
 

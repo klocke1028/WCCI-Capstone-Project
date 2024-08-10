@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wcci.final_project.components.PriceTracker;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,6 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
-
-    @Autowired
-    private PriceTracker priceTracker;
 
     private String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
 
@@ -173,15 +170,34 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public Double getBestPrice() throws IOException{
-        double bestPrice = 0.0;
-        String shopIds = priceTracker.getItadShopIds();
+    public Double getBestPrice(String shopIds, String gameItadId) throws IOException {
+        Double bestPrice = 0.0;
         String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
-
+        String requestBody = "[ \"" + gameItadId + "\" ]";
+    
         URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
         HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();
+        
         getBestPriceConnection.setRequestMethod("POST");
-        int gameInfoResponseCode = getBestPriceConnection.getResponseCode();
+        getBestPriceConnection.setDoOutput(true); 
+        getBestPriceConnection.setRequestProperty("Content-Type", "application/json");
+
+        OutputStreamWriter getBestPriceWriter = new OutputStreamWriter(getBestPriceConnection.getOutputStream(), "UTF-8");
+
+        getBestPriceWriter.write(requestBody);
+        getBestPriceWriter.close();
+
+        int getBestPriceResponseCode = getBestPriceConnection.getResponseCode();
+
+        if (getBestPriceResponseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader  bestPriceReader = new BufferedReader(new InputStreamReader(getBestPriceConnection.getInputStream()));
+            String bestPriceInputLine = bestPriceReader.readLine();
+            ObjectMapper bestPriceMapper = new ObjectMapper();
+            JsonNode bestPriceNode = bestPriceMapper.readTree(bestPriceInputLine);
+            System.out.println(bestPriceNode.asText());
+        } else {
+            System.out.println("Error in getting best price. Response Code: " + getBestPriceResponseCode);
+        }
 
         return bestPrice;
     }
