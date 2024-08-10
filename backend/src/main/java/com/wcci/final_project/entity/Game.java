@@ -35,6 +35,9 @@ public class Game {
 
     private String boxArtLink;
 
+    //THIS IS A NEW ADDITION SPECIFICALLY FOR THE GAME INFO PAGE
+    private List<String> tags;
+
     @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
@@ -97,6 +100,14 @@ public class Game {
         this.price = price;
         this.reviews = reviews;
         this.priceAlerts = priceAlerts;
+    }
+
+    //THIS IS A NEW ADDITION SPECIFICALLY FOR THE GAME INFO PAGE
+    public Game(String title, String itadId, String boxArtLink, List<String> tags) {
+        this.title = title;
+        this.itadId = itadId;
+        this.boxArtLink = boxArtLink;
+        this.tags = tags;
     }
 
     public void setReviews(List<Review> reviews) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
@@ -33,6 +34,8 @@ public class GameService {
     public boolean deleteGame(Long id) {
         if (!gameRepository.existsById(id))
             return false;
+        if (!gameRepository.existsById(id))
+            return false;
 
         gameRepository.deleteById(id);
         return true;
@@ -51,6 +54,10 @@ public class GameService {
         int resultsLimiter = 20;
         URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
                 + resultsLimiter + "&key=" + itadApiKey);
+        List<Game> searchResults = new ArrayList<>();
+        int resultsLimiter = 20;
+        URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
+                + resultsLimiter + "&key=" + itadApiKey);
         HttpsURLConnection itadConnection = (HttpsURLConnection) searchGames.openConnection();
         itadConnection.setRequestMethod("GET");
 
@@ -60,13 +67,20 @@ public class GameService {
             BufferedReader searchBufferedReader = new BufferedReader(
                     new InputStreamReader(itadConnection.getInputStream()));
             String searchInputLine = searchBufferedReader.readLine();
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader searchBufferedReader = new BufferedReader(
+                    new InputStreamReader(itadConnection.getInputStream()));
+            String searchInputLine = searchBufferedReader.readLine();
             StringBuilder searchResponse = new StringBuilder();
 
             searchResponse.append(searchInputLine);
+            searchResponse.append(searchInputLine);
 
+            ObjectMapper searchObjectMapper = new ObjectMapper();
             ObjectMapper searchObjectMapper = new ObjectMapper();
             JsonNode searchResultsNode = searchObjectMapper.readTree(searchResponse.toString());
 
+            if (searchResultsNode.isArray()) {
             if (searchResultsNode.isArray()) {
                 for (JsonNode gameNode : searchResultsNode) {
                     Game game = createGameSearchResult(gameNode);
@@ -76,7 +90,11 @@ public class GameService {
         } else {
             System.out.println("Error in getting search results. Error code: " + responseCode);
         }
+        } else {
+            System.out.println("Error in getting search results. Error code: " + responseCode);
+        }
 
+        return searchResults;
         return searchResults;
     }
 
