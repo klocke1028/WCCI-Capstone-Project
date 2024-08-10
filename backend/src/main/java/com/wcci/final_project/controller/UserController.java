@@ -107,6 +107,7 @@ public class UserController {
                 Review review = reviewService.findReviewById(reviewId);
                 if (!(review == null)) userReviews.add(review);
             }
+
             existingUser.setReviews(userReviews);
         }
 
@@ -117,7 +118,7 @@ public class UserController {
     public ResponseEntity<Void> removeUser(@PathVariable Long id) {
         boolean isDeleted = userService.deleteUser(id);
 
-        if(!isDeleted) {
+        if (!isDeleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 

@@ -1,6 +1,9 @@
 package com.wcci.final_project.dto;
 
 import java.util.List;
+
+import org.hibernate.annotations.EmbeddableInstantiator;
+
 import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
