@@ -1,4 +1,5 @@
 import React from "react";
+import "./LoginButton.css";
 
 function LoginButton() {
   const login = () => {
@@ -10,7 +11,7 @@ function LoginButton() {
         return response.json();
       })
       .catch((error) => {
-        console.error("There was a problem fetching this user: " + error);
+        console.error("There was a problem logging in: " + error);
       });
   };
   return (
