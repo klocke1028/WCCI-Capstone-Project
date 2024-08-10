@@ -50,34 +50,34 @@ public class WishlistController {
 
     @PostMapping
     public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistPayload wishlistPayload) {
-        Wishlist wishlist = new Wishlist();
+        Wishlist newWishlist = new Wishlist();
 
-        List<Long> wishlistGameIds = wishlistPayload.getGameIds();
-        Long wishlistUserId = wishlistPayload.getUserId();
+        List<Long> newWishlistGameIds = wishlistPayload.getGameIds();
+        Long newWishlistUserId = wishlistPayload.getUserId();
 
-        List<Game> wishlistGames = new ArrayList<>();
+        List<Game> newWishlistGames = new ArrayList<>();
 
-        for (Long wishlistGameId : wishlistGameIds) {
+        for (Long wishlistGameId : newWishlistGameIds) {
             Game wishlistGame = gameService.findGameById(wishlistGameId);
 
             if (wishlistGame != null) {
-                wishlistGames.add(wishlistGame);
-                wishlistGame.setWishlist(wishlist);
+                newWishlistGames.add(wishlistGame);
+                wishlistGame.setWishlist(newWishlist);
             }
         }
 
-        wishlist.setGames(wishlistGames);
+        newWishlist.setGames(newWishlistGames);
 
-        User wishlistUser = userService.findUserById(wishlistUserId);
+        User newWishlistUser = userService.findUserById(newWishlistUserId);
 
-        if (wishlistUser != null) {
-            wishlist.setUser(wishlistUser);
-            wishlistUser.setWishlist(wishlist);
+        if (newWishlistUser != null) {
+            newWishlist.setUser(newWishlistUser);
+            newWishlistUser.setWishlist(newWishlist);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return new ResponseEntity<>(wishlistService.createWishlist(wishlist), HttpStatus.CREATED);
+        return new ResponseEntity<>(wishlistService.createWishlist(newWishlist), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

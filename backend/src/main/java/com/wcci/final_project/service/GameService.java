@@ -174,13 +174,14 @@ public class GameService {
     }
 
     public Double getBestPrice(String shopIds, String gameItadId) throws IOException {
-        Double bestPrice = 0.0;
+        double bestPrice = 0.0;
+        List<Double> currentPrices = new ArrayList<>();
         String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
         String requestBody = "[ \"" + gameItadId + "\" ]";
-    
+
         URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
         HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();
-        
+
         getBestPriceConnection.setRequestMethod("POST");
         getBestPriceConnection.setDoOutput(true); 
         getBestPriceConnection.setRequestProperty("Content-Type", "application/json");
@@ -193,11 +194,35 @@ public class GameService {
         int getBestPriceResponseCode = getBestPriceConnection.getResponseCode();
 
         if (getBestPriceResponseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader  bestPriceReader = new BufferedReader(new InputStreamReader(getBestPriceConnection.getInputStream()));
+            BufferedReader bestPriceReader = new BufferedReader(new InputStreamReader(getBestPriceConnection.getInputStream()));
             String bestPriceInputLine = bestPriceReader.readLine();
             ObjectMapper bestPriceMapper = new ObjectMapper();
-            JsonNode bestPriceNode = bestPriceMapper.readTree(bestPriceInputLine);
-            System.out.println(bestPriceNode.asText());
+            JsonNode bestPricesArrayNode = bestPriceMapper.readTree(bestPriceInputLine);
+
+            for (JsonNode gamePricesNode : bestPricesArrayNode) {
+
+                for (JsonNode dealsNode : gamePricesNode.path("deals")) {
+
+                    JsonNode priceNode = dealsNode.path("price");
+                    double currentPrice = priceNode.path("amount").asDouble();
+
+                    currentPrices.add(currentPrice);
+                }
+            }
+
+            double initialCurrentPrice = currentPrices.get(0);
+
+            for (double currentPriceToCheck : currentPrices) {
+
+                if (currentPriceToCheck < initialCurrentPrice) {
+                    bestPrice = currentPriceToCheck;
+                    initialCurrentPrice = currentPriceToCheck;
+                } else {
+                    bestPrice = initialCurrentPrice;
+                }
+
+            }
+
         } else {
             System.out.println("Error in getting best price. Response Code: " + getBestPriceResponseCode);
         }

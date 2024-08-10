@@ -3,6 +3,7 @@ package com.wcci.final_project.entity;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -41,6 +42,8 @@ public class Game {
     @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
