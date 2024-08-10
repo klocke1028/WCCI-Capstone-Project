@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.dto.GamePayload;
-import com.wcci.final_project.dto.SearchPayload;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.entity.Review;
@@ -29,7 +28,7 @@ import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.ReviewService;
 
 @RestController
-@RequestMapping("api/games")
+@RequestMapping("/games")
 public class GameController {
 
     @Autowired
