@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameSearchBar from "./GameSearchBar";
 
-
 function SearchForGames() {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +14,9 @@ function SearchForGames() {
       return;
     }
 
-    const url = `http://localhost:8080/api/games/search?searchTerm=${encodeURIComponent(searchTerm)}`;
+    const url = `http://localhost:8080/games/search?searchTerm=${encodeURIComponent(
+      searchTerm
+    )}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -47,7 +48,7 @@ function SearchForGames() {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       fetchSearchResults(searchTerm);
       setIsResultsVisible(true);
     }

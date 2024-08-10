@@ -6,7 +6,7 @@ const PopularGames = () => {
 
   useEffect(() => {
     const fetchPopularGames = () => {
-      const url = "http://localhost:8080/api/games/popular";
+      const url = "http://localhost:8080/games/popular";
       fetch(url, {
         headers: {
           Accept: "application/json",

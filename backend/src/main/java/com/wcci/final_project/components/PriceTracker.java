@@ -44,7 +44,7 @@ public class PriceTracker {
         for (String gameInDatabaseItadId : gamesInDatabaseItadIds) {
             double newBestPrice = gameService.getBestPrice(shopIds, gameInDatabaseItadId);
 
-            Game gameInDatabase = gameService.getGameByItadId(gameInDatabaseItadId);
+            Game gameInDatabase = gameService.findGameByItadId(gameInDatabaseItadId);
             double gameInDatabaseCurrentBestPrice = gameInDatabase.getBestPrice();
 
             if (gameInDatabaseCurrentBestPrice != newBestPrice) gameInDatabaseCurrentBestPrice = newBestPrice;

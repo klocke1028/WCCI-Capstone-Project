@@ -98,6 +98,17 @@ public class GameController {
         return ResponseEntity.ok(foundGame);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Game> getGameByItadId(@RequestParam String itadId) {
+        Game foundGame = gameService.findGameByItadId(itadId);
+
+        if (foundGame == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(foundGame);    
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> allGames = gameService.getAllGames();
@@ -161,7 +172,6 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    // Changed this slightly to RequestParam instead of RequestBody
     @GetMapping("/search")
     public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String searchTerm) throws IOException {
         List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
@@ -189,4 +199,5 @@ public class GameController {
         JsonNode gameNode = new ObjectMapper().createObjectNode().put("id", itadId);
         return gameService.getGameProperties(gameNode);
     }
+
 }

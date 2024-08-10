@@ -375,7 +375,7 @@ public class GameService {
         return new Game(title, itadId, boxArtUrl, tags);
     }
 
-    public Game getGameByItadId(String wantedGameItadId) {
+    public Game findGameByItadId(String wantedGameItadId) {
         List<Game> gamesInDatabase = gameRepository.findAll();
         Game retrievedGame = new Game();
 
