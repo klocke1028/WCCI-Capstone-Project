@@ -54,10 +54,6 @@ public class GameService {
         int resultsLimiter = 20;
         URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
                 + resultsLimiter + "&key=" + itadApiKey);
-        List<Game> searchResults = new ArrayList<>();
-        int resultsLimiter = 20;
-        URL searchGames = new URL("https://api.isthereanydeal.com/games/search/v1?title=" + searchTerm + "&results="
-                + resultsLimiter + "&key=" + itadApiKey);
         HttpsURLConnection itadConnection = (HttpsURLConnection) searchGames.openConnection();
         itadConnection.setRequestMethod("GET");
 
@@ -67,20 +63,13 @@ public class GameService {
             BufferedReader searchBufferedReader = new BufferedReader(
                     new InputStreamReader(itadConnection.getInputStream()));
             String searchInputLine = searchBufferedReader.readLine();
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader searchBufferedReader = new BufferedReader(
-                    new InputStreamReader(itadConnection.getInputStream()));
-            String searchInputLine = searchBufferedReader.readLine();
             StringBuilder searchResponse = new StringBuilder();
 
             searchResponse.append(searchInputLine);
-            searchResponse.append(searchInputLine);
 
-            ObjectMapper searchObjectMapper = new ObjectMapper();
             ObjectMapper searchObjectMapper = new ObjectMapper();
             JsonNode searchResultsNode = searchObjectMapper.readTree(searchResponse.toString());
 
-            if (searchResultsNode.isArray()) {
             if (searchResultsNode.isArray()) {
                 for (JsonNode gameNode : searchResultsNode) {
                     Game game = createGameSearchResult(gameNode);
@@ -90,11 +79,7 @@ public class GameService {
         } else {
             System.out.println("Error in getting search results. Error code: " + responseCode);
         }
-        } else {
-            System.out.println("Error in getting search results. Error code: " + responseCode);
-        }
 
-        return searchResults;
         return searchResults;
     }
 
