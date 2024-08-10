@@ -38,31 +38,18 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
-        User user = new User();
+        User userToCreate = new User();
 
-        List<Long> userReviewIds = userPayload.getReviewIds();
-        Long userWishlistId = userPayload.getWishlistId();
+        userToCreate.setEmail(userPayload.getEmail());
 
-        if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
+        Wishlist wishlistForUser = new Wishlist();
+        Wishlist createdWishlistForUser = wishlistService.createWishlist(wishlistForUser);
 
-            if (!(userWishlist == null))
-                user.setWishlist(userWishlist);
-        }
+        userToCreate.setWishlist(createdWishlistForUser);
 
-        user.setEmail(userPayload.getEmail());
+        User newUser = userService.createUser(userToCreate);
 
-        if (!(userReviewIds == null)) {
-            List<Review> userReviews = new ArrayList<>();
-            for (Long reviewId : userReviewIds) {
-                Review review = reviewService.findReviewById(reviewId);
-                if (!(review == null))
-                    userReviews.add(review);
-            }
-            user.setReviews(userReviews);
-        }
-
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -88,28 +75,8 @@ public class UserController {
         if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        
-        List<Long> userReviewIds = userPayload.getReviewIds();
-        Long userWishlistId = userPayload.getWishlistId();
-
-        if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
-
-            if (userWishlist != null)
-            existingUser.setWishlist(userWishlist);
-        }
 
         existingUser.setEmail(userPayload.getEmail());
-
-        if (userReviewIds != null) {
-            List<Review> userReviews = new ArrayList<>();
-            for (Long reviewId : userReviewIds) {
-                Review review = reviewService.findReviewById(reviewId);
-                if (!(review == null)) userReviews.add(review);
-            }
-
-            existingUser.setReviews(userReviews);
-        }
 
         return new ResponseEntity<>(userService.updateUser(existingUser), HttpStatus.CREATED);
     }

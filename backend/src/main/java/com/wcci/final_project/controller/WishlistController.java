@@ -52,21 +52,7 @@ public class WishlistController {
     public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistPayload wishlistPayload) {
         Wishlist newWishlist = new Wishlist();
 
-        List<Long> newWishlistGameIds = wishlistPayload.getGameIds();
         Long newWishlistUserId = wishlistPayload.getUserId();
-
-        List<Game> newWishlistGames = new ArrayList<>();
-
-        for (Long wishlistGameId : newWishlistGameIds) {
-            Game wishlistGame = gameService.findGameById(wishlistGameId);
-
-            if (wishlistGame != null) {
-                newWishlistGames.add(wishlistGame);
-                wishlistGame.setWishlist(newWishlist);
-            }
-        }
-
-        newWishlist.setGames(newWishlistGames);
 
         User newWishlistUser = userService.findUserById(newWishlistUserId);
 
@@ -135,7 +121,15 @@ public class WishlistController {
         } else {
             Game newGame = new Game();
 
+            String newGameTitle = gamePayload.getTitle();
+
+            newGame.setTitle(newGameTitle);
+
             if (newGameItadId != null) newGame.setItadId(newGameItadId);
+
+            String newGameBoxArtUrl = gamePayload.getBoxArtUrl();
+
+            if (newGameBoxArtUrl != null) newGame.setBoxArtLink(newGameBoxArtUrl);
 
             String shopIds = priceAlertService.getItadShopIds();
 
@@ -157,6 +151,8 @@ public class WishlistController {
 
                 newGame.setReviews(gameReviews);
             }
+            
+            newGame.setWishlist(existingWishlist);
 
             Game savedNewGame = gameService.saveGame(newGame);
             againGamesInExistingWishlist.add(savedNewGame);

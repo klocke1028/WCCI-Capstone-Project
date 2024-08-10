@@ -9,12 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.controller.GameController;
-import com.wcci.final_project.controller.UserController;
 import com.wcci.final_project.entity.Game;
-import com.wcci.final_project.entity.User;
 import com.wcci.final_project.service.GameService;
 
 @Component
