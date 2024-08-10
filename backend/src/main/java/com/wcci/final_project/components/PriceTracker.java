@@ -29,7 +29,7 @@ public class PriceTracker {
     @Scheduled(initialDelay = 10000, fixedRate = 300000)
     // 10000 milliseconds = 10 seconds
     // 300000 milliseconds = 5 minutes
-    public void checkForNewBestPrice(User loggedInUser) {
+    public void checkForNewBestPrice() {
         List<Game> gamesInDatabase = gameService.getAllGames();
 
         List<String> gamesInDatabaseItadIds = new ArrayList<>();
