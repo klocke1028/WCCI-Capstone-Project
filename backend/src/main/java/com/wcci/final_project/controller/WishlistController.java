@@ -1,7 +1,9 @@
 package com.wcci.final_project.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,7 @@ import com.wcci.final_project.service.WishlistService;
 import com.wcci.final_project.service.ReviewService;
 
 @RestController
-@RequestMapping("/wishlist")
+@RequestMapping("api/wishlist")
 public class WishlistController {
 
     @Autowired

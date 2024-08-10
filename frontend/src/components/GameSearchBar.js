@@ -1,7 +1,8 @@
 import React from "react";
-import "./Navbar.css"
+import "./Navbar.css";
+import { Link } from "react-router-dom";
 
-function GameSearchBar({ searchTerm, handleSearchChange, results }) {
+function GameSearchBar({ searchTerm, handleSearchChange, handleKeyDown, results, isResultsVisible }) {
   return (
     <div className="search-bar-container">
       <input
@@ -10,12 +11,19 @@ function GameSearchBar({ searchTerm, handleSearchChange, results }) {
         placeholder="Search for games"
         value={searchTerm}
         onChange={handleSearchChange}
+        onKeyDown={handleKeyDown}
       />
-      <ul>
+      {isResultsVisible && (
+        <ul>
         {results.map((game) => (
-          <li key={game.appid}>{game.name}</li>
-        ))}
-      </ul>
+            <li key={game.itadId}>
+              <Link to={`/GameInfoPage/${game.itadId}`}>
+                {game.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

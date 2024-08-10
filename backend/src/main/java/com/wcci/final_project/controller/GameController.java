@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.dto.GamePayload;
 import com.wcci.final_project.dto.SearchPayload;
 import com.wcci.final_project.entity.Game;
@@ -24,9 +28,8 @@ import com.wcci.final_project.service.GameService;
 import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.ReviewService;
 
-
 @RestController
-@RequestMapping("/games")
+@RequestMapping("api/games")
 public class GameController {
 
     @Autowired
@@ -45,24 +48,27 @@ public class GameController {
         String gameTitle = gamePayload.getTitle();
         double gamePrice = gamePayload.getGamePrice();
 
-        if (gameTitle != null) game.setTitle(gameTitle);
-        if (gamePrice != 0) game.setPrice(gamePrice);
+        if (gameTitle != null)
+            game.setTitle(gameTitle);
+        if (gamePrice != 0)
+            game.setPrice(gamePrice);
 
-        List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
-        
+        List<Long> gameReviewIds = gamePayload.getGameReviewIds();
+
         if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
                 Review review = reviewService.findReviewById(reviewId);
 
-                if(review != null) gameReviews.add(review);
+                if (review != null)
+                    gameReviews.add(review);
             }
 
             game.setReviews(gameReviews);
-        } 
-        
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
+        }
+
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
 
         if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
@@ -70,12 +76,13 @@ public class GameController {
             for (Long priceAlertId : gamePriceAlertIds) {
                 PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
 
-                if(priceAlert != null) gamePriceAlerts.add(priceAlert);
+                if (priceAlert != null)
+                    gamePriceAlerts.add(priceAlert);
             }
 
             game.setPriceAlerts(gamePriceAlerts);
-        } 
-        
+        }
+
         return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.CREATED);
     }
 
@@ -90,7 +97,7 @@ public class GameController {
         return ResponseEntity.ok(foundGame);
     }
 
-    @GetMapping("/all") 
+    @GetMapping("/all")
     public ResponseEntity<List<Game>> getAllGames() {
         List<Game> allGames = gameService.getAllGames();
 
@@ -104,24 +111,27 @@ public class GameController {
         String gameTitle = gamePayload.getTitle();
         double gamePrice = gamePayload.getGamePrice();
 
-        if (gameTitle != null) existingGame.setTitle(gameTitle);
-        if (gamePrice != 0) existingGame.setPrice(gamePrice);
+        if (gameTitle != null)
+            existingGame.setTitle(gameTitle);
+        if (gamePrice != 0)
+            existingGame.setPrice(gamePrice);
 
-        List<Long> gameReviewIds = gamePayload.getGameReviewIds();       
-        
+        List<Long> gameReviewIds = gamePayload.getGameReviewIds();
+
         if (gameReviewIds != null && !gameReviewIds.isEmpty()) {
             List<Review> gameReviews = new ArrayList<>();
 
             for (Long reviewId : gameReviewIds) {
                 Review review = reviewService.findReviewById(reviewId);
 
-                if(review != null) gameReviews.add(review);
+                if (review != null)
+                    gameReviews.add(review);
             }
 
             existingGame.setReviews(gameReviews);
-        } 
-        
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
+        }
+
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
 
         if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
@@ -129,12 +139,13 @@ public class GameController {
             for (Long priceAlertId : gamePriceAlertIds) {
                 PriceAlert priceAlert = priceAlertService.findPriceAlertById(priceAlertId);
 
-                if(priceAlert != null) gamePriceAlerts.add(priceAlert);
+                if (priceAlert != null)
+                    gamePriceAlerts.add(priceAlert);
             }
 
             existingGame.setPriceAlerts(gamePriceAlerts);
-        } 
-        
+        }
+
         return new ResponseEntity<>(gameService.saveGame(existingGame), HttpStatus.CREATED);
     }
 
@@ -149,16 +160,32 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
+    // Changed this slightly to RequestParam instead of RequestBody
     @GetMapping("/search")
-    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestBody SearchPayload searchPayload) throws IOException {
-
-        String searchTerm = searchPayload.getSearchTerm();
-
+    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String searchTerm) throws IOException {
         List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
 
-        if (searchResults == null) return ResponseEntity.noContent().build();
+        if (searchResults.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
 
         return ResponseEntity.ok(searchResults);
     }
 
+    @GetMapping("/popular")
+    public List<Game> getPopularGames() {
+        try {
+            return gameService.getPopularGames();
+        } catch (IOException error) {
+            error.printStackTrace();
+
+            return null;
+        }
+    }
+
+    @GetMapping("/game-info")
+    public Game getGameInfo(@RequestParam("itadId") String itadId) throws IOException {
+        JsonNode gameNode = new ObjectMapper().createObjectNode().put("id", itadId);
+        return gameService.getGameProperties(gameNode);
+    }
 }

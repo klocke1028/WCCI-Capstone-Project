@@ -1,5 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "java.compile.nullAnalysis.mode": "automatic",
-  "cSpell.words": ["boxart", "itad"]
+  "cSpell.words": ["applist", "boxart", "homelink", "itad", "waitlisted"]
 }
