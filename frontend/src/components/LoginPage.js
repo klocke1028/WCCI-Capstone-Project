@@ -5,8 +5,8 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/user", {
-      method: "POST",
+    fetch("http://localhost:8080/user?email=" + email, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
