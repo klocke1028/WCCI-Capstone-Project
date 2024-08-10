@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import { useState } from "react";
-import SearchForGames from "./components/SearchForGames";
 //import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
