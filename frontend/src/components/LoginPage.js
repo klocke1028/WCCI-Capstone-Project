@@ -8,7 +8,7 @@ function LoginPage() {
     fetch("http://localhost:8080/user", {
       method: "POST",
       headers: {
-        "Content-Type": "application.json",
+        "Content-Type": "application/json",
       },
     })
       .then((response) => {
