@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./AccountRegistration.css";
 
+// Includes Ross notes
+
 function AccountRegistration() {
   //use a hook to just set the email
   const [email, setEmail] = useState("");
@@ -45,16 +47,16 @@ function AccountRegistration() {
 
   return (
     <div>
-      <div className="registration">
+      <div className="reg_container">
+        <h4 className="reg_form_header">Create An Account</h4>
         <form className="reg_form">
-          <h2>Create An Account</h2>
-          <div className="text">
+          <div className="reg_email_input">
             <input
               type="text"
               id="username"
               name="username"
               placeholder="E-mail"
-              className="registration_text_area"
+              className="reg_email_text"
               value={email}
               //sets the email state, like we created above whenever the value inside the input field changes
               onChange={(e) => setEmail(e.target.value)}
