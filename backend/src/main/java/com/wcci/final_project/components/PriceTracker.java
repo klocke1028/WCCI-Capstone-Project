@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +17,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.User;
+import com.wcci.final_project.service.GameService;
 
 @Component
 public class PriceTracker {
 
+    @Autowired
+    private GameService gameService;
+
     @SuppressWarnings("null")
-    @Scheduled(initialDelay = 20000, fixedRate = 60000)
+    @Scheduled(initialDelay = 10000, fixedRate = 300000)
     // 10000 milliseconds = 10 seconds
     // 300000 milliseconds = 5 minutes
-    public boolean checkForNewBestPrice(User loggedInUser) {
-        boolean gameHasNewBestPrice = false;
+    public void checkForNewBestPrice(User loggedInUser) {
+        List<Game> gamesInDatabase = gameService.getAllGames();
 
-        List<Game> usersWishlistedGames = loggedInUser.getWishlist().getGames();
+        List<String> gamesInDatabaseItadIds = new ArrayList<>();
 
-        if (!(usersWishlistedGames.isEmpty())) {
-            
-        }
-
-        return gameHasNewBestPrice;
     }
 
     public String getItadShopIds() throws IOException {
