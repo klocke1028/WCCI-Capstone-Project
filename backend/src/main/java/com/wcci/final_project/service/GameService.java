@@ -374,4 +374,21 @@ public class GameService {
     
         return new Game(title, itadId, boxArtUrl, tags);
     }
+
+    public Game getGameByItadId(String wantedGameItadId) {
+        List<Game> gamesInDatabase = gameRepository.findAll();
+        Game retrievedGame = new Game();
+
+        for (Game gameInDatabase : gamesInDatabase) {
+            String gameInDatabaseItadId = gameInDatabase.getItadId();
+
+            if (gameInDatabaseItadId.equals(wantedGameItadId)) {
+                Long retrievedGameId = gameInDatabase.getId();
+
+                retrievedGame = gameRepository.findById(retrievedGameId).orElse(null);
+            }
+        }
+
+        return retrievedGame;        
+    }
 }

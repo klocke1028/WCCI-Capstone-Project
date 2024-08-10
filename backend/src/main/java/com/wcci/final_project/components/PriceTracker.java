@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.entity.Game;
-import com.wcci.final_project.entity.User;
 import com.wcci.final_project.service.GameService;
+import com.wcci.final_project.service.PriceAlertService;
 
 @Component
 public class PriceTracker {
@@ -25,15 +25,30 @@ public class PriceTracker {
     @Autowired
     private GameService gameService;
 
-    @SuppressWarnings("null")
+    @Autowired
+    private PriceAlertService priceAlertService;
+
+    // @SuppressWarnings("null")
     @Scheduled(initialDelay = 10000, fixedRate = 300000)
-    // 10000 milliseconds = 10 seconds
-    // 300000 milliseconds = 5 minutes
-    public void checkForNewBestPrice() {
+    public void checkForNewBestPrice() throws IOException {
         List<Game> gamesInDatabase = gameService.getAllGames();
-
         List<String> gamesInDatabaseItadIds = new ArrayList<>();
+        String shopIds = priceAlertService.getItadShopIds();
 
+        for (Game gameInDatabase : gamesInDatabase) {
+            String gameInDatabaseItadId = gameInDatabase.getItadId();
+
+            gamesInDatabaseItadIds.add(gameInDatabaseItadId);
+        }
+
+        for (String gameInDatabaseItadId : gamesInDatabaseItadIds) {
+            double newBestPrice = gameService.getBestPrice(shopIds, gameInDatabaseItadId);
+
+            Game gameInDatabase = gameService.getGameByItadId(gameInDatabaseItadId);
+            double gameInDatabaseCurrentBestPrice = gameInDatabase.getBestPrice();
+
+            if (gameInDatabaseCurrentBestPrice != newBestPrice) gameInDatabaseCurrentBestPrice = newBestPrice;
+        }
     }
 
     public String getItadShopIds() throws IOException {
