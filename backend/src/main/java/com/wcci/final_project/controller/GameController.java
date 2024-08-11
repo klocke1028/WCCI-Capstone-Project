@@ -29,7 +29,7 @@ import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.ReviewService;
 
 @RestController
-@RequestMapping("api/games")
+@RequestMapping("/games")
 public class GameController {
 
     @Autowired

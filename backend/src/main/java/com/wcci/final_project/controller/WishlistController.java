@@ -28,7 +28,7 @@ import com.wcci.final_project.service.WishlistService;
 import com.wcci.final_project.service.ReviewService;
 
 @RestController
-@RequestMapping("api/wishlist")
+@RequestMapping("/wishlist")
 public class WishlistController {
 
     @Autowired
