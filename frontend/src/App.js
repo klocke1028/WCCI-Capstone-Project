@@ -1,12 +1,10 @@
 import React from "react";
 import "./App.css";
-import { useState } from "react";
-//import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
 import Navbar from "./components/Navbar";
-import SearchForGames from "./components/SearchForGames";
+import SearchPage from "./components/SearchPage";
 import AccountRegistration from "./components/AccountRegistration";
 import LoginPage from "./components/LoginPage";
 
@@ -18,13 +16,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/GameInfoPage/:itadId" element={<GameInfoPage />} />
-          <Route path="/search" element={<SearchForGames />} />
+          <Route path="/SearchPage" element={<SearchPage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route
             path="/AccountRegistration"
             element={<AccountRegistration />}
           />
-          <Route path="/SearchForGames" element={<SearchForGames />} />
         </Routes>
       </div>
     </Router>

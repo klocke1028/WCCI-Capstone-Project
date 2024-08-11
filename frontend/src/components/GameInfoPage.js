@@ -7,7 +7,7 @@ function GameInfoPage() {
   const [gameInfo, setGameInfo] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/games/game-info?itadId=${itadId}`, {
+    fetch(`http://localhost:8080/games/game-info?itadId=${itadId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

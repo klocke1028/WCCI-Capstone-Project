@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 function NavBar() {
-  const [loggedInEmail, setLoggedInEmail] = useState("");
 
+  const [loggedInEmail, setLoggedInEmail] = useState("");
   useEffect(() => {
     const email = localStorage.getItem("loggedInEmail");
     setLoggedInEmail(email);
+    console.log(email);
   }, []);
 
   const handleLogout = () => {
@@ -27,9 +28,7 @@ function NavBar() {
         <div className="search-container">
           <SearchForGames />
         </div>
-        <div>
-          {loggedInEmail && <p>Account: {loggedInEmail}</p>}
-        </div>
+        <div>{loggedInEmail && <p>Account: {loggedInEmail}</p>}</div>
         <div>
           {loggedInEmail ? (
             <Link to="/" onClick={handleLogout}>
@@ -39,6 +38,7 @@ function NavBar() {
             <Link to="/LoginPage">Login</Link>
           )}
         </div>
+        <div>{loggedInEmail && <p>Account: {loggedInEmail}</p>}</div>
       </nav>
     </div>
   );
