@@ -3,6 +3,7 @@ import "./LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("http://localhost:8080/user?email=" + email, {
@@ -17,9 +18,10 @@ function LoginPage() {
         }
         return response.json();
       })
-      .then((response) => {
-        console.log("Log in successful.");
-        window.location.href = "/TestHomePage";
+      .then((data) => {
+        console.log("Log in successful.", data);
+        localStorage.setItem("loggedInEmail", email);
+        window.location.href = "/";
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", +error);
