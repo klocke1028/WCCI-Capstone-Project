@@ -62,6 +62,12 @@ function SearchForGames() {
     }
   };
 
+  const clearSearchTerm = () => {
+    setSearchTerm("");
+    setResults([]);
+    setIsResultsVisible(false);
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -77,6 +83,7 @@ function SearchForGames() {
         handleKeyDown={handleKeyDown}
         results={results}
         isResultsVisible={isResultsVisible}
+        clearSearchTerm={clearSearchTerm}
       />
     </div>
   );
