@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import WishlistButton from "./WishlistButton";
 
 function GameInfoPage({ gameTitle, setWishlistedGames }) {
   const { itadId } = useParams();
@@ -38,10 +37,6 @@ function GameInfoPage({ gameTitle, setWishlistedGames }) {
       <h1>{gameInfo.title}</h1>
       <img src={gameInfo.boxArtLink} alt={gameInfo.title} />
       <p>Genres: {gameInfo.tags.join(", ")}</p>
-      <WishlistButton
-        gameTitle={gameTitle}
-        setWishlistedGames={setWishlistedGames}
-      />
     </div>
   );
 }

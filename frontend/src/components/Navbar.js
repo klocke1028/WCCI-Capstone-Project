@@ -7,14 +7,14 @@ function NavBar() {
   return (
     <div className="navbar-wrapper">
       <nav className="navbar">
-      <div className="homelink-container">
-        <Link to="/">
-          <p>All Things Games</p>
-        </Link>
-      </div>
-      <div className="search-container">
-      <SearchForGames />
-      </div>
+        <div className="homelink-container">
+          <Link to="/">
+            <p>All Things Games</p>
+          </Link>
+        </div>
+        <div className="search-container">
+          <SearchForGames />
+        </div>
       </nav>
     </div>
   );

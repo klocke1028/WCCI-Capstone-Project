@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import { useState } from "react";
-//import LoginPage from "./components/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
@@ -9,6 +8,7 @@ import Navbar from "./components/Navbar";
 import SearchForGames from "./components/SearchForGames";
 import AccountRegistration from "./components/AccountRegistration";
 import LoginPage from "./components/LoginPage";
+import Wishlist from "./components/Wishlist";
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
             element={<AccountRegistration />}
           />
           <Route path="/SearchForGames" element={<SearchForGames />} />
+          <Route path="/Wishlist" element={<Wishlist />} />
         </Routes>
       </div>
     </Router>
