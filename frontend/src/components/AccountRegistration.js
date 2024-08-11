@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import "./AccountRegistration.css";
 
-/**NEED TO GET THIS TO STORE A UNIQUE USER ID, SO THAT WHEN LOGGING INTO THE ACCOUNT, THE EMAIL WILL BE RECOGNIZED. 
- * ONLY OTHER THING I CAN THINK OF IS CREATING A NEW BACKEND METHOD TO findByEmail OR SOMETHING. 
- * ONCE THIS IS DONE THE LOGIN AUTHENTICATION WILL BE GOOD ENOUGH FOR TECH DEMO.
- */
+// Includes Ross notes
 
 function AccountRegistration() {
   //use a hook to just set the email
   const [email, setEmail] = useState("");
 
   //handles form submission, breaks without it
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     //Not 100% if this is right, but creating this object matches the backend
@@ -20,7 +17,7 @@ function AccountRegistration() {
     const userPayload = {
       email: email,
       reviewIds: [],
-      wishlistId: null
+      wishlistId: null,
     };
 
     //Need to specify POST because we are creating a user here
@@ -40,7 +37,6 @@ function AccountRegistration() {
       })
       .then((data) => {
         console.log("User successfully added:", data);
-        const userId = data.userId;
         //This will just take you to the login page after submitting the form
         window.location.href = "/LoginPage";
       })
@@ -51,16 +47,16 @@ function AccountRegistration() {
 
   return (
     <div>
-      <h2 className="website_name">Insert website name here:</h2>
-      <div className="registration">
+      <div className="reg_container">
+        <h4 className="reg_form_header">Create An Account</h4>
         <form className="reg_form">
-          <div className="text">
+          <div className="reg_email_input">
             <input
               type="text"
               id="username"
               name="username"
               placeholder="E-mail"
-              className="text_input"
+              className="reg_email_text"
               value={email}
               //sets the email state, like we created above whenever the value inside the input field changes
               onChange={(e) => setEmail(e.target.value)}
@@ -68,8 +64,8 @@ function AccountRegistration() {
           </div>
           <input
             type="submit"
-            value="Create Account!"
-            className="register_button"
+            value="Submit"
+            className="submit_button"
             //calls handleSubmit function when clicked
             //This will work if enter is pressed as well
             onClick={handleSubmit}

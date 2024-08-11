@@ -1,6 +1,7 @@
 package com.wcci.final_project.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wcci.final_project.dto.UserPayload;
@@ -33,18 +35,41 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
-        User userToCreate = new User();
+        User user = new User();
 
-        userToCreate.setEmail(userPayload.getEmail());
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        Long userWishlistId = userPayload.getWishlistId();
 
-        Wishlist wishlistForUser = new Wishlist();
-        Wishlist createdWishlistForUser = wishlistService.createWishlist(wishlistForUser);
+        if (userWishlistId != null) {
+            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
 
-        userToCreate.setWishlist(createdWishlistForUser);
+            if (!(userWishlist == null))
+                user.setWishlist(userWishlist);
+        }
 
-        User newUser = userService.createUser(userToCreate);
+        user.setEmail(userPayload.getEmail());
 
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        if (!(userReviewIds == null)) {
+            List<Review> userReviews = new ArrayList<>();
+            for (Long reviewId : userReviewIds) {
+                Review review = reviewService.findReviewById(reviewId);
+                if (!(review == null))
+                    userReviews.add(review);
+            }
+            user.setReviews(userReviews);
+        }
+
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        Optional<User> optionalFoundUser = userService.findUserByEmail(email);
+        if (optionalFoundUser.isPresent()) {
+            return ResponseEntity.ok(optionalFoundUser.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -56,10 +81,10 @@ public class UserController {
         return ResponseEntity.ok(foundUser);
     }
 
-    @GetMapping("/all") 
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> allUsers = userService.getAllUsers();
-        
+
         return ResponseEntity.ok(allUsers);
     }
 
@@ -71,7 +96,28 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+        List<Long> userReviewIds = userPayload.getReviewIds();
+        Long userWishlistId = userPayload.getWishlistId();
+
+        if (userWishlistId != null) {
+            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
+
+            if (userWishlist != null)
+                existingUser.setWishlist(userWishlist);
+        }
+
         existingUser.setEmail(userPayload.getEmail());
+
+        if (userReviewIds != null) {
+            List<Review> userReviews = new ArrayList<>();
+            for (Long reviewId : userReviewIds) {
+                Review review = reviewService.findReviewById(reviewId);
+                if (!(review == null))
+                    userReviews.add(review);
+            }
+
+            existingUser.setReviews(userReviews);
+        }
 
         return new ResponseEntity<>(userService.updateUser(existingUser), HttpStatus.CREATED);
     }
@@ -102,7 +148,7 @@ public class UserController {
     @GetMapping("/{id}/wishlist")
     public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable Long id) {
         User user = userService.findUserById(id);
-        
+
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
