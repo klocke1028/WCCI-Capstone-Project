@@ -28,6 +28,9 @@ function NavBar() {
           <SearchForGames />
         </div>
         <div>
+          {loggedInEmail && <p>Account: {loggedInEmail}</p>}
+        </div>
+        <div>
           {loggedInEmail ? (
             <Link to="/" onClick={handleLogout}>
               Logout
@@ -35,9 +38,6 @@ function NavBar() {
           ) : (
             <Link to="/LoginPage">Login</Link>
           )}
-        </div>
-        <div>
-          {loggedInEmail && <p>Account: {loggedInEmail}</p>}
         </div>
       </nav>
     </div>
