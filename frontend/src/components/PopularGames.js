@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PopularGamesImg from "./PopularGamesImg";
+import AddToWishlistButton from "./AddToWishlistButton";
 
 const PopularGames = () => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
     const fetchPopularGames = () => {
-      const url = "http://localhost:8080/api/games/popular";
+      const url = "http://localhost:8080/games/popular";
       fetch(url, {
         headers: {
           Accept: "application/json",
@@ -36,9 +38,10 @@ const PopularGames = () => {
         {games.map((game) => (
           <li key={game.itadId}>
             <Link to={`/GameInfoPage/${game.itadId}`}>
-              <img src={game.boxArtLink} alt={game.title} />
+              <PopularGamesImg game={game} />
               <h3>{game.title}</h3>
             </Link>
+            <AddToWishlistButton gameToAdd={game} />
           </li>
         ))}
       </ul>

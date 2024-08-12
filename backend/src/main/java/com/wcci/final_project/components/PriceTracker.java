@@ -1,4 +1,4 @@
-package com.wcci.final_project.service;
+package com.wcci.final_project.components;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,34 +10,45 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wcci.final_project.entity.PriceAlert;
-import com.wcci.final_project.repository.PriceAlertRepository;
+import com.wcci.final_project.entity.Game;
+import com.wcci.final_project.service.GameService;
+import com.wcci.final_project.service.PriceAlertService;
 
-@Service
-public class PriceAlertService {
+@Component
+public class PriceTracker {
 
     @Autowired
-    private PriceAlertRepository priceAlertRepository;
+    private GameService gameService;
 
-    public PriceAlert createPriceAlert(PriceAlert priceAlert) {
-        return priceAlertRepository.save(priceAlert);
-    }
+    @Autowired
+    private PriceAlertService priceAlertService;
 
-    public PriceAlert findPriceAlertById(Long id) {
-        return priceAlertRepository.findById(id).orElse(null);
-    }
+    // @SuppressWarnings("null")
+    @Scheduled(initialDelay = 10000, fixedRate = 300000)
+    public void checkForNewBestPrice() throws IOException {
+        List<Game> gamesInDatabase = gameService.getAllGames();
+        List<String> gamesInDatabaseItadIds = new ArrayList<>();
+        String shopIds = priceAlertService.getItadShopIds();
 
-    public boolean deletePriceAlert(Long id) {
-        if (!priceAlertRepository.existsById(id)) {
-            return false;
+        for (Game gameInDatabase : gamesInDatabase) {
+            String gameInDatabaseItadId = gameInDatabase.getItadId();
+
+            gamesInDatabaseItadIds.add(gameInDatabaseItadId);
         }
 
-        priceAlertRepository.deleteById(id);
-        return true;
+        for (String gameInDatabaseItadId : gamesInDatabaseItadIds) {
+            double newBestPrice = gameService.getBestPrice(shopIds, gameInDatabaseItadId);
+
+            Game gameInDatabase = gameService.findGameByItadId(gameInDatabaseItadId);
+            double gameInDatabaseCurrentBestPrice = gameInDatabase.getBestPrice();
+
+            if (gameInDatabaseCurrentBestPrice != newBestPrice) gameInDatabaseCurrentBestPrice = newBestPrice;
+        }
     }
 
     public String getItadShopIds() throws IOException {
@@ -51,8 +62,7 @@ public class PriceAlertService {
         int getShopsResponseCode = getShopsConnection.getResponseCode();
 
         if (getShopsResponseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader shopsBufferedReader = new BufferedReader(
-                    new InputStreamReader(getShopsConnection.getInputStream()));
+            BufferedReader shopsBufferedReader = new BufferedReader(new InputStreamReader(getShopsConnection.getInputStream()));
             String shopsResponse = shopsBufferedReader.readLine();
             ObjectMapper shopsObjectMapper = new ObjectMapper();
             JsonNode shopsNode = shopsObjectMapper.readTree(shopsResponse);
@@ -83,9 +93,5 @@ public class PriceAlertService {
         String itadShopIds = itadIdsBuilder.toString();
 
         return itadShopIds;
-    }
-
-
-
-    
+    }   
 }

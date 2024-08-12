@@ -3,6 +3,7 @@ package com.wcci.final_project.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class Wishlist {
     @GeneratedValue
     private Long id;
 
-    @JsonIgnoreProperties({ "wishlist", "hibernateLazyInitializer", "handler" })
+    @JsonManagedReference
     @OneToMany(mappedBy = "wishlist", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Game> games;
 

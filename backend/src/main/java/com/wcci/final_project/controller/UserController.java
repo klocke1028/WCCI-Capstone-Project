@@ -1,6 +1,5 @@
 package com.wcci.final_project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +20,7 @@ import com.wcci.final_project.dto.UserPayload;
 import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
 import com.wcci.final_project.entity.Wishlist;
-import com.wcci.final_project.service.ReviewService;
 import com.wcci.final_project.service.UserService;
-import com.wcci.final_project.service.WishlistService;
 
 @RestController
 @RequestMapping("/user")
@@ -32,37 +29,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ReviewService reviewService;
-
-    @Autowired
-    private WishlistService wishlistService;
-
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserPayload userPayload) {
         User user = new User();
 
-        List<Long> userReviewIds = userPayload.getReviewIds();
-        Long userWishlistId = userPayload.getWishlistId();
-
-        if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
-
-            if (!(userWishlist == null))
-                user.setWishlist(userWishlist);
-        }
-
         user.setEmail(userPayload.getEmail());
-
-        if (!(userReviewIds == null)) {
-            List<Review> userReviews = new ArrayList<>();
-            for (Long reviewId : userReviewIds) {
-                Review review = reviewService.findReviewById(reviewId);
-                if (!(review == null))
-                    userReviews.add(review);
-            }
-            user.setReviews(userReviews);
-        }
 
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
@@ -101,28 +72,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        List<Long> userReviewIds = userPayload.getReviewIds();
-        Long userWishlistId = userPayload.getWishlistId();
-
-        if (userWishlistId != null) {
-            Wishlist userWishlist = wishlistService.findWishlistById(userWishlistId);
-
-            if (userWishlist != null)
-                existingUser.setWishlist(userWishlist);
-        }
-
         existingUser.setEmail(userPayload.getEmail());
-
-        if (userReviewIds != null) {
-            List<Review> userReviews = new ArrayList<>();
-            for (Long reviewId : userReviewIds) {
-                Review review = reviewService.findReviewById(reviewId);
-                if (!(review == null))
-                    userReviews.add(review);
-            }
-
-            existingUser.setReviews(userReviews);
-        }
 
         return new ResponseEntity<>(userService.updateUser(existingUser), HttpStatus.CREATED);
     }

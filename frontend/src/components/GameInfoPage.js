@@ -7,7 +7,7 @@ function GameInfoPage({ gameTitle, setWishlistedGames }) {
   const [gameInfo, setGameInfo] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/games/game-info?itadId=${itadId}`, {
+    fetch(`http://localhost:8080/games/game-info?itadId=${itadId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,6 +37,13 @@ function GameInfoPage({ gameTitle, setWishlistedGames }) {
       <h1>{gameInfo.title}</h1>
       <img src={gameInfo.boxArtLink} alt={gameInfo.title} />
       <p>Genres: {gameInfo.tags.join(", ")}</p>
+      <div>
+        <div>
+          <div>
+            <p>Pricing</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

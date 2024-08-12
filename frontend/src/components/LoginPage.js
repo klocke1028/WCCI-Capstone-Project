@@ -3,6 +3,8 @@ import "./LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
+  localStorage.setItem("loggedInEmail", email);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("http://localhost:8080/user?email=" + email, {

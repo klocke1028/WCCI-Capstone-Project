@@ -1,9 +1,8 @@
 package com.wcci.final_project.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +22,13 @@ import com.wcci.final_project.entity.Review;
 import com.wcci.final_project.entity.User;
 import com.wcci.final_project.entity.Wishlist;
 import com.wcci.final_project.service.GameService;
+import com.wcci.final_project.service.PriceAlertService;
 import com.wcci.final_project.service.UserService;
 import com.wcci.final_project.service.WishlistService;
 import com.wcci.final_project.service.ReviewService;
 
 @RestController
-@RequestMapping("api/wishlist")
+@RequestMapping("/wishlist")
 public class WishlistController {
 
     @Autowired
@@ -43,32 +43,25 @@ public class WishlistController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private PriceAlertService priceAlertService;
+
     @PostMapping
     public ResponseEntity<Wishlist> addWishlist(@RequestBody WishlistPayload wishlistPayload) {
-        Wishlist wishlist = new Wishlist();
+        Wishlist newWishlist = new Wishlist();
 
-        List<Long> wishlistGameIds = wishlistPayload.getGameIds();
-        Long wishlistUserId = wishlistPayload.getUserId();
+        Long newWishlistUserId = wishlistPayload.getUserId();
 
-        List<Game> wishlistGames = new ArrayList<>();
+        User newWishlistUser = userService.findUserById(newWishlistUserId);
 
-        for (Long wishlistGameId : wishlistGameIds) {
-            Game wishlistGame = gameService.findGameById(wishlistGameId);
-            if (wishlistGame != null)
-                wishlistGames.add(wishlistGame);
-        }
-
-        wishlist.setGames(wishlistGames);
-
-        User wishlistUser = userService.findUserById(wishlistUserId);
-
-        if (wishlistUser != null) {
-            wishlist.setUser(wishlistUser);
+        if (newWishlistUser != null) {
+            newWishlist.setUser(newWishlistUser);
+            newWishlistUser.setWishlist(newWishlist);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return new ResponseEntity<>(wishlistService.createWishlist(wishlist), HttpStatus.CREATED);
+        return new ResponseEntity<>(wishlistService.createWishlist(newWishlist), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -83,8 +76,8 @@ public class WishlistController {
     }
 
     @PostMapping("/{id}/add-game")
-    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
-        String newGameTitle = gamePayload.getTitle();
+    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) throws IOException {
+        String newGameItadId = gamePayload.getItadId();
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
         List<Game> gamesInDatabase = gameService.getAllGames();
@@ -99,9 +92,9 @@ public class WishlistController {
         boolean isGameAlreadyInDatabase = false;
 
         for (Game gameInExistingWishlist : againGamesInExistingWishlist) {
-            String gameInExistingWishlistTitle = gameInExistingWishlist.getTitle();
+            String gameInExistingWishlistItadId = gameInExistingWishlist.getItadId();
 
-            if (gameInExistingWishlistTitle.equals(newGameTitle)) {
+            if (gameInExistingWishlistItadId.equals(newGameItadId)) {
                 isGameAlreadyInWishlist = true;
                 break;
             }
@@ -111,9 +104,9 @@ public class WishlistController {
 
         if (!isGameAlreadyInWishlist) {
             for (Game gameInDatabase : gamesInDatabase) {
-                String gameInDatabaseTitle = gameInDatabase.getTitle();
+                String gameInDatabaseItadId = gameInDatabase.getItadId();
 
-                if (gameInDatabaseTitle.equals(newGameTitle)) {
+                if (gameInDatabaseItadId.equals(newGameItadId)) {
                     isGameAlreadyInDatabase = true;
                     databaseGame = gameInDatabase;
                     break;
@@ -124,14 +117,23 @@ public class WishlistController {
         if (isGameAlreadyInDatabase) {
             againGamesInExistingWishlist.add(databaseGame);
         } else {
-            Game game = new Game();
+            Game newGame = new Game();
 
-            double newGamePrice = gamePayload.getGamePrice();
+            String newGameTitle = gamePayload.getTitle();
 
-            if (newGameTitle != null)
-                game.setTitle(newGameTitle);
-            if (newGamePrice != 0)
-                game.setPrice(newGamePrice);
+            newGame.setTitle(newGameTitle);
+
+            if (newGameItadId != null) newGame.setItadId(newGameItadId);
+
+            String newGameBoxArtUrl = gamePayload.getBoxArtUrl();
+
+            if (newGameBoxArtUrl != null) newGame.setBoxArtLink(newGameBoxArtUrl);
+
+            String shopIds = priceAlertService.getItadShopIds();
+
+            double newGameBestPrice = gameService.getBestPrice(shopIds, newGameItadId);
+
+            if (newGameBestPrice != 0.0) newGame.setBestPrice(newGameBestPrice);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
@@ -145,11 +147,13 @@ public class WishlistController {
                         gameReviews.add(gameReview);
                 }
 
-                game.setReviews(gameReviews);
+                newGame.setReviews(gameReviews);
             }
+            
+            newGame.setWishlist(existingWishlist);
 
-            Game newGame = gameService.saveGame(game);
-            againGamesInExistingWishlist.add(newGame);
+            Game savedNewGame = gameService.saveGame(newGame);
+            againGamesInExistingWishlist.add(savedNewGame);
             existingWishlist.setGames(againGamesInExistingWishlist);
         }
 
