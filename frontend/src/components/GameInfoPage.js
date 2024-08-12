@@ -37,6 +37,13 @@ function GameInfoPage() {
       <h1>{gameInfo.title}</h1>
       <img src={gameInfo.boxArtLink} alt={gameInfo.title} />
       <p>Genres: {gameInfo.tags.join(", ")}</p>
+      <div>
+        <div>
+          <div>
+            <p>Pricing</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

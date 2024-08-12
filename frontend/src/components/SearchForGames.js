@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameSearchBar from "./GameSearchBar";
-import { useNavigate } from "react-router-dom";
 
 function SearchForGames() {
   const [results, setResults] = useState([]);
@@ -14,7 +13,9 @@ function SearchForGames() {
       return;
     }
 
-    const url = `http://localhost:8080/games/search?searchTerm=${encodeURIComponent(searchTerm)}`;
+    const url = `http://localhost:8080/games/search?searchTerm=${encodeURIComponent(
+      searchTerm
+    )}`;
     fetch(url, {
       method: "GET",
       headers: {
