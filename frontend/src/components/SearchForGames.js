@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameSearchBar from "./GameSearchBar";
+import { useNavigate } from "react-router-dom";
 
 function SearchForGames() {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isResultsVisible, setIsResultsVisible] = useState(false);
   const searchBarRef = useRef(null);
+  const navigate = useNavigate();
 
   const fetchSearchResults = (searchTerm) => {
     if (!searchTerm.trim()) {
       setResults([]);
-      setIsResultsVisible(false);
       return;
     }
 
@@ -31,7 +31,7 @@ function SearchForGames() {
       })
       .then((data) => {
         setResults(data);
-        setIsResultsVisible(data.length > 0);
+        navigate("/SearchPage", { state: { results: data } });
       })
       .catch((error) => {
         console.error("There was a problem fetching the app list: " + error);
@@ -41,16 +41,11 @@ function SearchForGames() {
   const handleSearchChange = (event) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
-    if (!newSearchTerm.trim()) {
-      setResults([]);
-      setIsResultsVisible(false);
-    }
   };
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       fetchSearchResults(searchTerm);
-      setIsResultsVisible(true);
     }
   };
 
@@ -58,14 +53,7 @@ function SearchForGames() {
     if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
       setSearchTerm("");
       setResults([]);
-      setIsResultsVisible(false);
     }
-  };
-
-  const clearSearchTerm = () => {
-    setSearchTerm("");
-    setResults([]);
-    setIsResultsVisible(false);
   };
 
   useEffect(() => {
@@ -82,8 +70,6 @@ function SearchForGames() {
         handleSearchChange={handleSearchChange}
         handleKeyDown={handleKeyDown}
         results={results}
-        isResultsVisible={isResultsVisible}
-        clearSearchTerm={clearSearchTerm}
       />
     </div>
   );
