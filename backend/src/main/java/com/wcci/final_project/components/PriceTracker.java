@@ -28,7 +28,6 @@ public class PriceTracker {
     @Autowired
     private PriceAlertService priceAlertService;
 
-    // @SuppressWarnings("null")
     @Scheduled(initialDelay = 10000, fixedRate = 300000)
     public void checkForNewBestPrice() throws IOException {
         List<Game> gamesInDatabase = gameService.getAllGames();

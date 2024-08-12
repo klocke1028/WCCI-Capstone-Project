@@ -32,13 +32,14 @@ public class Game {
 
     private double bestPrice;
 
+    private double priceWhenAdded;
+
     private String shopWithBestPrice;    
 
     private String itadId;
 
     private String boxArtLink;
 
-    //THIS IS A NEW ADDITION SPECIFICALLY FOR THE GAME INFO PAGE
     private List<String> tags;
 
     @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })

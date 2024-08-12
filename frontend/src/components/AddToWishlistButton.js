@@ -1,57 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
+import { fetchLoggedInUser } from "./LoggedInUserFetch";
 
 function AddToWishlistButton({ gameToAdd }) {
-  const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
+  const addToWishlist = async () => {
+    const loggedInUser = await fetchLoggedInUser();
+    const userWishlistId = loggedInUser.wishlist.id;
 
-  const addToWishlist = () => {
+    const requestBody = {
+      title: gameToAdd.title,
+      itadId: gameToAdd.itadId,
+      boxArtUrl: gameToAdd.boxArtLink,
+    };
+
     fetch(
-      `http://localhost:8080/user?email=${encodeURIComponent(loggedInEmail[0])}`
+      `http://localhost:8080/wishlist/${encodeURIComponent(
+        userWishlistId
+      )}/add-game`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
     )
-      .then((response1) => {
-        if (!response1.ok) {
+      .then((response) => {
+        if (!response.ok) {
           throw new Error("Network response was not okay.");
         }
-        return response1.json();
+        return response.json();
       })
-      .then((data1) => {
-        const wishlistId = data1.wishlist.id;
-
-        const requestBody = {
-          title: gameToAdd.title,
-          itadId: gameToAdd.itadId,
-          boxArtUrl: gameToAdd.boxArtLink,
-        };
-
-        fetch(
-          `http://localhost:8080/wishlist/${encodeURIComponent(
-            wishlistId
-          )}/add-game`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          }
-        )
-          .then((response2) => {
-            if (!response2.ok) {
-              throw new Error("Network response was not okay.");
-            }
-            return response2.json();
-          })
-          .then((data2) => {
-            console.log(data2);
-          })
-          .catch((error2) => {
-            console.log(
-              "There was a problem adding the game to the wishlist: " + error2
-            );
-          });
+      .then((data) => {
+        console.log(data);
       })
-      .catch((error1) => {
-        console.error(
-          "There was a problem fetching the logged in user: " + error1
+      .catch((error) => {
+        console.log(
+          "There was a problem adding the game to the wishlist: " + error
         );
       });
   };
