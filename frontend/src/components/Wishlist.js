@@ -4,30 +4,47 @@ import "./Wishlist.css";
 
 const Wishlist = () => {
   const [games, setGames] = useState([]);
+  const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
 
   useEffect(() => {
     const fetchWishlistGames = () => {
-      const url = "http://localhost:8080/wishlist/{id}";
-      fetch(url, {
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
+      fetch(
+        `http://localhost:8080/user?email=${encodeURIComponent(
+          loggedInEmail[0]
+        )}`
+      )
+        .then((response1) => {
+          if (!response1.ok) {
             throw new Error("Network response was not ok.");
           }
-          return response.json();
+          return response1.json();
         })
-        .then((data) => {
-          setGames(data);
+        .then((data1) => {
+          const wishlistId = data1.wishlist.id;
+
+          const url = `http://localhost:8080/wishlist/${wishlistId}/games`;
+          return fetch(url, {
+            headers: {
+              Accept: "application/json",
+            },
+          });
+        })
+        .then((response2) => {
+          if (!response2.ok) {
+            throw new Error("Network response was not ok.");
+          }
+          return response2.json();
+        })
+        .then((data2) => {
+          setGames(data2);
         })
         .catch((error) => {
-          console.log("There was a problem fetching the wishlist:" + error);
+          console.log("There was a problem fetching the wishlist: " + error);
         });
     };
+
     fetchWishlistGames();
-  }, []);
+  }, [loggedInEmail]);
 
   return (
     <div className="wishlist-games-header">

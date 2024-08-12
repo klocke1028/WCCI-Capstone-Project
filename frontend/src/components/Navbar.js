@@ -27,8 +27,6 @@ function NavBar() {
         <div className="search-container">
           <SearchForGames />
         </div>
-<<<<<<< HEAD
-=======
         <div id="user-greeting">
           {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
         </div>
@@ -41,7 +39,6 @@ function NavBar() {
             <Link to="/LoginPage">Login</Link>
           )}
         </div>
->>>>>>> origin/main
       </nav>
     </div>
   );

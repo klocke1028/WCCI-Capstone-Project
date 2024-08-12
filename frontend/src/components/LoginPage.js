@@ -19,13 +19,8 @@ function LoginPage() {
         }
         return response.json();
       })
-<<<<<<< HEAD
-      .then((response) => {
-        console.log("Log in successful.");
-=======
       .then((data) => {
         console.log("Log in successful.", data);
->>>>>>> origin/main
         window.location.href = "/";
       })
       .catch((error) => {
@@ -36,7 +31,7 @@ function LoginPage() {
     <div>
       <div className="login_container">
         <h4 className="login_form_header">Login</h4>
-        <form className="login_form" onSubmit={handleSubmit}> 
+        <form className="login_form" onSubmit={handleSubmit}>
           <div className="email_input">
             <input
               type="text"
@@ -48,11 +43,7 @@ function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <input
-            type="submit"
-            value="Login"
-            className="login_button"
-          />
+          <input type="submit" value="Login" className="login_button" />
         </form>
         <a className="account_creation_link" href="/AccountRegistration">
           No account? Click here to sign Up!

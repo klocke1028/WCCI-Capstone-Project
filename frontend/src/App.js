@@ -24,11 +24,6 @@ function App() {
             path="/AccountRegistration"
             element={<AccountRegistration />}
           />
-<<<<<<< HEAD
-          <Route path="/SearchForGames" element={<SearchForGames />} />
-          <Route path="/Wishlist" element={<Wishlist />} />
-=======
->>>>>>> origin/main
         </Routes>
       </div>
     </Router>
