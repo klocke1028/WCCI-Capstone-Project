@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Wishlist.css";
+import PopularGamesImg from "./PopularGamesImg";
 
 const Wishlist = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +60,7 @@ const Wishlist = () => {
           {games.map((game) => (
             <li key={game.itadId}>
               <Link to={`/GameInfoPage/${game.itadId}`}>
+                <PopularGamesImg game={game} />
                 <h4>{game.title}</h4>
               </Link>
             </li>
