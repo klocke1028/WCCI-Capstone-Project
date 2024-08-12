@@ -32,4 +32,5 @@ public class WishlistService {
         wishlistRepository.deleteById(id);
         return true;
     }
+    
 }
