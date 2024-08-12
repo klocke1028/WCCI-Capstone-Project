@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import BestPrice from "./BestPrice";
 
 function GameInfoPage() {
   const { itadId } = useParams();
@@ -42,9 +41,6 @@ function GameInfoPage() {
         <div>
           <div>
             <p>Pricing</p>
-          </div>
-          <div>
-            <BestPrice itadId={gameInfo.itadId} />
           </div>
         </div>
       </div>

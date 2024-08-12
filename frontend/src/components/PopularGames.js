@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PopularGamesImg from "./PopularGamesImg";
+import AddToWishlistButton from "./AddToWishlistButton";
 
 const PopularGames = () => {
   const [games, setGames] = useState([]);
@@ -36,9 +38,10 @@ const PopularGames = () => {
         {games.map((game) => (
           <li key={game.itadId}>
             <Link to={`/GameInfoPage/${game.itadId}`}>
-              <img src={game.boxArtLink} alt={game.title} />
+              <PopularGamesImg game={game} />
               <h3>{game.title}</h3>
             </Link>
+            <AddToWishlistButton gameToAdd={game} />
           </li>
         ))}
       </ul>
