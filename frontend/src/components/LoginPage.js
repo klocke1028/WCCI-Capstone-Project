@@ -21,7 +21,7 @@ function LoginPage() {
       })
       .then((response) => {
         console.log("Log in successful.");
-        window.location.href = "/HomePage";
+        window.location.href = "/";
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", +error);
