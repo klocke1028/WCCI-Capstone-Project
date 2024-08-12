@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 function NavBar() {
+  const [loggedInEmail, setLoggedInEmail] = useState("");
+  useEffect(() => {
+    const email = localStorage.getItem("loggedInEmail");
+    setLoggedInEmail(email);
+    console.log(email);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInEmail");
+    setLoggedInEmail("");
+  };
+
   return (
     <div className="navbar-wrapper">
       <nav className="navbar">
@@ -15,6 +27,21 @@ function NavBar() {
         <div className="search-container">
           <SearchForGames />
         </div>
+<<<<<<< HEAD
+=======
+        <div id="user-greeting">
+          {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
+        </div>
+        <div>
+          {loggedInEmail ? (
+            <Link to="/" onClick={handleLogout}>
+              Logout
+            </Link>
+          ) : (
+            <Link to="/LoginPage">Login</Link>
+          )}
+        </div>
+>>>>>>> origin/main
       </nav>
     </div>
   );

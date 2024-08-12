@@ -7,7 +7,7 @@ function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/user?email=" + email, {
+    fetch(`http://localhost:8080/user?email=${encodeURIComponent(email)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,8 +19,13 @@ function LoginPage() {
         }
         return response.json();
       })
+<<<<<<< HEAD
       .then((response) => {
         console.log("Log in successful.");
+=======
+      .then((data) => {
+        console.log("Log in successful.", data);
+>>>>>>> origin/main
         window.location.href = "/";
       })
       .catch((error) => {
@@ -31,7 +36,7 @@ function LoginPage() {
     <div>
       <div className="login_container">
         <h4 className="login_form_header">Login</h4>
-        <form className="login_form">
+        <form className="login_form" onSubmit={handleSubmit}> 
           <div className="email_input">
             <input
               type="text"
@@ -47,7 +52,6 @@ function LoginPage() {
             type="submit"
             value="Login"
             className="login_button"
-            onClick={handleSubmit}
           />
         </form>
         <a className="account_creation_link" href="/AccountRegistration">
@@ -57,5 +61,4 @@ function LoginPage() {
     </div>
   );
 }
-
 export default LoginPage;

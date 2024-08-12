@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
 import Navbar from "./components/Navbar";
-import SearchForGames from "./components/SearchForGames";
+import SearchPage from "./components/SearchPage";
 import AccountRegistration from "./components/AccountRegistration";
 import LoginPage from "./components/LoginPage";
 import Wishlist from "./components/Wishlist";
@@ -18,14 +18,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/GameInfoPage/:itadId" element={<GameInfoPage />} />
-          <Route path="/search" element={<SearchForGames />} />
+          <Route path="/SearchPage" element={<SearchPage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route
             path="/AccountRegistration"
             element={<AccountRegistration />}
           />
+<<<<<<< HEAD
           <Route path="/SearchForGames" element={<SearchForGames />} />
           <Route path="/Wishlist" element={<Wishlist />} />
+=======
+>>>>>>> origin/main
         </Routes>
       </div>
     </Router>
