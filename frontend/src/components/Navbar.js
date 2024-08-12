@@ -38,7 +38,6 @@ function NavBar() {
             <Link to="/LoginPage">Login</Link>
           )}
         </div>
-        <div>{loggedInEmail && <p>Account: {loggedInEmail}</p>}</div>
       </nav>
     </div>
   );

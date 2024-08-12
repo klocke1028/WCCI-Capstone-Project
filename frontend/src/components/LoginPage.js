@@ -3,6 +3,7 @@ import "./LoginPage.css";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
+  localStorage.setItem("loggedInEmail", email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +21,6 @@ function LoginPage() {
       })
       .then((data) => {
         console.log("Log in successful.", data);
-        localStorage.setItem("loggedInEmail", email);
         window.location.href = "/";
       })
       .catch((error) => {
