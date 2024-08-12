@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 function NavBar() {
-
   const [loggedInEmail, setLoggedInEmail] = useState("");
   useEffect(() => {
     const email = localStorage.getItem("loggedInEmail");
@@ -28,7 +27,11 @@ function NavBar() {
         <div className="search-container">
           <SearchForGames />
         </div>
-        <div>{loggedInEmail && <p>Account: {loggedInEmail}</p>}</div>
+        <div id="user-greeting">
+          <Link to="/WishlistGamesTemp">
+            {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
+          </Link>
+        </div>
         <div>
           {loggedInEmail ? (
             <Link to="/" onClick={handleLogout}>

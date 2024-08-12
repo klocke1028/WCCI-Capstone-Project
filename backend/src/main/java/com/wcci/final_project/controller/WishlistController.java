@@ -131,9 +131,9 @@ public class WishlistController {
 
             String shopIds = priceAlertService.getItadShopIds();
 
-            double newGameBestPrice = gameService.getBestPrice(shopIds, newGameItadId);
+            double priceWhenAdded = gameService.getBestPrice(shopIds, newGameItadId);
 
-            if (newGameBestPrice != 0.0) newGame.setBestPrice(newGameBestPrice);
+            if (priceWhenAdded != 0.0) newGame.setPriceWhenAdded(priceWhenAdded);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
@@ -191,5 +191,16 @@ public class WishlistController {
         existingWishlist.setGames(againGamesInExistingWishlist);
 
         return ResponseEntity.ok(wishlistService.updateWishlist(existingWishlist));
+    }
+    
+    @GetMapping("/{id}/games")
+    public ResponseEntity<List<Game>> getGamesByWishlistId(@PathVariable Long id) {
+        Wishlist existingWishlist = wishlistService.findWishlistById(id);
+
+        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+        List<Game> existingWishlistGames = existingWishlist.getGames();
+
+        return ResponseEntity.ok(existingWishlistGames);
     }
 }
