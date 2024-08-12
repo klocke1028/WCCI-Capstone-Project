@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchLoggedInUser } from "./LoggedInUserFetch";
+import { fetchLoggedInUsersWishlist } from "./LoggedInUsersWishlistFetch";
 import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
 
@@ -11,8 +11,8 @@ function WishlistGamesTemp() {
   useEffect(() => {
     const fetchLoggedInUserData = async () => {
       try {
-        const loggedInUser = await fetchLoggedInUser();
-        setLoggedInUserWishlistId(loggedInUser.wishlist.id);
+        const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
+        setLoggedInUserWishlistId(loggedInUsersWishlist.id);
       } catch (error) {
         console.log(
           "There was a problem fetching the logged-in user: " + error
