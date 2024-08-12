@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import GameSearchBar from "./GameSearchBar";
+import { useNavigate } from "react-router-dom";
 
 function SearchForGames() {
   const [results, setResults] = useState([]);
