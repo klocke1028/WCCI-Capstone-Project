@@ -24,6 +24,7 @@ function App() {
             path="/AccountRegistration"
             element={<AccountRegistration />}
           />
+          <Route path="/Wishlist" element={<Wishlist />} />
         </Routes>
       </div>
     </Router>

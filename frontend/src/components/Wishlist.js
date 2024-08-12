@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import "./Wishlist.css";
 
 const Wishlist = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen((isOpen) => !isOpen);
+  };
   const [games, setGames] = useState([]);
   const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
 
@@ -47,17 +52,27 @@ const Wishlist = () => {
   }, [loggedInEmail]);
 
   return (
-    <div className="wishlist-games-header">
-      <h3 className="wishlist-games-header">Wishlist</h3>
-      <ul>
-        {games.map((game) => (
-          <li key={game.itadId}>
-            <Link to={`/GameInfoPage/${game.itadId}`}>
-              <h4>{game.title}</h4>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="wishlist_games">
+      <div className={`wishlist-container ${isOpen ? "is-open" : ""}`}>
+        <ul className="wishlist">
+          <p>Wishlist</p>
+          {games.map((game) => (
+            <li key={game.itadId}>
+              <Link to={`/GameInfoPage/${game.itadId}`}>
+                <h4>{game.title}</h4>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div
+        className={`hamburger no-user-select ${isOpen ? "active" : ""}`}
+        onClick={toggleMenu}
+      >
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </div>
     </div>
   );
 };

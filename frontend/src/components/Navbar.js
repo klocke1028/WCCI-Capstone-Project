@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
+import Wishlist from "./Wishlist";
 import "./Navbar.css";
 
 function NavBar() {
@@ -30,6 +31,7 @@ function NavBar() {
         <div id="user-greeting">
           {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
         </div>
+
         <div>
           {loggedInEmail ? (
             <Link to="/" onClick={handleLogout}>
