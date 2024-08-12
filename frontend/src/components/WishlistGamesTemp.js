@@ -61,7 +61,7 @@ function WishlistGamesTemp() {
               <h3>{wishlistGame.title}</h3>
             </Link>
             <h4 id="displayed-price">
-              Price When Added: ${wishlistGame.priceWhenAdded}
+              Best Price: ${wishlistGame.priceWhenAdded}
             </h4>
           </li>
         ))}
