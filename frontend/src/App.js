@@ -9,6 +9,7 @@ import SearchPage from "./components/SearchPage";
 import AccountRegistration from "./components/AccountRegistration";
 import LoginPage from "./components/LoginPage";
 import Wishlist from "./components/Wishlist";
+import WishlistGamesTemp from "./components/WishlistGamesTemp";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/GameInfoPage/:itadId" element={<GameInfoPage />} />
           <Route path="/SearchPage" element={<SearchPage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/WishlistGamesTemp" element={<WishlistGamesTemp />} />
           <Route
             path="/AccountRegistration"
             element={<AccountRegistration />}

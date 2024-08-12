@@ -131,9 +131,9 @@ public class WishlistController {
 
             String shopIds = priceAlertService.getItadShopIds();
 
-            double newGameBestPrice = gameService.getBestPrice(shopIds, newGameItadId);
+            double priceWhenAdded = gameService.getBestPrice(shopIds, newGameItadId);
 
-            if (newGameBestPrice != 0.0) newGame.setBestPrice(newGameBestPrice);
+            if (priceWhenAdded != 0.0) newGame.setPriceWhenAdded(priceWhenAdded);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 

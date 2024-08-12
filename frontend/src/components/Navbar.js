@@ -29,7 +29,9 @@ function NavBar() {
           <SearchForGames />
         </div>
         <div id="user-greeting">
-          {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
+          <Link to="/WishlistGamesTemp">
+            {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
+          </Link>
         </div>
 
         <div>
