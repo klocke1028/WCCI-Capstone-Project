@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.repository.GameRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,8 @@ public class GameService {
     }
 
     public boolean deleteGame(Long id) {
+        if (!gameRepository.existsById(id))
+            return false;
         if (!gameRepository.existsById(id))
             return false;
 
@@ -100,27 +102,37 @@ public class GameService {
 
             ObjectMapper gameObjectMapper = new ObjectMapper();
             JsonNode gameInfoNode = gameObjectMapper.readTree(gameResponse.toString());
-            String boxArtUrl = gameInfoNode.path("assets").path("boxart").asText();
+            String boxArtUrl = getBoxArt(gameInfoNode);
 
-            if (boxArtUrl.isEmpty()) {
-                String banner600 = gameInfoNode.path("assets").path("banner600").asText();
-                boxArtUrl = banner600;
-            }
+            game = new Game(title, itadId, boxArtUrl);
+        } else {
+            System.out.println("Error in getting game info. Error code: " + gameInfoResponseCode);
+        }
 
-            if (boxArtUrl.isEmpty()) {
-                String banner400 = gameInfoNode.path("assets").path("banner400").asText();
-                boxArtUrl = banner400;
-            }
+        return game;
+    }
 
-            if (boxArtUrl.isEmpty()) {
-                String banner300 = gameInfoNode.path("assets").path("banner300").asText();
-                boxArtUrl = banner300;
-            }
+    public Game searchGameOnItadByItadId(Game existingGame) throws IOException {
+        Game game = new Game();
+        String title = existingGame.getTitle();
+        String itadId = existingGame.getItadId();
 
-            if (boxArtUrl.isEmpty()) {
-                String banner145 = gameInfoNode.path("assets").path("banner145").asText();
-                boxArtUrl = banner145;
-            }
+        URL gameInfo = new URL("https://api.isthereanydeal.com/games/info/v2?id=" + itadId + "&key=" + itadApiKey);
+        HttpsURLConnection gameInfoConnection = (HttpsURLConnection) gameInfo.openConnection();
+        gameInfoConnection.setRequestMethod("GET");
+        int gameInfoResponseCode = gameInfoConnection.getResponseCode();
+
+        if (gameInfoResponseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader gameBufferedReader = new BufferedReader(
+                    new InputStreamReader(gameInfoConnection.getInputStream()));
+            String gameInputLine = gameBufferedReader.readLine();
+            StringBuilder gameResponse = new StringBuilder();
+
+            gameResponse.append(gameInputLine);
+
+            ObjectMapper gameObjectMapper = new ObjectMapper();
+            JsonNode gameInfoNode = gameObjectMapper.readTree(gameResponse.toString());
+            String boxArtUrl = getBoxArt(gameInfoNode);
 
             game = new Game(title, itadId, boxArtUrl);
         } else {
@@ -158,6 +170,63 @@ public class GameService {
 
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public Double getBestPrice(String shopIds, String gameItadId) throws IOException {
+        double bestPrice = 0.0;
+        List<Double> currentPrices = new ArrayList<>();
+        String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
+        String requestBody = "[ \"" + gameItadId + "\" ]";
+
+        URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
+        HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();
+
+        getBestPriceConnection.setRequestMethod("POST");
+        getBestPriceConnection.setDoOutput(true); 
+        getBestPriceConnection.setRequestProperty("Content-Type", "application/json");
+
+        OutputStreamWriter getBestPriceWriter = new OutputStreamWriter(getBestPriceConnection.getOutputStream(), "UTF-8");
+
+        getBestPriceWriter.write(requestBody);
+        getBestPriceWriter.close();
+
+        int getBestPriceResponseCode = getBestPriceConnection.getResponseCode();
+
+        if (getBestPriceResponseCode == HttpsURLConnection.HTTP_OK) {
+            BufferedReader bestPriceReader = new BufferedReader(new InputStreamReader(getBestPriceConnection.getInputStream()));
+            String bestPriceInputLine = bestPriceReader.readLine();
+            ObjectMapper bestPriceMapper = new ObjectMapper();
+            JsonNode bestPricesArrayNode = bestPriceMapper.readTree(bestPriceInputLine);
+
+            for (JsonNode gamePricesNode : bestPricesArrayNode) {
+
+                for (JsonNode dealsNode : gamePricesNode.path("deals")) {
+
+                    JsonNode priceNode = dealsNode.path("price");
+                    double currentPrice = priceNode.path("amount").asDouble();
+
+                    currentPrices.add(currentPrice);
+                }
+            }
+
+            double initialCurrentPrice = currentPrices.get(0);
+
+            for (double currentPriceToCheck : currentPrices) {
+
+                if (currentPriceToCheck < initialCurrentPrice) {
+                    bestPrice = currentPriceToCheck;
+                    initialCurrentPrice = currentPriceToCheck;
+                } else {
+                    bestPrice = initialCurrentPrice;
+                }
+
+            }
+
+        } else {
+            System.out.println("Error in getting best price. Response Code: " + getBestPriceResponseCode);
+        }
+
+        return bestPrice;
     }
 
     public List<Game> getPopularGames() throws IOException {
@@ -304,5 +373,22 @@ public class GameService {
         }
     
         return new Game(title, itadId, boxArtUrl, tags);
+    }
+
+    public Game findGameByItadId(String wantedGameItadId) {
+        List<Game> gamesInDatabase = gameRepository.findAll();
+        Game retrievedGame = new Game();
+
+        for (Game gameInDatabase : gamesInDatabase) {
+            String gameInDatabaseItadId = gameInDatabase.getItadId();
+
+            if (gameInDatabaseItadId.equals(wantedGameItadId)) {
+                Long retrievedGameId = gameInDatabase.getId();
+
+                retrievedGame = gameRepository.findById(retrievedGameId).orElse(null);
+            }
+        }
+
+        return retrievedGame;        
     }
 }

@@ -3,6 +3,7 @@ package com.wcci.final_project.entity;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -29,7 +30,9 @@ public class Game {
     
     private String title;
 
-    private double price;
+    private double bestPrice;
+
+    private String shopWithBestPrice;    
 
     private String itadId;
 
@@ -42,7 +45,7 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @JsonIgnoreProperties({ "game", "hibernateLazyInitializer", "handler" })
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Wishlist wishlist;
     
@@ -76,35 +79,34 @@ public class Game {
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(String title, double price) {
+    public Game(String title, double bestPrice) {
         this.title = title;
-        this.price = price;
+        this.bestPrice = bestPrice;
         this.reviews = new ArrayList<>();
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(String title, double price, List<Review> reviews) {
+    public Game(String title, double bestPrice, List<Review> reviews) {
         this.title = title;
-        this.price = price;
+        this.bestPrice = bestPrice;
         this.reviews = reviews;
         this.priceAlerts = new ArrayList<>();
     }
 
-    public Game(String title, List<PriceAlert> priceAlerts, double price) {
+    public Game(String title, List<PriceAlert> priceAlerts, double bestPrice) {
         this.title = title;
         this.priceAlerts = priceAlerts;
-        this.price = price;
+        this.bestPrice = bestPrice;
         this.reviews = new ArrayList<>();
     }
 
-    public Game(String title, double price, List<Review> reviews, List<PriceAlert> priceAlerts) {
+    public Game(String title, double bestPrice, List<Review> reviews, List<PriceAlert> priceAlerts) {
         this.title = title;
-        this.price = price;
+        this.bestPrice = bestPrice;
         this.reviews = reviews;
         this.priceAlerts = priceAlerts;
     }
 
-    //THIS IS A NEW ADDITION SPECIFICALLY FOR THE GAME INFO PAGE
     public Game(String title, String itadId, String boxArtLink, List<String> tags) {
         this.title = title;
         this.itadId = itadId;

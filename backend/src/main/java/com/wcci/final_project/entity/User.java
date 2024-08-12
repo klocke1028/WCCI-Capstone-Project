@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -43,11 +42,13 @@ public class User {
 
     public User() {
         this.reviews = new ArrayList<>();
+        this.wishlist = new Wishlist();
     }
 
     public User(String email) {
         this.email = email;
         this.reviews = new ArrayList<>();
+        this.wishlist = new Wishlist();
     }
 
     public User(String email, Wishlist wishlist) {
@@ -59,6 +60,7 @@ public class User {
     public User(String email, List<Review> reviews) {
         this.email = email;
         this.reviews = reviews;
+        this.wishlist = new Wishlist();
     }
 
     public User(String email, Wishlist wishlist, List<Review> reviews) {
