@@ -8,10 +8,13 @@ function WishlistGamesTemp() {
   const [loggedInUserWishlistId, setLoggedInUserWishlistId] = useState(null);
   const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
 
+  console.log("Logged in email:", loggedInEmail);
+
   useEffect(() => {
     const fetchLoggedInUserData = async () => {
       try {
         const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
+        console.log("loggedInUsersWishlist:", loggedInUsersWishlist);
         setLoggedInUserWishlistId(loggedInUsersWishlist.id);
       } catch (error) {
         console.log(
@@ -22,6 +25,8 @@ function WishlistGamesTemp() {
 
     fetchLoggedInUserData();
   }, []);
+
+  console.log("Wishlist Id:", loggedInUserWishlistId);
 
   useEffect(() => {
     if (loggedInUserWishlistId === null) return;
