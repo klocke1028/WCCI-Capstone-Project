@@ -161,7 +161,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable Long id, @RequestBody Long gameId) {
+    public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
         if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -175,7 +175,7 @@ public class WishlistController {
 
         for (Game wishlistGame : againGamesInExistingWishlist) {
             Long wishlistGameId = wishlistGame.getId();
-            if (wishlistGameId == gameId) {
+            if (wishlistGame.getItadId().equals(gamePayload.getItadId())) {
                 Game game = gameService.findGameById(wishlistGameId);
 
                 if (game != null) {

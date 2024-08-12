@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
 import AddToWishlistButton from "./AddToWishlistButton";
+import RemoveWishlistedGame from "./RemoveWishlistedGame";
 
 const PopularGames = () => {
   const [games, setGames] = useState([]);
@@ -42,6 +43,7 @@ const PopularGames = () => {
               <h3>{game.title}</h3>
             </Link>
             <AddToWishlistButton gameToAdd={game} />
+            <RemoveWishlistedGame gameToRemove={game} />
           </li>
         ))}
       </ul>

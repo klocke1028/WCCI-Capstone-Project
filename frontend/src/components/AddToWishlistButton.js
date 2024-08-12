@@ -14,6 +14,7 @@ function AddToWishlistButton({ gameToAdd }) {
         return response1.json();
       })
       .then((data1) => {
+        console.log("data1:", data1);
         const wishlistId = data1.wishlist.id;
 
         const requestBody = {
@@ -41,7 +42,7 @@ function AddToWishlistButton({ gameToAdd }) {
             return response2.json();
           })
           .then((data2) => {
-            console.log(data2);
+            console.log("data2:", data2);
           })
           .catch((error2) => {
             console.log(
