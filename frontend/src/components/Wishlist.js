@@ -56,13 +56,13 @@ const Wishlist = () => {
     <div className="wishlist_games">
       <div className={`wishlist-container ${isOpen ? "is-open" : ""}`}>
         <ul className="wishlist">
-          <p>Wishlist</p>
           {games.map((game) => (
             <li key={game.itadId}>
               <Link to={`/GameInfoPage/${game.itadId}`}>
                 <PopularGamesImg game={game} />
                 <h4>{game.title}</h4>
               </Link>
+              <h4 id="displayed-price">Best Price: ${game.priceWhenAdded}</h4>
             </li>
           ))}
         </ul>
