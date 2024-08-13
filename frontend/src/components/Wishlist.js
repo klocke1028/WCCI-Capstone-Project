@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Wishlist.css";
 import PopularGamesImg from "./PopularGamesImg";
-import RemoveWishlistedGame from "./RemoveWishlistedGame"
+import RemoveWishlistedGame from "./RemoveWishlistedGame";
 
 const Wishlist = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +13,6 @@ const Wishlist = () => {
 
   const [games, setGames] = useState([]);
   const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
-  
 
   useEffect(() => {
     const fetchWishlistGames = () => {
@@ -73,11 +72,10 @@ const Wishlist = () => {
       </div>
       <div
         className={`hamburger no-user-select ${isOpen ? "active" : ""}`}
-        onClick={toggleMenu}>
-        
+        onClick={toggleMenu}
+      >
         <span className="bar"></span>
         <span className="bar"></span>
-
       </div>
     </div>
   );

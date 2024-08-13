@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-function GameInfoPage() {
+function GameInfoPage({ gameTitle, setWishlistedGames }) {
   const { itadId } = useParams();
   const [gameInfo, setGameInfo] = useState(null);
 
