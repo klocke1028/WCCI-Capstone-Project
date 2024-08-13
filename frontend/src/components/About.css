@@ -1,0 +1,50 @@
+.bio-container {
+  display: flex;
+  justify-content: center;
+  height: 150vh;
+  background-position: center;
+  background-size: cover;
+}
+
+.about-info {
+  text-align: center;
+  display: flex;
+  text-align: center;
+  border: 3px solid black;
+  padding: auto;
+  margin: auto;
+  width: 50%;
+}
+
+.student {
+  padding: 1em;
+  list-style: none;
+}
+
+.student-name {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.student-pic img {
+  border: 3px solid black;
+}
+
+.bio {
+  display: inline;
+  font-weight: 500;
+  font-size: 20px;
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .about-info {
+    margin-top: 10em;
+    width: 100%;
+  }
+
+  .bio {
+    font-size: 1em;
+    font-weight: bold;
+  }
+}
