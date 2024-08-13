@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
 import AddToWishlistButton from "./AddToWishlistButton";
 import RemoveWishlistedGame from "./RemoveWishlistedGame";
+import "./PopularGames.css"
 
 const PopularGames = () => {
   const [games, setGames] = useState([]);
@@ -35,6 +36,7 @@ const PopularGames = () => {
   return (
     <div className="popular-games">
       <h2>Popular Games</h2>
+      <div className="container">
       <ul>
         {games.map((game) => (
           <li key={game.itadId}>
@@ -47,6 +49,7 @@ const PopularGames = () => {
           </li>
         ))}
       </ul>
+      </div>
     </div>
   );
 };
