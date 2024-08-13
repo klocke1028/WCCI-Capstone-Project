@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
 import Wishlist from "./Wishlist";
+import About from "./About";
 import "./Navbar.css";
 
 function NavBar() {
@@ -45,6 +46,9 @@ function NavBar() {
         </div>
         <div>
           <Wishlist />
+        </div>
+        <div>
+          <Link to="/About">About us</Link>
         </div>
       </nav>
     </div>
