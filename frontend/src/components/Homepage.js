@@ -1,5 +1,6 @@
 import React from 'react';
 import PopularGames from './PopularGames';
+import "./Homepage.css"
 
 const Homepage = () => {
     return (

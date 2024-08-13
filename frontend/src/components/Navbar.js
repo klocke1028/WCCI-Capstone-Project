@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import Wishlist from "./Wishlist";
 
 function NavBar() {
   const [loggedInEmail, setLoggedInEmail] = useState("");
@@ -40,6 +41,9 @@ function NavBar() {
           ) : (
             <Link to="/LoginPage">Login</Link>
           )}
+        </div>
+        <div>
+          <Wishlist />
         </div>
       </nav>
     </div>
