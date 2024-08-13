@@ -3,9 +3,10 @@
   display: flex;
   height: 70px;
   width: 100vw;
-  background-color: rgb(0, 0, 0);
+  background-color: #0d1b2a;
   justify-content: center;
   align-items: center;
+  margin-top: 1em;
 }
 
 .navbar {
@@ -13,7 +14,6 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 0;
   left: 0;
   z-index: 1000;
   height: 70px;

@@ -3,6 +3,7 @@ import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
 import Wishlist from "./Wishlist";
 import "./Navbar.css";
+import Wishlist from "./Wishlist";
 
 function NavBar() {
   const [loggedInEmail, setLoggedInEmail] = useState("");
@@ -42,6 +43,9 @@ function NavBar() {
           ) : (
             <Link to="/LoginPage">Login</Link>
           )}
+        </div>
+        <div>
+          <Wishlist />
         </div>
       </nav>
     </div>

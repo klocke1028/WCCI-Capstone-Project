@@ -1,1 +1,69 @@
+<<<<<<< HEAD
+=======
+.wishlist-container {
+    position: fixed;
+    top: 0;
+    right: -40em;
+    width: 40em;
+    height: 100%;
+    background-color: #f4f4f4;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+  }
+  
+  .wishlist-container.is-open {
+    right: 0;
+  }
+  
+  .wishlist {
+    list-style: none;
+    padding: 20px;
+  }
+  
+  .wishlist img {
+    width: 70%;
+    height: 70%;
+  }
+
+.hamburger {
+  position: relative;
+  display: flex;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.hamburger .bar:nth-child(1) {
+    transform: rotate(0deg);
+  }
+
+  .bar {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .bar:last-child {
+    transform: rotate(90deg);
+  }
+  
+  .hamburger.active .bar:first-child {
+    transform: rotate(-45deg);
+  }
+  
+  .hamburger.active .bar:last-child {
+    transform: rotate(45deg);
+  }
+
+
+
+
+>>>>>>> origin/main
 

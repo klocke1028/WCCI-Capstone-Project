@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React from "react";
 import PopularGames from "./PopularGames";
 import Wishlist from "./Wishlist";
+=======
+import React from 'react';
+import PopularGames from './PopularGames';
+import "./Homepage.css"
+>>>>>>> origin/main
 
 const Homepage = () => {
   return (
