@@ -1,6 +1,11 @@
-import React from "react";
-import { fetchLoggedInUsersWishlist } from "./LoggedInUserData";
+import { checkAndUpdatePrices } from "../services/priceChecker";
 
-async function PriceTracker() {
-  const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
-}
+const WishlistPriceUpdater = () => {
+  const interval = setInterval(() => {
+    checkAndUpdatePrices();
+  }, 60000);
+
+  return () => clearInterval(interval);
+};
+
+export default WishlistPriceUpdater;
