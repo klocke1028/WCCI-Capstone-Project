@@ -1,4 +1,6 @@
 import React from "react";
-import { fetchLoggedInUser } from "./LoggedInUserFetch";
+import { fetchLoggedInUsersWishlist } from "./LoggedInUserData";
 
-async function PriceTracker() {}
+async function PriceTracker() {
+  const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
+}

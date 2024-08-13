@@ -1,57 +1,28 @@
 import { useState, useEffect } from "react";
-import { fetchLoggedInUsersWishlist } from "./LoggedInUsersWishlistFetch";
+import { fetchLoggedInUsersWishlistedGames } from "./LoggedInUserData";
 import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
 
 function WishlistGamesTemp() {
   const [wishlistGames, setWishlistGames] = useState([]);
-  const [loggedInUserWishlistId, setLoggedInUserWishlistId] = useState(null);
   const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
-
-  console.log("Logged in email:", loggedInEmail);
 
   useEffect(() => {
     const fetchLoggedInUserData = async () => {
       try {
-        const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
-        console.log("loggedInUsersWishlist:", loggedInUsersWishlist);
-        setLoggedInUserWishlistId(loggedInUsersWishlist.id);
+        const loggedInUsersWishlistedGames =
+          await fetchLoggedInUsersWishlistedGames();
+        setWishlistGames(loggedInUsersWishlistedGames);
       } catch (error) {
         console.log(
-          "There was a problem fetching the logged-in user: " + error
+          "There was a problem fetching the logged-in user's wishlisted games: " +
+            error
         );
       }
     };
 
     fetchLoggedInUserData();
-  }, []);
-
-  console.log("Wishlist Id:", loggedInUserWishlistId);
-
-  useEffect(() => {
-    if (loggedInUserWishlistId === null) return;
-
-    const fetchWishlistGames = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/wishlist/${encodeURIComponent(
-            loggedInUserWishlistId
-          )}/games`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        const data = await response.json();
-        setWishlistGames(data);
-      } catch (error) {
-        console.log(
-          "There was a problem fetching the user's wishlisted games: " + error
-        );
-      }
-    };
-
-    fetchWishlistGames();
-  }, [loggedInUserWishlistId]);
+  }, [wishlistGames]);
 
   return (
     <div>
