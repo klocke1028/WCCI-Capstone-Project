@@ -1,4 +1,4 @@
-import { checkAndUpdatePrices } from "../services/priceChecker";
+import { checkAndUpdatePrices } from "./CheckPrices";
 
 const WishlistPriceUpdater = () => {
   const interval = setInterval(() => {

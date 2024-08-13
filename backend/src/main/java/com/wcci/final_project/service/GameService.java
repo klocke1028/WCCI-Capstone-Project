@@ -176,7 +176,7 @@ public class GameService {
         double bestPrice = 0.0;
         List<Double> currentPrices = new ArrayList<>();
         String itadApiKey = "7f002b2417b6c356251e81434b37c25a3a28402d";
-        String requestBody = "[ \"" + gameItadId + "\" ]";
+        String requestBody = "[ " + gameItadId + " ]";
 
         URL getBestPriceUrl = new URL("https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=" + shopIds + "&key=" + itadApiKey);
         HttpsURLConnection getBestPriceConnection = (HttpsURLConnection) getBestPriceUrl.openConnection();

@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { useState } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GameInfoPage from "./components/GameInfoPage";
 import Homepage from "./components/Homepage";
@@ -9,8 +9,17 @@ import SearchPage from "./components/SearchPage";
 import AccountRegistration from "./components/AccountRegistration";
 import LoginPage from "./components/LoginPage";
 import WishlistGamesTemp from "./components/WishlistGamesTemp";
+import WishlistPriceUpdater from "./components/WishlistPriceUpdater";
 
 function App() {
+  useEffect(() => {
+    const stopUpdater = WishlistPriceUpdater();
+
+    return () => {
+      stopUpdater();
+    };
+  }, []);
+
   return (
     <Router>
       <div>

@@ -18,6 +18,8 @@ import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.service.GameService;
 import com.wcci.final_project.service.PriceAlertService;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/price-alerts")
 public class PriceAlertController {
@@ -86,6 +88,13 @@ public class PriceAlertController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/shop-ids")
+    public ResponseEntity<String> getItadShopIds() throws IOException {
+        String itadShopIds = priceAlertService.getItadShopIds();
+
+        return ResponseEntity.ok(itadShopIds);
     }
 
 }

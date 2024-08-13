@@ -27,18 +27,22 @@ function WishlistGamesTemp() {
   return (
     <div>
       <div>
-        <h3>{loggedInEmail}'s Wishlisted Games</h3>
+        <h3>{loggedInEmail[0]}'s Wishlisted Games</h3>
       </div>
       <ul>
         {wishlistGames.map((wishlistGame) => (
-          <li id={wishlistGame.itadId}>
+          <li key={wishlistGame.id}>
             <Link to={`/GameInfoPage/${wishlistGame.itadId}`}>
               <PopularGamesImg game={wishlistGame} />
               <h3>{wishlistGame.title}</h3>
             </Link>
-            <h4 id="displayed-price">
-              Best Price: ${wishlistGame.priceWhenAdded}
-            </h4>
+            <h4>Best Price</h4>
+            <div>
+              <span>$</span>
+              <span id={`game-price-${wishlistGame.itadId}`}>
+                {wishlistGame.priceWhenAdded}
+              </span>
+            </div>
           </li>
         ))}
       </ul>
