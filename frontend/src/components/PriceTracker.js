@@ -1,4 +1,12 @@
-import React from "react";
-import { fetchLoggedInUser } from "./LoggedInUserFetch";
+import { checkAndUpdatePrices } from '../services/priceChecker';
 
-async function PriceTracker() {}
+const WishlistPriceUpdater = () => {
+
+            const interval = setInterval(() => {
+                checkAndUpdatePrices();
+            }, 60000);
+
+            return () => clearInterval(interval);
+};
+
+export default WishlistPriceUpdater;
