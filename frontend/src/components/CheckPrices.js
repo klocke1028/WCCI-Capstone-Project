@@ -17,12 +17,12 @@ export const checkAndUpdatePrices = async () => {
       `#game-price-${itadId}`
     ).innerText;
 
-    if (bestPrice !== displayedPrice) {
+    // eslint-disable-next-line eqeqeq
+    if (bestPrice != displayedPrice) {
       document.querySelector(`#game-price-${itadId}`).innerText = bestPrice;
 
       window.alert(
-        { wishlistedGameTitle },
-        " has a new price! Go to it's page to check it out now!"
+        `${wishlistedGameTitle} has a new price! Go to it's page to check it out now!`
       );
     }
 

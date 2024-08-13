@@ -11,6 +11,7 @@ import LoginPage from "./components/LoginPage";
 import Wishlist from "./components/Wishlist";
 import WishlistGamesTemp from "./components/WishlistGamesTemp";
 import About from "./components/About";
+import WishlistPriceUpdater from "./components/WishlistPriceUpdater";
 
 function App() {
   useEffect(() => {
