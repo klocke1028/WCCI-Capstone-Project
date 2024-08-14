@@ -1,56 +1,33 @@
-/*import { fetchLoggedInUser } from './LoggedInUserFetch';
-
+import { fetchLoggedInUsersWishlistedGames } from "./LoggedInUserData";
+import { fetchBestPrice } from "./ItadData";
 
 export const checkAndUpdatePrices = async () => {
-    const data = await fetchLoggedInUser();
-    const wishlistedGames = data.wishlist.games;
+  const wishlistedGames = await fetchLoggedInUsersWishlistedGames();
 
-    wishlistedGames.forEach(async (wishlistedGame) => {
-        const itadId = wishlistedGame.itadId; //Becomes RequestBody
+  wishlistedGames.forEach(async (wishlistedGame) => {
+    const itadId = wishlistedGame.itadId;
+    const wishlistedGameTitle = wishlistedGame.title;
+    const response = await fetchBestPrice({ itadId });
 
-        const shopIds = ; // import a getItadShopIds() function
+    console.log(wishlistedGameTitle);
 
-        const itadResponse = await fetch(`https://api.isthereanydeal.com/games/prices/v2?country=US&nondeals=true&vouchers=false&shops=${shopIds}&key=7f002b2417b6c356251e81434b37c25a3a28402d`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json", 
-            },
-            body: JSON.stringify([itadId]),
-        });
+    const bestPrice = response;
 
-        if (!itadResponse.ok) {
-            console.error("Network response was not ok.");
-            return;
-        }
-        
-        const itadData = await itadResponse.json();
+    const displayedPrice = document.querySelector(
+      `#game-price-${itadId}`
+    ).innerText;
 
-        console.log(itadData);
+    // eslint-disable-next-line eqeqeq
+    if (bestPrice != displayedPrice) {
+      document.querySelector(`#game-price-${itadId}`).innerText = bestPrice;
 
-        const bestPrice = itadData.deals[1].amount; //Believe this should return the deals array with shop, then price, etc. and inside price is "amount".
+      window.alert(
+        `${wishlistedGameTitle} has a new price! Go to it's page to check it out now!`
+      );
+    }
 
-        if (bestPrice !== undefined) {
-            const priceWhenAdded = wishlistedGame.priceWhenAdded;
-
-            if (bestPrice !== priceWhenAdded) {
-                
-                wishlistedGame.bestPrice = bestPrice;
-
-                await fetch(`http://localhost:8080/`, { 
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        itadId: itadId,
-                        newPrice: bestPrice,
-                    }),
-                });
-
-                console.log(`Price for ${wishlistedGame.title} updated to ${bestPrice}`);
-            }
-        } else {
-            console.log(`Could not find a price for ${wishlistedGame.title}`);
-        }
-    });
-};*/
+    window.alert(
+      `${wishlistedGameTitle} does not have a new price. Still tracking, stay tuned!`
+    );
+  });
+};

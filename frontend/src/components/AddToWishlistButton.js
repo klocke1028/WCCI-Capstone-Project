@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchLoggedInUser } from "./LoggedInUserFetch";
+import { fetchLoggedInUser } from "./LoggedInUserData";
 
 function AddToWishlistButton({ gameToAdd }) {
   const addToWishlist = async () => {
