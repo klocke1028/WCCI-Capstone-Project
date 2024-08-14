@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.dto.GamePayload;
+import com.wcci.final_project.dto.ItadIdPayload;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.entity.Review;
@@ -198,6 +199,15 @@ public class GameController {
     public Game getGameInfo(@RequestParam("itadId") String itadId) throws IOException {
         JsonNode gameNode = new ObjectMapper().createObjectNode().put("id", itadId);
         return gameService.getGameProperties(gameNode);
+    }
+
+    @PostMapping("/best-price")
+    public ResponseEntity<Double> getBestPrice(@RequestBody String itadId) throws IOException{
+        String shopIds = priceAlertService.getItadShopIds();
+
+        Double bestPrice = gameService.getBestPrice(shopIds, itadId);
+
+        return ResponseEntity.ok(bestPrice);
     }
 
 }
