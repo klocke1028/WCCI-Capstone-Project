@@ -45,9 +45,11 @@ function LoginPage() {
           </div>
           <input type="submit" value="Login" className="login_button" />
         </form>
-        <a className="account_creation_link" href="/AccountRegistration">
-          No account? Click here to sign Up!
-        </a>
+        <div className="link_container">
+          <a className="account_creation_link" href="/AccountRegistration">
+            No account? Click here to sign up!
+          </a>
+        </div>
       </div>
     </div>
   );

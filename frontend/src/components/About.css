@@ -1,16 +1,24 @@
-.bio-container {
+body {
+  background-color: #677e9b;
+}
+
+.about_header {
+  color: #e0e1dd;
+}
+
+.about_container {
   display: flex;
   justify-content: center;
   height: 150vh;
-  background-position: center;
-  background-size: cover;
 }
 
-.about-info {
+.about_info {
   text-align: center;
   display: flex;
   text-align: center;
-  border: 3px solid black;
+  background-color: #0d1b2a;
+  border-radius: 22px;
+  box-shadow: 0 4px 8px 0 black;
   padding: auto;
   margin: auto;
   width: 50%;
@@ -21,24 +29,26 @@
   list-style: none;
 }
 
-.student-name {
+.student_name {
   text-decoration: underline;
-  font-weight: 600;
+  color: white;
+  font-weight: 300;
 }
 
-.student-pic img {
-  border: 3px solid black;
+.student_pic img {
+  border-radius: 22px;
 }
 
 .bio {
   display: inline;
-  font-weight: 500;
+  color: white;
+  font-weight: 300;
   font-size: 20px;
   width: 50%;
 }
 
 @media (max-width: 768px) {
-  .about-info {
+  .about_info {
     margin-top: 10em;
     width: 100%;
   }
