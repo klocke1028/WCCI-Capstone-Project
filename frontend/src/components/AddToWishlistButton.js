@@ -4,11 +4,11 @@ import { fetchLoggedInUser } from "./LoggedInUserData";
 function AddToWishlistButton({ gameToAdd }) {
   const addToWishlist = async () => {
     const loggedInUser = await fetchLoggedInUser();
-    const userWishlist = loggedInUser.wishlist;
+    const userWishlistedGames = loggedInUser.wishlist.games;
     const gameToAddItadId = gameToAdd.itadId;
     let isAlreadyOnWishlist = false;
 
-    userWishlist.forEach((wishlistedGame) => {
+    userWishlistedGames.forEach((wishlistedGame) => {
       isAlreadyOnWishlist = wishlistedGame.itadId === gameToAddItadId;
       if (isAlreadyOnWishlist) return;
     });
