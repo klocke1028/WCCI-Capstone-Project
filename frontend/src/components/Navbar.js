@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
 import Wishlist from "./Wishlist";
-import About from "./About";
 import "./Navbar.css";
 
 function NavBar() {
@@ -23,18 +22,20 @@ function NavBar() {
       <nav className="navbar">
         <div className="homelink-container">
           <Link to="/">
-            <p>All Things Games</p>
+            <p className="website-name">All Things Games</p>
           </Link>
         </div>
         <div className="search-container">
           <SearchForGames />
+        </div>
+        <div className="about-container">
+          <Link to="/About">About Us</Link>
         </div>
         <div id="user-greeting">
           <Link to="/WishlistGamesTemp">
             {loggedInEmail && <p>Welcome {loggedInEmail}!</p>}
           </Link>
         </div>
-
         <div>
           {loggedInEmail ? (
             <Link to="/" onClick={handleLogout}>
@@ -44,11 +45,8 @@ function NavBar() {
             <Link to="/LoginPage">Login</Link>
           )}
         </div>
-        <div>
+        <div className="view-wishlist">
           <Wishlist />
-        </div>
-        <div>
-          <Link to="/About">About us</Link>
         </div>
       </nav>
     </div>

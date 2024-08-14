@@ -1,4 +1,4 @@
-import { fetchLoggedInUser } from './LoggedInUserFetch';
+/*import { fetchLoggedInUser } from './LoggedInUserFetch';
 
 
 export const checkAndUpdatePrices = async () => {
@@ -53,4 +53,4 @@ export const checkAndUpdatePrices = async () => {
             console.log(`Could not find a price for ${wishlistedGame.title}`);
         }
     });
-};
+};*/
