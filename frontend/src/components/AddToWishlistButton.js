@@ -4,40 +4,53 @@ import { fetchLoggedInUser } from "./LoggedInUserData";
 function AddToWishlistButton({ gameToAdd }) {
   const addToWishlist = async () => {
     const loggedInUser = await fetchLoggedInUser();
-    const userWishlistId = loggedInUser.wishlist.id;
+    const userWishlist = loggedInUser.wishlist;
+    const gameToAddItadId = gameToAdd.itadId;
+    let isAlreadyOnWishlist = false;
 
-    const requestBody = {
-      title: gameToAdd.title,
-      itadId: gameToAdd.itadId,
-      boxArtUrl: gameToAdd.boxArtLink,
-    };
+    userWishlist.forEach((wishlistedGame) => {
+      isAlreadyOnWishlist = wishlistedGame.itadId === gameToAddItadId;
+      if (isAlreadyOnWishlist) return;
+    });
 
-    fetch(
-      `http://localhost:8080/wishlist/${encodeURIComponent(
-        userWishlistId
-      )}/add-game`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not okay.");
+    if (!isAlreadyOnWishlist) {
+      const userWishlistId = loggedInUser.wishlist.id;
+
+      const requestBody = {
+        title: gameToAdd.title,
+        itadId: gameToAdd.itadId,
+        boxArtUrl: gameToAdd.boxArtLink,
+      };
+
+      fetch(
+        `http://localhost:8080/wishlist/${encodeURIComponent(
+          userWishlistId
+        )}/add-game`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(
-          "There was a problem adding the game to the wishlist: " + error
-        );
-      });
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not okay.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(
+            "There was a problem adding the game to the wishlist: " + error
+          );
+        });
+    } else {
+      window.alert("This game is already on your wishlist!");
+    }
   };
 
   return (
