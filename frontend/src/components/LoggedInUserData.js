@@ -17,3 +17,19 @@ export async function fetchLoggedInUser() {
   }
   return null;
 }
+
+export async function fetchLoggedInUsersWishlist() {
+  const loggedInUser = await fetchLoggedInUser();
+
+  const loggedInUsersWishlist = loggedInUser.wishlist;
+
+  return loggedInUsersWishlist;
+}
+
+export async function fetchLoggedInUsersWishlistedGames() {
+  const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
+
+  const loggedInUsersWishlistedGames = loggedInUsersWishlist.games;
+
+  return loggedInUsersWishlistedGames;
+}

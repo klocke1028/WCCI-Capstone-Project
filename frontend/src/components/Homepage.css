@@ -1,8 +1,10 @@
 body {
-    background-color: #677e9b;
+    background-color: #415a77;
 }
 
 h1 {
     color: #e0e1dd;
     text-shadow: 3px 3px 1px #0d1b2a;
+    padding-top: .5em;
+    padding-bottom: .5em;
 }
