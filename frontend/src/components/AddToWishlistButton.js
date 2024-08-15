@@ -6,6 +6,7 @@ function AddToWishlistButton({ gameToAdd }) {
     const loggedInUser = await fetchLoggedInUser();
     const userWishlistedGames = loggedInUser.wishlist.games;
     const gameToAddItadId = gameToAdd.itadId;
+    console.log("Game to add ITAD ID: ~", gameToAddItadId, "~");
     let isAlreadyOnWishlist = false;
 
     userWishlistedGames.forEach((wishlistedGame) => {
@@ -14,6 +15,8 @@ function AddToWishlistButton({ gameToAdd }) {
     });
 
     if (!isAlreadyOnWishlist) {
+      console.log("Adding game with ITAD ID: ", { gameToAddItadId });
+
       const userWishlistId = loggedInUser.wishlist.id;
 
       const requestBody = {
@@ -38,10 +41,6 @@ function AddToWishlistButton({ gameToAdd }) {
           if (!response.ok) {
             throw new Error("Network response was not okay.");
           }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
         })
         .catch((error) => {
           console.log(

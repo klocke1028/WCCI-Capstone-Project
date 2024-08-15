@@ -9,25 +9,22 @@ export const checkAndUpdatePrices = async () => {
     const wishlistedGameTitle = wishlistedGame.title;
     const response = await fetchBestPrice({ itadId });
 
-    console.log(wishlistedGameTitle);
-
     const bestPrice = response;
 
-    const displayedPrice = document.querySelector(
+    const displayedPriceElement = document.querySelector(
       `#game-price-${itadId}`
-    ).innerText;
+    );
+    if (!displayedPriceElement) {
+      console.error(`Element with ID #game-price-${itadId} not found.`);
+      return;
+    }
+
+    const displayedPrice = displayedPriceElement.innerText;
 
     // eslint-disable-next-line eqeqeq
     if (bestPrice != displayedPrice) {
-      document.querySelector(`#game-price-${itadId}`).innerText = bestPrice;
-
-      window.alert(
-        `${wishlistedGameTitle} has a new price! Go to it's page to check it out now!`
-      );
+      displayedPriceElement.innerText = bestPrice;
+      // Need an alert system here
     }
-
-    window.alert(
-      `${wishlistedGameTitle} does not have a new price. Still tracking, stay tuned!`
-    );
   });
 };
