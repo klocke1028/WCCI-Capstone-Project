@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { fetchLoggedInUsersWishlistedGames } from "./LoggedInUserData";
 import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
+import { checkAndUpdatePrices } from "./CheckPrices";
 
 function WishlistGamesTemp() {
   const [wishlistGames, setWishlistGames] = useState([]);
-  const loggedInEmail = useState(localStorage.getItem("loggedInEmail"));
+  const loggedInEmail = localStorage.getItem("loggedInEmail");
 
   useEffect(() => {
     const fetchLoggedInUserData = async () => {
@@ -22,12 +23,30 @@ function WishlistGamesTemp() {
     };
 
     fetchLoggedInUserData();
+  }, []);
+
+  useEffect(() => {
+    if (wishlistGames.length > 0) {
+      checkAndUpdatePrices();
+    }
   }, [wishlistGames]);
+
+  wishlistGames.forEach((wishlistGame) => {
+    const wishlistedGameTitle = wishlistGame.title;
+    const wishlistedGameItadId = wishlistGame.itadId;
+    console.log(
+      "Displaying ",
+      { wishlistedGameTitle },
+      " with ITAD ID: ~",
+      { wishlistedGameItadId },
+      "~"
+    );
+  });
 
   return (
     <div>
       <div>
-        <h3>{loggedInEmail[0]}'s Wishlisted Games</h3>
+        <h3>{loggedInEmail}'s Wishlisted Games</h3>
       </div>
       <ul>
         {wishlistGames.map((wishlistGame) => (
