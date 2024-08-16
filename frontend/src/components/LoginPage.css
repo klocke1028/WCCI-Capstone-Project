@@ -8,8 +8,8 @@ body {
   background: #0d1b2a;
   width: 425px;
   height: 320px;
+  margin: auto auto;
   margin-top: 10%;
-  border: 2px solid;
   border-radius: 22px;
   box-shadow: 0 4px 8px 0 black;
 }
@@ -62,4 +62,18 @@ body {
 
 .account_creation_link:hover {
   color: #677e9b;
+}
+
+@media (max-width: 920px) {
+  .login_form {
+    max-width: 80%;
+    position: relative;
+    margin-top: 1em;
+    min-height: 40vh;
+    height: auto;
+  }
+
+  .login_container .content {
+    padding-top: 2em;
+  }
 }

@@ -1,9 +1,6 @@
 body {
   background-color: #677e9b;
-}
-
-.about_header {
-  color: #e0e1dd;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .about_container {
@@ -14,7 +11,6 @@ body {
 
 .about_info {
   text-align: center;
-  display: flex;
   text-align: center;
   background-color: #0d1b2a;
   border-radius: 22px;
@@ -26,28 +22,25 @@ body {
 
 .student {
   padding: 1em;
-  list-style: none;
 }
 
 .student_name {
-  text-decoration: underline;
   color: white;
-  font-weight: 300;
+  text-decoration: underline;
 }
 
 .student_pic img {
-  border-radius: 22px;
+  border-radius: 20px;
 }
 
 .bio {
   display: inline;
-  color: white;
   font-weight: 300;
   font-size: 20px;
   width: 50%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 765px) {
   .about_info {
     margin-top: 10em;
     width: 100%;
