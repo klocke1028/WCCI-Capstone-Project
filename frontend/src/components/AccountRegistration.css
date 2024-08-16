@@ -1,33 +1,60 @@
 body {
-  height: 100vh;
-  width: 100%;
+  background-color: #677e9b;
   text-align: center;
 }
 
-.reg_container {
+.reg_page_container {
+  display: inline;
+}
+
+.reg_page_header {
+  color: #e0e1dd;
+  text-shadow: 3px 3px 1px #0d1b2a;
+  font-size: 35px;
+  font-style: italic;
+}
+
+.reg_form_container {
   display: inline-block;
-  background: #ffffff;
-  width: 435px;
-  height: 350px;
-  margin-top: 10%;
-  border: 2px solid;
+  background: #0d1b2a;
+  width: 425px;
+  height: 250px;
+  margin: 10%;
   border-radius: 22px;
   box-shadow: 0 4px 8px 0 black;
 }
 
 .reg_form_header {
+  color: white;
   font-size: 25px;
+  margin: 15px;
+}
+
+.reg_form,
+.reg_email_text {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .reg_email_input {
   margin: 25px;
-  padding: 20px;
+  padding: 25px;
 }
 
 .reg_email_text {
-  font-size: 15px;
+  border: 1px solid white;
+  border-radius: 6px;
+  font-size: 18px;
+  width: 80%;
 }
 
 .submit_button {
-  font-size: 15px;
+  background-color: #677e9b;
+  cursor: pointer;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 2px solid black;
+  border-radius: 6px;
 }
