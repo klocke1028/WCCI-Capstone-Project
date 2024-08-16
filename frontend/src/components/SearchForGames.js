@@ -31,7 +31,7 @@ function SearchForGames() {
       })
       .then((data) => {
         setResults(data);
-        navigate("/SearchPage", { state: { results: data } });
+        navigate("/SearchPage", { state: { results: data, searchTerm } });
       })
       .catch((error) => {
         console.error("There was a problem fetching the app list: " + error);
