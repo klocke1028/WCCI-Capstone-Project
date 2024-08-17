@@ -52,10 +52,10 @@
   
   .search-game-image {
       width: 210px; 
-      height: 150px;
+      height: 210px;
       margin-right: 20px;
       border-radius: 4px;
-      object-fit: cover;
+      object-fit: contain;
   }
   
   .search-game-title {
