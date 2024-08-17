@@ -58,7 +58,7 @@ const Wishlist = () => {
     <div className="wishlist-games">
       <div className={`wishlist-container ${isOpen ? "is-open" : ""}`}>
         <ul className="wishlist">
-          <p>Wishlist</p>
+          <p className="wishlist-title">Wishlist</p>
           {games.map((game) => (
             <li key={game.itadId}>
               <Link to={`/GameInfoPage/${game.itadId}`}>

@@ -35,7 +35,7 @@ const PopularGames = () => {
   return (
     <div className="popular-games">
       <h2>Popular Games</h2>
-      <div className="container">
+      <div className="popular-container">
       <ul>
         {games.map((game) => (
           <li key={game.itadId}>
