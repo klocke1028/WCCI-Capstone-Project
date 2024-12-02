@@ -38,8 +38,8 @@ public class UserController {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+    @GetMapping 
+    public ResponseEntity<User> getUserByEmail(@RequestParam("email") String email) {
         Optional<User> optionalFoundUser = userService.findUserByEmail(email);
         if (optionalFoundUser.isPresent()) {
             return ResponseEntity.ok(optionalFoundUser.get());
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         User foundUser = userService.findUserById(id);
         if (foundUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserPayload userPayload) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserPayload userPayload) {
         User existingUser = userService.findUserById(id);
 
         if (existingUser == null) {
@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeUser(@PathVariable Long id) {
+    public ResponseEntity<Void> removeUser(@PathVariable("id") Long id) {
         boolean isDeleted = userService.deleteUser(id);
 
         if (!isDeleted) {
@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<Review>> getReviewsByUserId(@PathVariable Long id) {
+    public ResponseEntity<List<Review>> getReviewsByUserId(@PathVariable("id") Long id) {
         User user = userService.findUserById(id);
 
         if (user == null) {
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/wishlist")
-    public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable Long id) {
+    public ResponseEntity<Wishlist> getWishlistByUserId(@PathVariable("id") Long id) {
         User user = userService.findUserById(id);
 
         if (user == null) {

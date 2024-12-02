@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import "./GameInfoPage.css";
+import AddToWishlistButton from "./AddToWishlistButton";
 
 function GameInfoPage({ gameTitle, setWishlistedGames }) {
   const { itadId } = useParams();
@@ -33,17 +35,11 @@ function GameInfoPage({ gameTitle, setWishlistedGames }) {
   }
 
   return (
-    <div>
+    <div className="game-info-container">
       <h1>{gameInfo.title}</h1>
       <img src={gameInfo.boxArtLink} alt={gameInfo.title} />
       <p>Genres: {gameInfo.tags.join(", ")}</p>
-      <div>
-        <div>
-          <div>
-            <p>Pricing</p>
-          </div>
-        </div>
-      </div>
+      <AddToWishlistButton gameToAdd={gameInfo} />
     </div>
   );
 }

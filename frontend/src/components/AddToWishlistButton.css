@@ -1,0 +1,16 @@
+.wishlist-button {
+  background-color: #677e9b;
+  color: #0d1b2a;
+  cursor: pointer;
+  font-size: 15px;
+  border: 2px solid #0d1b2a;
+  border-radius: 6px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.wishlist-button:hover {
+  box-shadow: 0 4px 8px 0 black;
+}

@@ -6,25 +6,26 @@ export const checkAndUpdatePrices = async () => {
 
   wishlistedGames.forEach(async (wishlistedGame) => {
     const itadId = wishlistedGame.itadId;
-    const wishlistedGameTitle = wishlistedGame.title;
     const response = await fetchBestPrice({ itadId });
 
     const bestPrice = response;
 
-    const displayedPriceElement = document.querySelector(
-      `#game-price-${itadId}`
-    );
-    if (!displayedPriceElement) {
-      console.error(`Element with ID #game-price-${itadId} not found.`);
-      return;
-    }
+    if (window.location.href === "http://localhost:3000/WishlistGamesTemp") {
+      const displayedPriceElement = document.querySelector(
+        `#game-price-${itadId}`
+      );
+      if (!displayedPriceElement) {
+        console.error(`Element with ID #game-price-${itadId} not found.`);
+        return;
+      }
 
-    const displayedPrice = displayedPriceElement.innerText;
+      const displayedPrice = displayedPriceElement.innerText;
 
-    // eslint-disable-next-line eqeqeq
-    if (bestPrice != displayedPrice) {
-      displayedPriceElement.innerText = bestPrice;
-      // Need an alert system here
+      // eslint-disable-next-line eqeqeq
+      if (bestPrice != displayedPrice) {
+        displayedPriceElement.innerText = bestPrice;
+        // Need an alert system here
+      }
     }
   });
 };

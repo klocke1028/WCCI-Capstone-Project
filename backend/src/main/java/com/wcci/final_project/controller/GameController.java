@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wcci.final_project.dto.GamePayload;
-import com.wcci.final_project.dto.ItadIdPayload;
 import com.wcci.final_project.entity.Game;
 import com.wcci.final_project.entity.PriceAlert;
 import com.wcci.final_project.entity.Review;
@@ -50,10 +49,14 @@ public class GameController {
         double gamePrice = gamePayload.getGamePrice();
         String gameBoxArtUrl = gamePayload.getBoxArtUrl();
 
-        if (gameItadId != null) newGame.setItadId(gameItadId);
-        if (gameTitle != null) newGame.setTitle(gameTitle);
-        if (gamePrice != 0) newGame.setBestPrice(gamePrice);
-        if (gameBoxArtUrl != null) newGame.setBoxArtLink(gameBoxArtUrl);
+        if (gameItadId != null)
+            newGame.setItadId(gameItadId);
+        if (gameTitle != null)
+            newGame.setTitle(gameTitle);
+        if (gamePrice != 0)
+            newGame.setBestPrice(gamePrice);
+        if (gameBoxArtUrl != null)
+            newGame.setBoxArtLink(gameBoxArtUrl);
 
         List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
@@ -68,9 +71,9 @@ public class GameController {
             }
 
             newGame.setReviews(gameReviews);
-        } 
-        
-        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds(); 
+        }
+
+        List<Long> gamePriceAlertIds = gamePayload.getPriceAlertIds();
 
         if (gamePriceAlertIds != null && !gamePriceAlertIds.isEmpty()) {
             List<PriceAlert> gamePriceAlerts = new ArrayList<>();
@@ -83,13 +86,13 @@ public class GameController {
             }
 
             newGame.setPriceAlerts(gamePriceAlerts);
-        } 
-        
+        }
+
         return new ResponseEntity<>(gameService.saveGame(newGame), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+    public ResponseEntity<Game> getGameById(@PathVariable("id") Long id) {
         Game foundGame = gameService.findGameById(id);
 
         if (foundGame == null) {
@@ -100,14 +103,14 @@ public class GameController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Game> getGameByItadId(@RequestParam String itadId) {
+    public ResponseEntity<Game> getGameByItadId(@RequestParam("itadId") String itadId) {
         Game foundGame = gameService.findGameByItadId(itadId);
 
         if (foundGame == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return ResponseEntity.ok(foundGame);    
+        return ResponseEntity.ok(foundGame);
     }
 
     @GetMapping("/all")
@@ -118,7 +121,7 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
+    public ResponseEntity<Game> updateGame(@PathVariable("id") Long id, @RequestBody GamePayload gamePayload) {
         Game existingGame = gameService.findGameById(id);
 
         String gameTitle = gamePayload.getTitle();
@@ -163,7 +166,7 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeGame(@PathVariable Long id) {
+    public ResponseEntity<Void> removeGame(@PathVariable("id") Long id) {
         boolean isDeleted = gameService.deleteGame(id);
 
         if (!isDeleted) {
@@ -174,7 +177,8 @@ public class GameController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam String searchTerm) throws IOException {
+    public ResponseEntity<List<Game>> searchForGamesByTitle(@RequestParam("searchTerm") String searchTerm)
+            throws IOException {
         List<Game> searchResults = gameService.searchGamesByTitle(searchTerm);
 
         if (searchResults.isEmpty()) {
@@ -202,7 +206,7 @@ public class GameController {
     }
 
     @PostMapping("/best-price")
-    public ResponseEntity<Double> getBestPrice(@RequestBody String itadId) throws IOException{
+    public ResponseEntity<Double> getBestPrice(@RequestBody String itadId) throws IOException {
         String shopIds = priceAlertService.getItadShopIds();
 
         Double bestPrice = gameService.getBestPrice(shopIds, itadId);

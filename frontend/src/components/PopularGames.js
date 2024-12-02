@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PopularGamesImg from "./PopularGamesImg";
 import AddToWishlistButton from "./AddToWishlistButton";
-import "./PopularGames.css"
+import "./PopularGames.css";
 
 const PopularGames = () => {
   const [games, setGames] = useState([]);
@@ -36,17 +36,17 @@ const PopularGames = () => {
     <div className="popular-games">
       <h2>Popular Games</h2>
       <div className="popular-container">
-      <ul>
-        {games.map((game) => (
-          <li key={game.itadId}>
-            <Link to={`/GameInfoPage/${game.itadId}`}>
-              <PopularGamesImg game={game} />
-              <h3>{game.title}</h3>
-            </Link>
-            <AddToWishlistButton gameToAdd={game} />
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {games.map((game) => (
+            <li key={game.itadId}>
+              <Link to={`/GameInfoPage/${game.itadId}`}>
+                <PopularGamesImg game={game} />
+                <h3>{game.title}</h3>
+              </Link>
+              <AddToWishlistButton gameToAdd={game} />
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

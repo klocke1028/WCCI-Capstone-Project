@@ -65,7 +65,7 @@ public class WishlistController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Wishlist> getWishlistById(@PathVariable Long id) {
+    public ResponseEntity<Wishlist> getWishlistById(@PathVariable("id") Long id) {
         Wishlist foundWishlist = wishlistService.findWishlistById(id);
 
         if (foundWishlist == null) {
@@ -76,7 +76,8 @@ public class WishlistController {
     }
 
     @PostMapping("/{id}/add-game")
-    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) throws IOException {
+    public ResponseEntity<Wishlist> addGameToWishlist(@PathVariable("id") Long id, @RequestBody GamePayload gamePayload)
+            throws IOException {
         String newGameItadId = gamePayload.getItadId();
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
@@ -123,11 +124,13 @@ public class WishlistController {
 
             newGame.setTitle(newGameTitle);
 
-            if (newGameItadId != null) newGame.setItadId(newGameItadId);
+            if (newGameItadId != null)
+                newGame.setItadId(newGameItadId);
 
             String newGameBoxArtUrl = gamePayload.getBoxArtUrl();
 
-            if (newGameBoxArtUrl != null) newGame.setBoxArtLink(newGameBoxArtUrl);
+            if (newGameBoxArtUrl != null)
+                newGame.setBoxArtLink(newGameBoxArtUrl);
 
             String shopIds = priceAlertService.getItadShopIds();
 
@@ -135,7 +138,8 @@ public class WishlistController {
 
             double priceWhenAdded = gameService.getBestPrice(shopIds, newGameItadId);
 
-            if (priceWhenAdded != 0.0) newGame.setPriceWhenAdded(priceWhenAdded);
+            if (priceWhenAdded != 0.0)
+                newGame.setPriceWhenAdded(priceWhenAdded);
 
             List<Long> gameReviewIds = gamePayload.getGameReviewIds();
 
@@ -151,7 +155,7 @@ public class WishlistController {
 
                 newGame.setReviews(gameReviews);
             }
-            
+
             newGame.setWishlist(existingWishlist);
 
             Game savedNewGame = gameService.saveGame(newGame);
@@ -163,10 +167,12 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable Long id, @RequestBody GamePayload gamePayload) {
+    public ResponseEntity<Wishlist> removeGameFromWishlist(@PathVariable("id") Long id,
+            @RequestBody GamePayload gamePayload) {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
-        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (existingWishlist == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         List<Game> wishlistGames = existingWishlist.getGames();
         List<Game> againGamesInExistingWishlist = new ArrayList<>();
@@ -194,12 +200,13 @@ public class WishlistController {
 
         return ResponseEntity.ok(wishlistService.updateWishlist(existingWishlist));
     }
-    
+
     @GetMapping("/{id}/games")
-    public ResponseEntity<List<Game>> getGamesByWishlistId(@PathVariable Long id) {
+    public ResponseEntity<List<Game>> getGamesByWishlistId(@PathVariable("id") Long id) {
         Wishlist existingWishlist = wishlistService.findWishlistById(id);
 
-        if (existingWishlist == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (existingWishlist == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
         List<Game> existingWishlistGames = existingWishlist.getGames();
 

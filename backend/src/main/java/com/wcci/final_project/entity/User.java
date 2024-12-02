@@ -69,5 +69,3 @@ public class User {
         this.reviews = reviews;
     }
 }
-
-// Time to create review entity

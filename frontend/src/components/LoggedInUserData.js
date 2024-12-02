@@ -21,7 +21,11 @@ export async function fetchLoggedInUser() {
 export async function fetchLoggedInUsersWishlist() {
   const loggedInUser = await fetchLoggedInUser();
 
-  const loggedInUsersWishlist = loggedInUser.wishlist;
+  let loggedInUsersWishlist = [];
+
+  if (loggedInUser !== null) {
+    loggedInUsersWishlist = loggedInUser.wishlist;
+  }
 
   return loggedInUsersWishlist;
 }
@@ -30,6 +34,8 @@ export async function fetchLoggedInUsersWishlistedGames() {
   const loggedInUsersWishlist = await fetchLoggedInUsersWishlist();
 
   const loggedInUsersWishlistedGames = loggedInUsersWishlist.games;
+
+  console.log("From fetch: ", loggedInUsersWishlistedGames);
 
   return loggedInUsersWishlistedGames;
 }

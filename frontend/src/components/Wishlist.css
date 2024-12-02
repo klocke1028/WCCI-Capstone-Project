@@ -1,78 +1,99 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #677e9b;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.user-wishlist-header {
+  color: white;
+  margin: 20px 0;
+  font-size: 1.5em;
+  text-align: center;
+}
+
 .wishlist-container {
-  position: fixed;
-  top: 0;
-  right: -40em;
-  width: 40em;
-  height: 100%;
-  background-color: #1b263b;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-  transition: right 0.3s ease;
-  overflow-y: auto;
-}
-
-.wishlist-container.is-open {
-  right: 0;
-}
-
-.wishlist {
-  list-style: none;
+  margin: 10px auto;
   padding: 20px;
+  background-color: #0d1b2a;
+  border-radius: 8px;
+  max-width: 90%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.wishlist img {
-  width: 70%;
-  height: 70%;
-  padding-top: 2em;
+.game-title {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.hamburger {
-  position: relative;
-  display: flex;
-  width: 1.5em;
-  height: 1.5em;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
+.game-title:hover {
+  color: #f0f0f0;
+  text-decoration: underline;
 }
 
-.hamburger.active {
-  position: fixed;
+.best-price-header {
+  color: white;
+  margin: 10px 0;
+  font-size: 1.2em;
+  text-align: center;
 }
 
-.hamburger .bar:nth-child(1) {
-  transform: rotate(0deg);
+.best-price-display {
+  color: white;
+  font-weight: 700;
+  margin: 5px 0;
+  text-align: center;
 }
 
-.bar {
-  position: absolute;
-  width: 100%;
-  height: 3px;
-  background-color: #e0e1dd;
-  transition: all 0.3s ease;
+@media (max-width: 1200px) {
+  .wishlist-container {
+    max-width: 80%;
+  }
+
+  .user-wishlist-header,
+  .best-price-header {
+    font-size: 1.4em;
+  }
 }
 
-.bar:last-child {
-  transform: rotate(90deg);
+@media (max-width: 992px) {
+  .wishlist-container {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .user-wishlist-header,
+  .best-price-header {
+    font-size: 1.3em;
+  }
 }
 
-.hamburger.active .bar:first-child {
-  transform: rotate(-45deg);
+@media (max-width: 768px) {
+  .wishlist-container {
+    max-width: 95%;
+    padding: 15px;
+    margin: 10px auto; /* Reduce margin for smaller screens */
+  }
+
+  .user-wishlist-header,
+  .best-price-header {
+    font-size: 1.2em;
+  }
+
+  .best-price-display {
+    font-size: 1em; /* Adjust font size for readability */
+  }
 }
 
-.hamburger.active .bar:last-child {
-  transform: rotate(45deg);
-}
+@media (max-width: 480px) {
+  .user-wishlist-header,
+  .best-price-header {
+    font-size: 1em;
+  }
 
-.wishlist-title {
-  padding-top: 1em;
-  padding-bottom: 1.5em;
-  color: #e0e1dd;
-  font-size: 2em;
-}
-
-h4 {
-  padding: .5em;
-  font-size: 24px;
+  .best-price-display {
+    font-size: 0.9em; /* Slightly smaller text for very small screens */
+  }
 }

@@ -87,3 +87,4 @@ public class GamePayload {
         this.priceAlertIds = new ArrayList<>();
         }
     }
+

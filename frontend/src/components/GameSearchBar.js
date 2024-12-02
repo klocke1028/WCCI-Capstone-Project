@@ -2,7 +2,14 @@ import React from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 
-function GameSearchBar({ searchTerm, handleSearchChange, handleKeyDown, results, isResultsVisible, clearSearchTerm }) {
+function GameSearchBar({
+  searchTerm,
+  handleSearchChange,
+  handleKeyDown,
+  results,
+  isResultsVisible,
+  clearSearchTerm,
+}) {
   return (
     <div className="search-bar-container">
       <input
@@ -17,7 +24,10 @@ function GameSearchBar({ searchTerm, handleSearchChange, handleKeyDown, results,
         <ul>
           {results.map((game) => (
             <li key={game.itadId}>
-              <Link to={`/GameInfoPage/${game.itadId}`} onClick={clearSearchTerm}>
+              <Link
+                to={`/GameInfoPage/${game.itadId}`}
+                onClick={clearSearchTerm}
+              >
                 {game.title}
               </Link>
             </li>

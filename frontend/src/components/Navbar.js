@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SearchForGames from "./SearchForGames";
 import { Link } from "react-router-dom";
-import Wishlist from "./Wishlist";
 import "./Navbar.css";
 
 function NavBar() {
@@ -13,8 +12,8 @@ function NavBar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("loggedInEmail");
     setLoggedInEmail("");
+    localStorage.setItem("loggedInEmail", loggedInEmail);
   };
 
   return (
@@ -44,9 +43,6 @@ function NavBar() {
           ) : (
             <Link to="/LoginPage">Login</Link>
           )}
-        </div>
-        <div className="view-wishlist">
-          <Wishlist />
         </div>
       </nav>
     </div>

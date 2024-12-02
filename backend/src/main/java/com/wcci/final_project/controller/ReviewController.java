@@ -44,18 +44,20 @@ public class ReviewController {
         User user = userService.findUserById(reviewUserId);
 
         review.setText(reviewPayload.getText());
-        
-        if (reviewGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (reviewGame == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         review.setGame(gameService.findGameById(reviewGameId));
 
-        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         review.setUser(user);
 
         return new ResponseEntity<>(reviewService.createReview(review), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+    public ResponseEntity<Review> getReviewById(@PathVariable("id") Long id) {
         Review foundReview = reviewService.findReviewById(id);
         if (foundReview == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -64,29 +66,31 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Review> modifyReview(@PathVariable Long id, @RequestBody ReviewPayload reviewPayload) {
+    public ResponseEntity<Review> modifyReview(@PathVariable("id") Long id, @RequestBody ReviewPayload reviewPayload) {
         Review existingReview = reviewService.findReviewById(id);
 
         Game reviewGame = existingReview.getGame();
         User user = existingReview.getUser();
-        
-        if (reviewGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        
+        if (reviewGame == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
         existingReview.setText(reviewPayload.getText());
 
         return new ResponseEntity<>(reviewService.updateReview(existingReview), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeReview(@PathVariable Long id) {
+    public ResponseEntity<Void> removeReview(@PathVariable("id") Long id) {
         boolean isDeleted = reviewService.deleteReview(id);
 
         if (!isDeleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        
+
         return ResponseEntity.noContent().build();
     }
 

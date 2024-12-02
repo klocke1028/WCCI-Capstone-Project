@@ -2,29 +2,34 @@
   box-sizing: border-box;
   display: flex;
   height: 70px;
-  width: 100vw;
+  width: 100%;
   background-color: #0d1b2a;
   justify-content: center;
   align-items: center;
-  margin-top: 1em;
 }
 
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
-  position: absolute;
-  left: 0;
+  width: 100%;
+  padding: 0 1em;
+  box-sizing: border-box;
+  position: relative;
   z-index: 1000;
-  height: 70px;
-  padding-right: 0em;
-  padding-left: 26em;
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1em;
+  box-sizing: border-box;
 }
 
 .navbar a {
   color: #e0e1dd;
   text-decoration: none;
   font-size: 16px;
+  margin: 0 1em;
 }
 
 .search-bar-container {
@@ -35,10 +40,14 @@
 .search-bar {
   padding: 0.75em;
   border-radius: 0.5em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #user-greeting {
   color: #e0e1dd;
+  padding: 0 1em;
+  padding: 0 1em;
 }
 
 .homelink-container {
@@ -46,15 +55,110 @@
 }
 
 .about-container {
-  padding-left: 3em;
-  padding-right: 4em;
-}
-
-#user-greeting {
-  padding-left: 3em;
-  padding-right: 3em;
+  padding: 0 1em;
 }
 
 .view-wishlist {
-  padding-left: 25em;
+  padding-left: 3em;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5em;
+  }
+
+  .search-bar-container {
+    padding: 0.5em;
+  }
+
+  .search-bar {
+    padding: 0.5em;
+  }
+
+  .homelink-container,
+  .about-container,
+  .view-wishlist {
+    margin: 3em;
+    padding: 0;
+  }
+
+  #user-greeting {
+    display: none;
+  }
+
+  .view-wishlist {
+    padding-right: 1em;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  .view-wishlist {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.25em;
+  }
+
+  .navbar a {
+    font-size: 14px;
+  }
+
+  .search-bar-container {
+    padding: 0.25em;
+  }
+
+  .search-bar {
+    padding: 0.25em;
+  }
+
+  .homelink-container,
+  .about-container,
+  .view-wishlist {
+    margin: 0.25em;
+  }
+
+  #user-greeting {
+    display: none;
+  }
+
+  .view-wishlist {
+    padding-left: 3rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+  .navbar {
+    padding: 0.25em;
+  }
+
+  .navbar a {
+    font-size: 14px;
+  }
+
+  .search-bar-container {
+    padding: 0.25em;
+  }
+
+  .search-bar {
+    padding: 0.25em;
+  }
+
+  .homelink-container,
+  .about-container,
+  .view-wishlist {
+    margin: 0.25em;
+  }
+
+  #user-greeting {
+    display: none;
+  }
+
+  .view-wishlist {
+    padding-left: 3rem;
+    width: 100%;
+  }
 }

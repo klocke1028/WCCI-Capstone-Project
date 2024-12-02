@@ -1,23 +1,28 @@
 body {
   background-color: #677e9b;
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .about_container {
   display: flex;
   justify-content: center;
-  height: 150vh;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .about_info {
   text-align: center;
-  text-align: center;
   background-color: #0d1b2a;
   border-radius: 22px;
   box-shadow: 0 4px 8px 0 black;
-  padding: auto;
+  padding: 20px;
   margin: auto;
   width: 50%;
+  max-width: 800px;
 }
 
 .student {
@@ -31,23 +36,36 @@ body {
 
 .student_pic img {
   border-radius: 20px;
+  max-width: 100%;
+  height: auto;
 }
 
 .bio {
-  display: inline;
+  color: white;
   font-weight: 300;
-  font-size: 20px;
-  width: 50%;
+  font-size: 1.2em;
+  margin-top: 10px;
+  width: 100%;
 }
 
-@media (max-width: 765px) {
+@media (max-width: 768px) {
   .about_info {
-    margin-top: 10em;
-    width: 100%;
+    width: 80%;
+    padding: 15px;
   }
 
   .bio {
     font-size: 1em;
-    font-weight: bold;
+  }
+}
+
+@media (max-width: 480px) {
+  .about_info {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .bio {
+    font-size: 0.9em;
   }
 }

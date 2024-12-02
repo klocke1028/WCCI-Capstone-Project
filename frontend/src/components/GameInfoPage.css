@@ -1,0 +1,32 @@
+.game-info-container {
+  margin: 100px auto;
+  padding: 10px;
+  background-color: #0d1b2a;
+  border-radius: 8px;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-info-container h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  color: #e0e1dd;
+}
+
+.game-info-container img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 20px;
+}
+
+.game-info-container p {
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 10px;
+  border-radius: 4px;
+  color: #e0e1dd;
+}
